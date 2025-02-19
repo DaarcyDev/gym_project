@@ -28,7 +28,7 @@ export class UsersService {
 
   // Method to get memebership of a user
   membership(): Observable<any> {
-    return this.http.get(`${this.baseUrl}membership/`);
+    return this.http.get(`${this.baseUrl}memberships/`);
   }
 
 }
