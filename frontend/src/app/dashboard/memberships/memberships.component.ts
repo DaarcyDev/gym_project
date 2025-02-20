@@ -13,7 +13,8 @@ export class MembershipsComponent {
   constructor(private DashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.DashboardService.dashboard_membership().subscribe({
+    console.log('MembershipsComponent');
+    this.DashboardService.dashboard_memberships().subscribe({
       next: (response) => {
         this.message = response.message;
       },

@@ -17,8 +17,8 @@ export class DashboardService {
   }
 
   // Method to get dashboard_membership
-  dashboard_membership(): Observable<any> {
-    return this.http.get(`${this.baseUrl}dashboard_membership/`);
+  dashboard_memberships(): Observable<any> {
+    return this.http.get(`${this.baseUrl}dashboard_memberships/`);
   }
 
   // Method to get dashboard_sales
