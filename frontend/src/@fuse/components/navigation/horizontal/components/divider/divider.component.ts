@@ -14,10 +14,10 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class FuseHorizontalNavigationDividerItemComponent implements OnInit, OnDestroy
 {
-    @Input() item: FuseNavigationItem;
-    @Input() name: string;
+    @Input() item!: FuseNavigationItem;
+    @Input() name!: string;
 
-    private _fuseHorizontalNavigationComponent: FuseHorizontalNavigationComponent;
+    private _fuseHorizontalNavigationComponent!: FuseHorizontalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**

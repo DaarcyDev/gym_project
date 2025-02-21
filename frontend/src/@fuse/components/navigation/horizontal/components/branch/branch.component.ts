@@ -25,11 +25,11 @@ export class FuseHorizontalNavigationBranchItemComponent implements OnInit, OnDe
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() child: boolean = false;
-    @Input() item: FuseNavigationItem;
-    @Input() name: string;
-    @ViewChild('matMenu', {static: true}) matMenu: MatMenu;
+    @Input() item!: FuseNavigationItem;
+    @Input() name!: string;
+    @ViewChild('matMenu', {static: true}) matMenu!: MatMenu;
 
-    private _fuseHorizontalNavigationComponent: FuseHorizontalNavigationComponent;
+    private _fuseHorizontalNavigationComponent!: FuseHorizontalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**

@@ -15,8 +15,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class FuseFullscreenComponent
 {
-    @Input() iconTpl: TemplateRef<any>;
-    @Input() tooltip: string;
+    @Input() iconTpl!: TemplateRef<any>;
+    @Input() tooltip!: string;
 
     /**
      * Constructor
