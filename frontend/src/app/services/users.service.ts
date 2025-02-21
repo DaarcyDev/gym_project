@@ -21,6 +21,11 @@ export class UsersService {
     return this.http.get(`${this.baseUrl}login/`);
   }
 
+  // Method to signin a user
+  signin(): Observable<any> {
+    return this.http.get(`${this.baseUrl}signin/`);
+  }
+
   // Method to get profile of a user
   profile(): Observable<any> {
     return this.http.get(`${this.baseUrl}profile/`);

@@ -18,6 +18,10 @@ def users_login(request):
 	return Response({"message": "Hello, world! from Django login"})
 
 @api_view(['GET'])
+def users_signin(request):
+	return Response({"message": "Hello, world! from Django login"})
+
+@api_view(['GET'])
 def users_profile(request):
 	return Response({"message": "Hello, world! from Django profile"})
 

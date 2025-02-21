@@ -7,6 +7,6 @@ urlpatterns = [
 	path('products_create/' , views.products_create),
 	path('products_update/' , views.products_update),
 	path('products_delete/' , views.products_delete),
-	path('products_detail/' , views.products_detail),
+	path('products_details/' , views.products_details),
 	path('products_sales/' , views.products_sales),
 ]

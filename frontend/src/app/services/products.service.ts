@@ -9,7 +9,7 @@ export class ProductsService {
 
   private baseUrl = 'http://127.0.0.1:8000/api/products/';
   
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
   
   // Method to get all products
   products_list(): Observable<any> {
@@ -32,8 +32,8 @@ export class ProductsService {
   }
 
   // Method to get a product detail
-  products_detail(): Observable<any> {
-    return this.http.get(`${this.baseUrl}products_detail/`);
+  products_details(): Observable<any> {
+    return this.http.get(`${this.baseUrl}products_details/`);
   }
 
   // Method to get a product sales

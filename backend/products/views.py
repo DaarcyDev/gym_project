@@ -18,8 +18,10 @@ def products_update(request):
 def products_delete(request):
 	return Response({"message": "Hello, world! from Django products delete"})
 
-def products_detail(request):
+@api_view(['GET'])
+def products_details(request):
 	return Response({"message": "Hello, world! from Django products detail"})
 
+@api_view(['GET'])
 def products_sales(request):
 	return Response({"message": "Hello, world! from Django products sales"})
