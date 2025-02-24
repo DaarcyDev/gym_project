@@ -1,0 +1,263 @@
+<div class="flex flex-col flex-auto min-w-0">
+	<mat-drawer-container class="flex flex-col flex-auto min-w-0">
+		<mat-drawer class="w-72 dark:bg-gray-900" [autoFocus]="false" [mode]="'over'" [position]="'end'" #matDrawer>
+			<app-attach-c-situacion-fiscal [documentPdf]="dataSource?.cfdi_pdf_binary" [fileNamePdf]="dataSource?.cfdi_pdf_binary_filename"
+				[dataId] = "dataSource?.id" [dataName]="dataSource?.name"
+				(form)="closeSidebar($event)"></app-attach-c-situacion-fiscal>
+		</mat-drawer>
+		<mat-drawer-content class="flex flex-col">
+			<div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-4 px-6 sm:py-5 sm:px-10 border-b bg-card dark:bg-transparent">
+				<div class="flex-1 min-w-0">
+					<div class="flex gap-2 button-container">
+						<!-- <button class="rounded" mat-flat-button color="primary" *ngIf="!editMode" (click)="editProfile()">Editar</button> -->
+						<button class="rounded" mat-flat-button color="primary" *ngIf="editMode" (click)="updateProfile()"
+							[disabled]="errorUser || errorCompany || errorDirection">Guardar</button>
+						<button class="rounded" mat-flat-button color="accent" *ngIf="editMode"
+							(click)="discardChanges()">Descartar</button>
+						<button class="rounded" mat-flat-button color="primary" *ngIf="editMode" (click)="updateProfile()"
+							[disabled]="errorUser || errorCompany || errorDirection">Guardar</button>
+					</div>
+				</div>
+			</div>
+			<!-- Content -->
+			<div class="flex-auto py-4 px-6 sm:py-8 sm:px-10">
+				<!-- Forms -->
+				<div class="h-300 min-h-300 bg-card rounded-2xl shadow">
+					<div class="mb-action-bar inner-scroll">
+						<div class="hidden sm:flex mb-action group hover:bg-indigo-50 hover:border-indigo-600 hover:text-primary-500  active:text-white"
+							(click)="matDrawer.toggle()">
+							<div class="icono">
+								<mat-icon aria-hidden="false" aria-label="back" class="color_blue">backup</mat-icon>
+							</div>
+							<div class="description">
+								<span>Adjuntar Constancia de Situación Fiscal</span>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-col gap-0 py-6 px-6 sm:py-8 sm:px-10">
+						<div class="flex flex-col sm:flex-row">
+							<div class="flex w-full items-center justify-center sm:w-1/2 md:w-2/5">
+								<div
+									class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card sm:w-50 sm:h-50 md:w-60 md:h-60">
+									<!-- Upload / Remove avatar -->
+									<div class="absolute inset-0 bg-black bg-opacity-50 z-10" *ngIf="editMode"></div>
+									<div class="absolute inset-0 flex items-center justify-center z-20" *ngIf="editMode">
+										<div>
+											<input id="avatar-file-input"
+												class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+												type="file" [multiple]="false" [accept]="'image/jpeg, image/png'"
+												(change)="uploadAvatar(avatarFileInput.files)" #avatarFileInput>
+											<label
+												class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-hover sm:w-15 sm:h-15 md:w-20 md:h-20"
+												for="avatar-file-input" matRipple>
+												<mat-icon class="text-white w-9 h-9 sm:w-12 sm:h-12 md:w-15 md:h-15"
+													[svgIcon]="'heroicons_outline:camera'"></mat-icon>
+											</label>
+										</div>
+									</div>
+									<!-- Image/Letter -->
+									<img class="object-cover w-full h-full"
+										*ngIf="userForm.value.avatar && !userForm.value.avatar.includes('http')"
+										[src]="'data:image/png;base64,'+userForm.value.avatar">
+									<img class="object-cover w-full h-full" *ngIf="userForm.value.avatar.includes('http')"
+										[src]="userForm.value.avatar">
+									<div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200 sm:text-9xl md:text-10xl"
+										*ngIf="!userForm.value.avatar">
+										{{profile?.name.charAt(0)}}
+									</div>
+								</div>
+							</div>
+							<div class="flex w-full sm:w-1/2 md:w-3/5">
+								<form class="flex flex-col w-full" [formGroup]="userForm">
+									<div class="flex flex-col gap-0">
+										<mat-form-field class="flex-auto" subscriptSizing="dynamic">
+											<mat-label floatlLabel="never">Nombre</mat-label>
+											<input matInput type="text" formControlName="name" [placeholder]="'CDMX'"
+												disabled="true">
+											<mat-icon class="icon-size-5" matPrefix
+												[svgIcon]="'heroicons_solid:user'"></mat-icon>
+										</mat-form-field>
+										<ng-container *ngFor="let validation of validationMessages.name">
+											<mat-error
+												*ngIf="userForm.get('name').hasError(validation.type) && (userForm.get('name').dirty || userForm.get('name').touched) && editMode">
+												{{ validation.message }}
+											</mat-error>
+										</ng-container>
+									</div>
+									<div class="flex flex-col gap-0 mt-4">
+										<mat-form-field class="flex-auto" subscriptSizing="dynamic"
+											[ngClass]="{'required-field-edit': editMode}">
+											<mat-label>RFC</mat-label>
+											<input matInput type="text" formControlName="rfc"
+												[placeholder]="'IOO120934HYSE'" [required]="editMode">
+											<mat-icon class="icon-size-5" matPrefix
+												[svgIcon]="'heroicons_solid:tag'"></mat-icon>
+										</mat-form-field>
+										<ng-container *ngFor="let validation of validationMessages.rfc">
+											<mat-error
+												*ngIf="userForm.get('rfc').hasError(validation.type) && (userForm.get('rfc').dirty || userForm.get('rfc').touched) && editMode">
+												{{ validation.message }}
+											</mat-error>
+										</ng-container>
+									</div>
+									<div class="flex flex-col gap-0 mt-4">
+										<mat-form-field class="flex" subscriptSizing="dynamic">
+											<mat-label>Correo electrónico para notificaciones</mat-label>
+											<input matInput type="email" formControlName="email"
+												[placeholder]="'miusuario@correo.com'">
+											<mat-icon class="icon-size-5" matPrefix
+												[svgIcon]="'heroicons_solid:envelope'"></mat-icon>
+										</mat-form-field>
+										<ng-container *ngFor="let validation of validationMessages.email">
+											<mat-error
+												*ngIf="userForm.get('email').hasError(validation.type) && (userForm.get('email').dirty || userForm.get('email').touched) && editMode">
+												{{ validation.message }}
+											</mat-error>
+										</ng-container>
+									</div>
+									<div class="flex flex-col gap-0 mt-4">
+										<mat-form-field class="flex" subscriptSizing="dynamic">
+											<mat-label>Teléfono para notificaciones</mat-label>
+											<input matInput type="text" formControlName="telefono"
+												[placeholder]="'5555555555'">
+											<mat-icon class="icon-size-5" matPrefix
+												[svgIcon]="'heroicons_solid:phone'"></mat-icon>
+										</mat-form-field>
+										<ng-container *ngFor="let validation of validationMessages.telefono">
+											<mat-error
+												*ngIf="userForm.get('telefono').hasError(validation.type) && (userForm.get('telefono').dirty || userForm.get('telefono').touched) && editMode">
+												{{ validation.message }}
+											</mat-error>
+										</ng-container>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="flex mt-6 sm:mt-8">
+							<!-- Tabs -->
+							<mat-tab-group class="w-full px-0" mat-stretch-tabs="false" [animationDuration]="'0'">
+								<mat-tab label="Dirección fiscal">
+									<ng-template matTabContent>
+										<!-- Address, Num. Ext. Num. Int. -->
+										<form class="flex flex-col sm:flex-row sm:gap-5" [formGroup]="directionForm">
+											<div class="flex flex-col gap-0 mt-2 sm:w-2/4">
+												<mat-form-field class="flex" subscriptSizing="dynamic"
+													[ngClass]="{'required-field-edit': editMode}">
+													<mat-label>Calle</mat-label>
+													<input matInput type="text" formControlName="calle"
+														[placeholder]="'Hamburgo'" [required]="editMode">
+												</mat-form-field>
+												<ng-container *ngFor="let validation of validationMessages.calle">
+													<mat-error
+														*ngIf="directionForm.get('calle').hasError(validation.type) && (directionForm.get('calle').dirty || directionForm.get('calle').touched) && editMode">
+														{{ validation.message }}
+													</mat-error>
+												</ng-container>
+											</div>
+											<div class="flex flex-col gap-0 mt-2 sm:mt-2 sm:w-1/5 md:w-1/4" name="num-ext">
+												<mat-form-field class="flex" subscriptSizing="dynamic">
+													<mat-label>Número exterior</mat-label>
+													<input matInput type="text" formControlName="numero_ext"
+														[placeholder]="'1'">
+												</mat-form-field>
+											</div>
+											<div class="flex flex-col gap-0 mt-2 sm:mt-2 sm:w-1/5 md:w-1/4">
+												<mat-form-field class="flex" subscriptSizing="dynamic">
+													<mat-label>Número interior</mat-label>
+													<input matInput type="text" formControlName="numero_int"
+														[placeholder]="'21'">
+												</mat-form-field>
+											</div>
+										</form>
+										<!-- Neighborhood, City, Zip -->
+										<form class="flex flex-col sm:mt-4 sm:flex-row sm:gap-5" [formGroup]="directionForm">
+											<div class="flex flex-col gap-0 mt-2 sm:mt-2 sm:w-2/5 md:w-2/4">
+												<mat-form-field class="flex" subscriptSizing="dynamic"
+													[ngClass]="{'required-field-edit': editMode}">
+													<mat-label>Colonia</mat-label>
+													<input matInput type="text" formControlName="colonia"
+														[placeholder]="'Colonia Juárez'" [required]="editMode">
+												</mat-form-field>
+												<ng-container *ngFor="let validation of validationMessages.colonia">
+													<mat-error
+														*ngIf="directionForm.get('colonia').hasError(validation.type) && (directionForm.get('colonia').dirty || directionForm.get('colonia').touched) && editMode">
+														{{ validation.message }}
+													</mat-error>
+												</ng-container>
+											</div>
+											<div class="flex flex-col gap-0 mt-2 sm:w-1/5 md:w-1/4">
+												<mat-form-field class="flex" subscriptSizing="dynamic"
+													[ngClass]="{'required-field-edit': editMode}">
+													<mat-label>Código postal</mat-label>
+													<input matInput type="text" formControlName="cp"
+														[placeholder]="'06600'" [required]="editMode">
+												</mat-form-field>
+												<ng-container *ngFor="let validation of validationMessages.cp">
+													<mat-error
+														*ngIf="directionForm.get('cp').hasError(validation.type) && (directionForm.get('cp').dirty || directionForm.get('cp').touched) && editMode">
+														{{ validation.message }}
+													</mat-error>
+												</ng-container>
+											</div>
+											<div class="flex mt-2 sm:mt-2 sm:w-2/5 md:w-1/4">
+												<mat-form-field class="flex-auto" subscriptSizing="dynamic">
+													<mat-label>Municipio</mat-label>
+													<input matInput type="text" formControlName="municipio"
+														[placeholder]="'Coyoacán'">
+												</mat-form-field>
+											</div>
+										</form>
+										<!-- State, Country -->
+										<form class="flex flex-col sm:mt-4 sm:flex-row sm:gap-5" [formGroup]="directionForm">
+											<div class="flex flex-col gap-0 mt-2 sm:mt-2 sm:w-2/5 md:w-2/4">
+												<mat-form-field class="flex-auto" subscriptSizing="dynamic">
+													<mat-label>Estado</mat-label>
+													<input matInput placeholder="Ciudad de México"
+														[value]="profile?.state?.name?profile.state.name:''"
+														disabled="true" *ngIf="!editMode">
+													<mat-select disableRipple placeholder="Ciudad de México"
+														formControlName="estado" (ngModelChange)="changeState($event)"
+														*ngIf="editMode">
+														<mat-option *ngFor="let state of states" [value]="state">{{ state
+															}}</mat-option>
+													</mat-select>
+												</mat-form-field>
+											</div>
+											<div class="flex flex-col gap-0 mt-2 sm:mt-2 sm:w-2/5 md:w-1/4">
+												<mat-form-field class="flex" subscriptSizing="dynamic"
+													[ngClass]="{'required-field-edit': editMode}">
+													<mat-label>Ciudad</mat-label>
+													<input matInput type="text" formControlName="ciudad"
+														[placeholder]="'Ciudad de México'" [required]="editMode">
+												</mat-form-field>
+												<ng-container *ngFor="let validation of validationMessages.ciudad">
+													<mat-error
+														*ngIf="directionForm.get('ciudad').hasError(validation.type) && (directionForm.get('ciudad').dirty || directionForm.get('ciudad').touched) && editMode">
+														{{ validation.message }}
+													</mat-error>
+												</ng-container>
+											</div>
+											<div class="flex mt-2 sm:mt-2 sm:w-2/5 md:w-1/4">
+												<mat-form-field class="flex-auto" subscriptSizing="dynamic">
+													<mat-label>País</mat-label>
+													<input matInput placeholder="México"
+														[value]="profile?.country?.name ? profile.country : ''"
+														disabled="true" *ngIf="!editMode">
+													<mat-select disableRipple placeholder="México" formControlName="pais"
+														(ngModelChange)="changeCountry($event)" *ngIf="editMode">
+														<mat-option *ngFor="let country of countries"
+															[value]="country">{{ country }}</mat-option>
+													</mat-select>
+												</mat-form-field>
+											</div>
+										</form>
+									</ng-template>
+								</mat-tab>
+							</mat-tab-group>
+						</div>
+					</div>
+				</div>
+			</div>
+		</mat-drawer-content>
+	</mat-drawer-container>
+</div>

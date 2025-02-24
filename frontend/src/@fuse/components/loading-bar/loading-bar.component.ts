@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
 {
     @Input() autoMode: boolean = true;
-    mode: 'determinate' | 'indeterminate' = 'indeterminate';
+    mode: 'determinate' | 'indeterminate';
     progress: number = 0;
     show: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -44,7 +44,7 @@ export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
         if ( 'autoMode' in changes )
         {
             // Set the auto mode in the service
-            this._fuseLoadingService.setAutoMode(coerceBooleanProperty(changes['autoMode'].currentValue));
+            this._fuseLoadingService.setAutoMode(coerceBooleanProperty(changes.autoMode.currentValue));
         }
     }
 
@@ -65,7 +65,7 @@ export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((value) =>
             {
-                this.progress = value ?? 0;
+                this.progress = value;
             });
 
         this._fuseLoadingService.show$

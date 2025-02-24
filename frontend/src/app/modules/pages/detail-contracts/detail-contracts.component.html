@@ -1,0 +1,215 @@
+<div id="detalle-contracts" class="page-layout simple left-sidebar inner-sidebar inner-scroll general-list" style="width: 100%;">
+
+	<!-- HEADER -->
+	<div class="header-forma accent dark bg-gray-900">
+		<div class="titulo-header">
+			<mat-icon (click)="showDetails()">keyboard_backspace</mat-icon>
+			<div class="text-titulo-header">
+				<span>Finanzas</span>
+			</div>
+		</div>
+	</div>
+	<!-- HEADER -->
+
+	<div class="zs-action-bar-state inner-scroll">
+
+		<!-- ACTIONS -->
+		<div class="actions-profile-detalle" *ngIf="!edit_enable" (click)="editarDetail()">
+			<div class="action action-filled">
+				<span class="style-button">Editar</span>
+			</div>
+		</div>
+		<div class="actions-profile-detalle" *ngIf="!acept_button" (click)="sendDoc()">
+			<div class="action action-filled">
+				<span class="style-button">Enviar</span>
+			</div>
+		</div>
+		<div class="actions-profile-editar" *ngIf="edit_enable" (click)="updateDetail()">
+			<div class="action action-filled">
+				<span class="style-button">Guardar</span>
+			</div>
+			<div class="action action-outline" (click)="cancelarEdicion()">
+				<span class="style-button">Descartar</span>
+			</div>
+		</div>
+		<!-- ACTIONS -->
+
+		<div class="states">
+			<div *ngFor="let state of estados.reverse()">
+				<div class="zs-action-s" *ngIf="dataSource.state_name != state.name">
+					<div class="description-state">
+						<span>{{ state.name }}</span>
+					</div>
+				</div>
+				<div class="zs-action-state" *ngIf="dataSource.state_name === state.name">
+					<div class="description-state">
+						<mat-chip [style.color]="'#FFFFFF'" selected>{{
+							dataSource.state_name }}</mat-chip>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- CONTENT CARD -->
+	<div class="content-card">
+		<!-- CONTENT -->
+		<div class="content">
+			<!-- FORMA CONTENT -->
+			<div class="forma-content">
+
+				<div class="zs-action-bar inner-scroll">
+					<input id="user_document" (change)="upDocument($event)" type="file" accept="application/pdf, application/xml"
+						class="d-none">
+					<div class="zs-action" onclick="document.getElementById('user_document').click();">
+						<div class="icono">
+							<mat-icon aria-hidden="false" aria-label="back">file_upload</mat-icon>
+						</div>
+						<div class="description">
+							<span>Adjuntar factura</span>
+						</div>
+					</div>
+
+					<!-- <div class="zs-action">
+						<div class="icono">
+							<mat-icon aria-hidden="false" aria-label="back">done</mat-icon>
+						</div>
+						<div class="description">
+							<span>Confirmar</span>
+						</div>
+					</div>
+
+					<div class="zs-action">
+						<div class="icono">
+							<mat-icon aria-hidden="false" aria-label="back">download</mat-icon>
+						</div>
+						<div class="description">
+							<span>Descargar cotización</span>
+						</div>
+					</div> -->
+
+				</div>
+
+				<!-- FORMULARIO -->
+				<div class="formulario">
+					<form name="ruleForm" [formGroup]="datos" class="sale">
+						<div class="form-sale-title">
+							<span class="form-sale-title-label">
+								Folio
+							</span>
+							<span class="form-sale-title-text">
+								{{dataSource.name}}
+							</span>
+						</div>
+						<div class="container-group-orders">
+							<div class="zs-div" fxLayout="column" fxFlex>
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Tipo de gasto</mat-label>
+									<input matInput placeholder="Tipo de gasto" name="expense_type" formControlName="expense_type"
+										[readonly]="true">
+								</mat-form-field>
+								<mat-form-field appearance="outline" floatLabel="always"
+								class="w-100-p zs-form-field-required">
+									<mat-label>Línea relacionada</mat-label>
+									<input matInput placeholder="Línea relacionada" name="line_id" formControlName="line_id" [readonly]="true">
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Concesionario</mat-label>
+									<input matInput placeholder="Concesionario" name="concesionario_id" formControlName="concesionario_id"
+										[readonly]="true">
+								</mat-form-field>
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Fecha del gasto</mat-label>
+									<input matInput placeholder="Fecha del gasto" name="date" formControlName="date" [readonly]="true"
+									[ngStyle]="{'width': (datos.get('date').value?.length > 8 ? '80px' : 'auto')}">
+								</mat-form-field>
+							</div>
+							<div class="zs-div" fxLayout="column" fxFlex>
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Proveedor</mat-label>
+									<input matInput placeholder="Proveedor" name="partner_id" formControlName="partner_id"
+										[readonly]="true">
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Total</mat-label>
+									<input matInput placeholder="Total" name="amount_total" formControlName="amount_total" [readonly]="true">
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" floatLabel="always" class="w-100-p zs-form-field-required">
+									<mat-label>Estatus</mat-label>
+									<input matInput placeholder="Estatus" name="state" formControlName="state" [readonly]="true">
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="container-group-orders">
+						</div>
+					</form>
+				</div>
+				<!-- FORMULARIO -->
+
+
+				<!-- TABLE -->
+				<div class="form-sale-title">
+					<span class="table-title-label">
+						Líneas del gasto
+					</span>
+				</div>
+
+				<div class="card-table">
+					<mat-table class="products-table" #table [dataSource]="products" matSort fusePerfectScrollbar>
+
+						<ng-container *ngFor="let colum of tableColumns" [matColumnDef]="colum.id">
+							<mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+							<mat-cell *matCellDef="let element">
+								<ng-container *ngIf="colum.id === 'price_subtotal' || colum.id === 'price_unit'">
+									{{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+								</ng-container>
+								<ng-container *ngIf="colum.id !== 'price_subtotal' && colum.id !== 'price_unit'">
+									{{ getColumnValue(element, colum.key) }}
+								</ng-container>
+							</mat-cell>
+						</ng-container>
+
+						<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+						<ng-container>
+							<mat-row *matRowDef="let element; columns: displayedColumns;" class="product" matRipple>
+							</mat-row>
+						</ng-container>
+					</mat-table>
+				</div>
+				<!-- TABLE -->
+
+
+				<div class="content-table">
+					<table class="simple invoice-table-footer">
+						<tbody>
+							<tr class="subtotal">
+								<td>SUBTOTAL</td>
+								<td>{{dataSource.amount_untaxed | currency:'USD':'symbol'}}</td>
+							</tr>
+							<tr class="tax">
+								<td>IMPUESTOS</td>
+								<td>{{dataSource.amount_tax | currency:'USD':'symbol'}}</td>
+							</tr>
+							<tr class="discount">
+								<td>DESCUENTO</td>
+								<td>-{{dataSource.discount | currency:'USD':'symbol'}}</td>
+							</tr>
+							<tr class="total">
+								<td>TOTAL</td>
+								<td>{{dataSource.amount_total | currency:'USD':'symbol'}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<!-- FORMA CONTENT -->
+		</div>
+		<!-- CONTENT -->
+	</div>
+	<!-- CONTENT CARD -->
+</div>

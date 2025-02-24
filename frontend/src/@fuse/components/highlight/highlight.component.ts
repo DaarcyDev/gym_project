@@ -15,13 +15,12 @@ import { FuseHighlightService } from '@fuse/components/highlight/highlight.servi
 })
 export class FuseHighlightComponent implements OnChanges, AfterViewInit
 {
-    @Input() code: any;
-    @Input() lang: any;
-    @ViewChild(TemplateRef) templateRef!: TemplateRef<any>;
+    @Input() code: string;
+    @Input() lang: string;
+    @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
 
-    highlightedCode: any;
-    // private _viewRef!: EmbeddedViewRef<any>;
-    private _viewRef!: any;
+    highlightedCode: string;
+    private _viewRef: EmbeddedViewRef<any>;
 
     /**
      * Constructor

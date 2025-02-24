@@ -31,7 +31,7 @@ export class FuseAlertComponent implements OnChanges, OnInit, OnDestroy
     @Input() appearance: FuseAlertAppearance = 'soft';
     @Input() dismissed: boolean = false;
     @Input() dismissible: boolean = false;
-    @Input() name: string;
+    @Input() name: string = this._fuseUtilsService.randomId();
     @Input() showIcon: boolean = true;
     @Input() type: FuseAlertType = 'primary';
     @Output() readonly dismissedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -45,9 +45,8 @@ export class FuseAlertComponent implements OnChanges, OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseAlertService: FuseAlertService,
         private _fuseUtilsService: FuseUtilsService,
-    ) 
+    )
     {
-        this.name = this._fuseUtilsService.randomId();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -95,7 +94,7 @@ export class FuseAlertComponent implements OnChanges, OnInit, OnDestroy
         if ( 'dismissed' in changes )
         {
             // Coerce the value to a boolean
-            this.dismissed = coerceBooleanProperty(changes['dismissed'].currentValue);
+            this.dismissed = coerceBooleanProperty(changes.dismissed.currentValue);
 
             // Dismiss/show the alert
             this._toggleDismiss(this.dismissed);
@@ -105,14 +104,14 @@ export class FuseAlertComponent implements OnChanges, OnInit, OnDestroy
         if ( 'dismissible' in changes )
         {
             // Coerce the value to a boolean
-            this.dismissible = coerceBooleanProperty(changes['dismissible'].currentValue);
+            this.dismissible = coerceBooleanProperty(changes.dismissible.currentValue);
         }
 
         // Show icon
         if ( 'showIcon' in changes )
         {
             // Coerce the value to a boolean
-            this.showIcon = coerceBooleanProperty(changes['showIcon'].currentValue);
+            this.showIcon = coerceBooleanProperty(changes.showIcon.currentValue);
         }
     }
 

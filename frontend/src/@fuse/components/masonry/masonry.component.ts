@@ -14,8 +14,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 })
 export class FuseMasonryComponent implements OnChanges, AfterViewInit
 {
-    @Input() columnsTemplate!: TemplateRef<any>;
-    @Input() columns!: number;
+    @Input() columnsTemplate: TemplateRef<any>;
+    @Input() columns: number;
     @Input() items: any[] = [];
     distributedColumns: any[] = [];
 

@@ -1,0 +1,577 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div
+        class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 border-b bg-card dark:bg-transparent">
+        <!-- Title -->
+        <div>
+            <div class="text-4xl font-extrabold tracking-tight leading-none">
+				<div class="cursor-pointer" [routerLink]="['/conces']">
+				<mat-icon class="mr-3 icon-size-6 "  [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon> Kilometraje</div>
+				</div>
+            <div class="flex items-center mt-0.5 font-medium text-secondary">
+                <!-- Breadcrumbs -->
+                <ng-container>
+                    <div class="flex items-center space-x-2">
+                        <a class="color_blue cursor-pointer" [routerLink]="['/conces']">Kilometraje
+                        </a>
+                        <div class="">/</div>
+                        <div>{{dataSource?.name}}</div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <!-- Actions bar -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-6 sm:py-2 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0 py-2">
+            <div class="flex gap-2">
+                <div class="flex items-center ml-auto">
+                    <!-- Botones para telefono -->
+                    <span
+                        class="sm:hidden bg-primary rounded-full flex justify-center items-center ml-3 mr-3 text-sm text-white w-7 h-8"
+                        (click)="showStates()">
+                        <mat-icon class="text-white" [svgIcon]="'heroicons_solid:ellipsis-vertical'"></mat-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <custom-stepper [states]="estados" [st]="estado"></custom-stepper>
+    </div>
+    <!-- Content -->
+    <div class="flex-auto py-4 px-6 sm:py-8 sm:px-10 overflow-y-auto" cdkScrollable>
+        <!-- Forms -->
+        <div class="h-300 min-h-300 bg-card rounded-2xl shadow">
+            <div class="flex flex-col gap-0 py-6 px-6 sm:py-8 sm:px-10">
+                <div class="flex gap-x-2 mr-auto">
+                    <div class="justify-self-end text-l tracking-tight text-secondary">IDENTIFICADOR</div>
+                </div>
+                <div class="flex gap-x-2 mr-auto mb-4">
+                    <div class="text-2xl sm:text-3xl">{{dataSource?.name}}</div>
+                </div>
+
+                <!-- DATOS GENERALES -->
+                <div class="mt-4 mb-4">
+                    <span class="text-2xl">
+                        Datos generales
+                    </span>
+                </div>
+                <form class="grid grid-cols-2 mt-2 gap-5" [formGroup]="datos">
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Línea relacionada</mat-label>
+                            <input matInput type="text" formControlName="line_id" [placeholder]="'Línea 1'" disabled="true">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Fecha de inicio</mat-label>
+                            <input matInput type="text" formControlName="date_start" [placeholder]="'2024-05-27'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Concesionario</mat-label>
+                            <input matInput type="text" formControlName="conces_id" [placeholder]="'Concesionario 1'" disabled="true">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Fecha de finalización</mat-label>
+                            <input matInput type="text" formControlName="date_end" [placeholder]="'2024-05-29'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+                </form>
+
+                <!-- DATOS RESUMEN KILOMETRAJE -->
+                <div class="mt-4 mb-4">
+                    <span class="text-2xl">
+                       Resumen
+                    </span>
+                </div>
+                <form class="grid grid-cols-2 mt-2 gap-5" [formGroup]="datos">
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Cantidad total</mat-label>
+                            <input matInput type="text" formControlName="cantidad_total"
+                            [value]="datos.get('cantidad_total')?.value | number:'1.2-2'"
+                            [placeholder]="'1000.00'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Monto pagado</mat-label>
+                            <input matInput type="text" formControlName="monto_pagado"
+                            [value]="datos.get('monto_pagado')?.value | currency:'USD':'symbol'"
+                            [placeholder]="'1000.00'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Monto total</mat-label>
+                            <input matInput type="text" formControlName="monto_total"
+                            [value]="datos.get('monto_total')?.value | currency:'USD':'symbol'"
+                            [placeholder]="'1000.00'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Monto por pagar</mat-label>
+                            <input matInput type="text" formControlName="monto_por_pagar"
+                            [value]="datos.get('monto_por_pagar')?.value | currency:'USD':'symbol'"
+                            [placeholder]="'1000.00'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+                </form>
+
+
+                <!-- DATOS  -->
+                <div class="flex mt-6 sm:mt-8">
+                    <mat-tab-group class="w-full px-0" mat-stretch-tabs="false" [animationDuration]="'0'">
+                        <!-- RESUMEN DE OPERACIONES -->
+                        <mat-tab label="Resumen de operaciones">
+                            <ng-template matTabContent>
+                                <!-- KILOMETRAJE -->
+                                <div class="mt-4 mb-4">
+                                    <span class="text-2xl">
+                                        Kilometraje
+                                    </span>
+                                </div>
+                                <form class="flex flex-col mt-2 sm:flex-row sm:gap-5" [formGroup]="analisisOperaciones">
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Km programados</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_programacion"
+                                            [value]="analisisOperaciones.get('cantidad_programacion')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Apoyos</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_apoyo"
+                                            [value]="analisisOperaciones.get('cantidad_apoyo')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Incumplimiento</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_incumplimiento"
+                                            [value]="analisisOperaciones.get('cantidad_incumplimiento')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </form>
+                                <form class="flex flex-col mt-2 sm:flex-row sm:gap-5" [formGroup]="analisisOperaciones">
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Afectaciones</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_afectacion"
+                                            [value]="analisisOperaciones.get('cantidad_afectacion')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Deducciones de operadores</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_deduccion_op"
+                                            [value]="analisisOperaciones.get('cantidad_deduccion_op')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Deducciones generales</mat-label>
+                                            <input matInput type="text" formControlName="cantidad_deduccion_grl"
+                                            [value]="analisisOperaciones.get('cantidad_deduccion_grl')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </form>
+
+                                <!-- FINANCIERO -->
+                                <div class="mt-4 mb-4">
+                                    <span class="text-2xl">
+                                        Financiero
+                                    </span>
+                                </div>
+                                <form class="flex flex-col mt-2 sm:flex-row sm:gap-5" [formGroup]="analisisOperaciones">
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Monto programados</mat-label>
+                                            <input matInput type="text" formControlName="monto_programacion"
+                                            [value]="analisisOperaciones.get('monto_programacion')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Apoyos</mat-label>
+                                            <input matInput type="text" formControlName="monto_apoyo"
+                                            [value]="analisisOperaciones.get('monto_apoyo')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Incumplimiento</mat-label>
+                                            <input matInput type="text" formControlName="monto_incumplimiento"
+                                            [value]="analisisOperaciones.get('monto_incumplimiento')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </form>
+                                <form class="flex flex-col mt-2 sm:flex-row sm:gap-5" [formGroup]="analisisOperaciones">
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Afectaciones</mat-label>
+                                            <input matInput type="text" formControlName="monto_afectacion"
+                                            [value]="analisisOperaciones.get('monto_afectacion')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Deducciones de operadores</mat-label>
+                                            <input matInput type="text" formControlName="monto_deduccion_op"
+                                            [value]="analisisOperaciones.get('monto_deduccion_op')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex sm:w-1/3">
+                                        <mat-form-field class="flex-auto">
+                                            <mat-label>Deducciones generales</mat-label>
+                                            <input matInput type="text" formControlName="monto_deduccion_grl"
+                                            [value]="analisisOperaciones.get('monto_deduccion_grl')?.value"
+                                            [placeholder]="'1000.00'" [readonly]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </form>
+                            </ng-template>
+                        </mat-tab>
+
+                        <!-- Kilometraje conciliad -->
+                        <mat-tab label="Kilometraje conciliado">
+                            <ng-template matTabContent>
+                                <div class="flex mt-1">
+                                    <mat-tab-group class="w-full px-0" mat-stretch-tabs="false" [animationDuration]="'0'">
+                                        <!-- KILOMETROS PROGRAMADOS -->
+                                        <mat-tab label="Kilómetros programados">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto hidden sm:contents" #table [dataSource]="kilometrosP" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of kilometrosPColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km_conciliation'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km_conciliation'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayedkilometrosPColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayedkilometrosPColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+                                                <mat-list role="list" class="contents sm:hidden">
+                                                    <mat-list-item role="listitem" *ngFor="let data of kilometrosP" class="mx-0 mb-4">
+                                                        <div class="info-container">
+                                                            <div class="title">
+                                                                <div>
+                                                                    <h4 class="order-numero text-sm">Día: <span class="text-sm">{{data.day}}</span></h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="information">
+                                                                <h5 class="order-vendedor">Fecha: {{data.date}}</h5>
+                                                                <h5 class="order-vendedor">Autobús:</h5>
+                                                                <h5 class="order-vendedor">{{data.tipo_automovil_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Km conciliados: {{data.km_conciliation | number:'1.2-2' }}</h5>
+                                                                <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                                <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </mat-list-item>
+                                                </mat-list>
+                                            </ng-template>
+                                        </mat-tab>
+
+                                        <!-- APOYO -->
+                                        <mat-tab label="Apoyos">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto  hidden sm:contents" #table [dataSource]="apoyo" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of generalColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayedGeneralColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayedGeneralColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+
+                                                <mat-list role="list"  class="contents sm:hidden">
+                                                    <mat-list-item role="listitem" *ngFor="let data of apoyo">
+                                                        <div class="info-container">
+                                                            <div class="title">
+                                                                <div>
+                                                                    <h4 class="order-numero">Fecha: <span>{{data.date}}</span></h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="information">
+                                                                <h5 class="order-vendedor">Hora: {{data.hour}}</h5>
+                                                                <h5 class="order-vendedor">Autobús:</h5>
+                                                                <h5 class="order-vendedor">{{data.tipo_automovil_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Concepto: {{data.concepto_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Km: {{data.km | number:'1.2-2' }}</h5>
+                                                                <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                                <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </mat-list-item>
+                                                </mat-list>
+                                            </ng-template>
+                                        </mat-tab>
+
+                                        <!-- INCUMPLIMIENTO -->
+                                        <mat-tab label="Incumplimientos">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto  hidden sm:contents" #table [dataSource]="incumplimiento" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of generalColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayedGeneralColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayedGeneralColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+
+                                                <mat-list role="list"  class="contents sm:hidden">
+                                                    <mat-list-item role="listitem" *ngFor="let data of incumplimiento">
+                                                        <div class="info-container">
+                                                            <div class="title">
+                                                                <div>
+                                                                    <h4 class="order-numero text-sm">Fecha: <span class="text-sm">{{data.date}}</span></h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="information">
+                                                                <h5 class="order-vendedor">Hora: {{data.hour}}</h5>
+                                                                <h5 class="order-vendedor">Autobús:</h5>
+                                                                <h5 class="order-vendedor">{{data.tipo_automovil_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Concepto: {{data.concepto_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Km: {{data.km | number:'1.2-2' }}</h5>
+                                                                <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                                <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </mat-list-item>
+                                                </mat-list>
+                                            </ng-template>
+                                        </mat-tab>
+
+                                        <!-- AFECTACIONES -->
+                                        <mat-tab label="Afectaciones">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto  hidden sm:contents" #table [dataSource]="afectaciones" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of generalColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayedGeneralColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayedGeneralColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+
+                                                <mat-list role="list"  class="contents sm:hidden">
+                                                    <mat-list-item role="listitem" *ngFor="let data of afectaciones">
+                                                        <div class="info-container">
+                                                            <div class="title">
+                                                                <div>
+                                                                    <h4 class="order-numero text-sm">Fecha: <span class="text-sm">{{data.date}}</span></h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="information">
+                                                                <h5 class="order-vendedor">Hora: {{data.hour}}</h5>
+                                                                <h5 class="order-vendedor">Autobús:</h5>
+                                                                <h5 class="order-vendedor">{{data.tipo_automovil_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Concepto: {{data.concepto_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Km: {{data.km | number:'1.2-2' }}</h5>
+                                                                <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                                <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </mat-list-item>
+                                                </mat-list>
+                                            </ng-template>
+                                        </mat-tab>
+
+                                        <!-- DEDUCCIONES GENERALES -->
+                                        <mat-tab label="Deducciones generales">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto  hidden sm:contents" #table [dataSource]="deduccionesG" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of generalColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayedGeneralColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayedGeneralColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+
+                                                <mat-list role="list" class="contents sm:hidden">
+                                                    <mat-list-item role="listitem" *ngFor="let data of deduccionesG">
+                                                        <div class="info-container">
+                                                            <div class="title">
+                                                                <div>
+                                                                    <h4 class="order-numero text-sm">Fecha: <span class="text-sm">{{data.date}}</span></h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="information">
+                                                                <h5 class="order-vendedor">Hora: {{data.hour}}</h5>
+                                                                <h5 class="order-vendedor">Autobús:</h5>
+                                                                <h5 class="order-vendedor">{{data.tipo_automovil_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Concepto: {{data.concepto_id.name}}</h5>
+                                                                <h5 class="order-vendedor">Km: {{data.km | number:'1.2-2' }}</h5>
+                                                                <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                                <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </mat-list-item>
+                                                </mat-list>
+                                            </ng-template>
+                                        </mat-tab>
+
+                                        <!-- DEDUCCIONES DE OPERADORES -->
+                                        <mat-tab label="Deducciones de operadores">
+                                            <ng-template matTabContent>
+                                                <mat-table class="max-h-auto  hidden sm:contents" #table [dataSource]="deduccionesO" matSort fusePerfectScrollbar>
+                                                    <!-- Definir las columnas -->
+                                                    <ng-container *ngFor="let colum of deduccionesOColumns" [matColumnDef]="colum.id">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{colum.name}}</mat-header-cell>
+                                                        <mat-cell *matCellDef="let element">
+                                                            <ng-container
+                                                                *ngIf="colum.id != 'precio_unitario' && colum.id != 'monto_total' && colum.id != 'km'">
+                                                                {{ getColumnValue(element, colum.key) }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'precio_unitario' || colum.id === 'monto_total'">
+                                                                {{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="colum.id === 'km'">
+                                                                {{ getColumnValue(element, colum.key) | number:'1.2-2' }}
+                                                            </ng-container>
+                                                        </mat-cell>
+                                                    </ng-container>
+
+                                                    <mat-header-row *matHeaderRowDef="displayeddeduccionesOColumns"></mat-header-row>
+
+                                                    <ng-container>
+                                                        <mat-row *matRowDef="let element; columns: displayeddeduccionesOColumns;" class="product" matRipple>
+                                                        </mat-row>
+                                                    </ng-container>
+                                                </mat-table>
+                                            </ng-template>
+
+                                            <mat-list role="list" class="contents sm:hidden">
+                                                <mat-list-item role="listitem" *ngFor="let data of deduccionesO">
+                                                    <div class="info-container">
+                                                        <div class="title">
+                                                            <div>
+                                                                <h4 class="order-numero text-sm">Fecha: <span class="text-sm">{{data.date}}</span></h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="information">
+                                                            <h5 class="order-vendedor">Hora: {{data.hour}}</h5>
+                                                            <h5 class="order-vendedor">Concepto: {{data.concepto_id.name}}</h5>
+                                                            <h5 class="order-vendedor">Km: {{data.km | number:'1.2-2' }}</h5>
+                                                            <h5 class="order-vendedor">Tarifa aplicada: {{data.precio_unitario | currency:'USD':'symbol'}}</h5>
+                                                            <h5 class="order-vendedor">Monto total: {{data.monto_total | currency:'USD':'symbol'}}</h5>
+                                                        </div>
+                                                    </div>
+                                                </mat-list-item>
+                                            </mat-list>
+                                        </mat-tab>
+
+                                    </mat-tab-group>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

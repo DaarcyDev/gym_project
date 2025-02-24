@@ -1,0 +1,80 @@
+.card-table {
+    margin: 2em;
+    width: 95%;
+    box-shadow: 0 2px 15px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    // border-radius: 10px 10px 0 0;
+    border-radius: 10px;
+    background-color: #FFF;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+}
+
+.mdc-list {
+    padding: 8px -5em !important;
+}
+
+mat-list-item:nth-child(n) {
+    height: min-content;
+}
+
+mat-list-item {
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid #BABABA;
+    margin: 0.5rem 0;
+}
+
+.info-container {
+    display: grid;
+    grid-template-areas:
+        'title title'
+        'info state';
+    gap: 1px 5px;
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+
+    h6 {
+        font-size: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    h5 {
+        font-size: 0.7rem;
+        margin: 0;
+    }
+
+    h4 {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    .title {
+        grid-area: title;
+        border-bottom: 1px solid grey;
+
+        .order-numero {
+            span {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        }
+				 .state {
+				 	grid-area: state;
+				 	display: flex;
+				 	justify-content: center;
+				 	align-items: center;
+		
+				 	.order-status {
+				 		display: grid;
+				 	}
+				 }
+    }
+
+   
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+	padding: 24px 0 !important;
+}

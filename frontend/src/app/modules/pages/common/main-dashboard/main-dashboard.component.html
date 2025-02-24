@@ -1,0 +1,470 @@
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+	<div class="w-full max-w-screen-xl mx-auto">
+		<!-- Tabs -->
+		<mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
+			<!-- Home -->
+			<mat-tab label="Información">
+				<ng-template matTabContent>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+						<!-- Summary -->
+						<div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6">Total de facturas
+								</div>
+							</div>
+							<div class="flex flex-col items-center mt-auto">
+								<div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+									{{data?.kpi_data?.total_expenses}}</div>
+							</div>
+						</div>
+
+						<!-- Overdue -->
+						<div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6 ">Facturas por
+									cargar</div>
+							</div>
+							<div class="flex flex-col items-center mt-auto">
+								<div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+									{{data?.kpi_data?.invoice_load_expenses}}</div>
+							</div>
+						</div>
+						<!-- Issues -->
+						<div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6">Facturas en
+									revisión por Metrobús</div>
+							</div>
+							<div class="flex flex-col items-center mt-auto">
+								<div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+									{{data?.kpi_data?.process_expenses}}</div>
+							</div>
+						</div>
+						<!-- Features -->
+						<div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6">Facturas en
+									proceso de pago</div>
+							</div>
+							<div class="flex flex-col items-center mt-auto">
+								<div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">
+									{{data?.kpi_data?.payment_process_expenses}}</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class=" grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 w-full min-w-0 mt-8">
+
+						<!-- Resumen de facturación -->
+
+						<div
+							class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden">
+							<div class="absolute bottom-0 right-0 w-24 h-24 -m-6">
+								<mat-icon class="icon-size-24 opacity-25 text-green-500 dark:text-green-400"
+									[svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+							</div>
+							<div class="flex items-center">
+								<div class="flex flex-col">
+									<div class="text-lg font-medium tracking-tight leading-6 truncate">Resumen de
+										facturación</div>
+								</div>
+							</div>
+							<div class="flex flex-row flex-wrap mt-4 -mx-6">
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Monto por facturar
+									</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.expenses_summary?.amount_to_invoiced | currency:'USD'}}</div>
+								</div>
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Monto en revisión</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.expenses_summary?.amount_in_revision | currency:'USD'}}</div>
+								</div>
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Monto en proceso de
+										pago</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.expenses_summary?.amount_payment_process | currency:'USD'}}</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Último kilometraje -->
+
+						<div
+							class="relative flex flex-col flex-auto p-6 pr-3 pb-3 bg-card rounded-2xl shadow overflow-hidden">
+							<div class="absolute bottom-0 right-5 -m-6">
+								<mat-icon class="icon-size-24 opacity-25 text-green-500 dark:text-green-400"
+									[svgIcon]="'heroicons_outline:truck'"></mat-icon>
+							</div>
+							<div class="flex items-center">
+								<div class="flex flex-col">
+									<div class="text-lg font-medium tracking-tight leading-6 truncate">Último
+										kilometraje concilidado</div>
+								</div>
+							</div>
+							<div class="flex flex-row flex-wrap mt-4 -mx-6">
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Kilómetros programados
+									</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.last_km_summary?.km_programated | number:'1.0-0'}}</div>
+								</div>
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Kilometros conciliados
+									</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.last_km_summary?.km_conciliate | number:'1.0-0'}}</div>
+								</div>
+								<div class="flex flex-col mx-6 my-3">
+									<div class="text-sm font-medium leading-none text-secondary">Monto a pagar</div>
+									<div class="mt-2 font-medium text-3xl leading-none">
+										{{data?.last_km_summary?.payment_amount | currency:'USD'}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- KmProgVsKmCons -->
+
+					<div class="flex flex-col flex-auto mt-8 bg-card shadow rounded-2xl overflow-hidden">
+						<div class="flex items-start justify-between m-6 mb-0">
+							<div class="text-lg font-medium tracking-tight leading-6 truncate">
+								Kilómetros programados vs. Kilómetros conciliados
+							</div>
+							<div class="ml-2">
+								<button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+									[matMenuTriggerFor]="conversionMenuKmProgVsKmCons">
+									<span
+										class="font-medium text-sm text-secondary">{{selectedTimeKmProgVsKmCons}}</span>
+								</button>
+								<mat-menu #conversionMenuKmProgVsKmCons="matMenu">
+									<button mat-menu-item (click)="updateKmProgVsKmCons('thirty_days')">30 días</button>
+									<button mat-menu-item (click)="updateKmProgVsKmCons('three_months')">3
+										meses</button>
+									<button mat-menu-item (click)="updateKmProgVsKmCons('twelve_months')">12
+										meses</button>
+								</mat-menu>
+							</div>
+						</div>
+						<div class="flex items-start mt-6 mx-6">
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
+								<div class="flex flex-col">
+									<div class="flex items-center">
+										<div class="font-medium text-secondary leading-5">Km. programados promedio</div>
+									</div>
+									<div class="flex items-start mt-2">
+										<div class="text-4xl sm:text-3xl font-bold tracking-tight leading-none">{{
+											kmProgAvg | number:'1.0-0' }}</div>
+									</div>
+								</div>
+								<div class="flex flex-col">
+									<div class="flex items-center">
+										<div class="font-medium text-secondary leading-5">Km. conciliados promedio</div>
+									</div>
+									<div class="flex items-start mt-2">
+										<div class="text-4xl sm:text-3xl font-bold tracking-tight leading-none">{{
+											KmConsAvg | number:'1.0-0'}}</div>
+									</div>
+								</div>
+								<div class="flex flex-col">
+									<div class="flex items-center">
+										<div class="font-medium text-secondary leading-5">Monto a pagar promedio</div>
+									</div>
+									<div class="flex items-start mt-2">
+										<div class="text-4xl sm:text-3xl font-bold tracking-tight leading-none">{{
+											AmountAvg | currency:'USD'}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="flex flex-col flex-auto h-80 mt-3">
+							<apx-chart class="flex-auto w-full h-full" [chart]="chartkmProgVskmCons?.chart"
+								[colors]="chartkmProgVskmCons?.colors" [dataLabels]="chartkmProgVskmCons?.dataLabels"
+								[grid]="chartkmProgVskmCons?.grid" [legend]="chartkmProgVskmCons?.legend"
+								[series]="chartkmProgVskmCons?.series" [stroke]="chartkmProgVskmCons?.stroke"
+								[tooltip]="chartkmProgVskmCons?.tooltip" [xaxis]="chartkmProgVskmCons?.xaxis"
+								[yaxis]="chartkmProgVskmCons?.yaxis"
+								[markers]="chartkmProgVskmCons?.markers"></apx-chart>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-8 w-full mt-6 md:mt-8">
+						<!-- chartkmLine -->
+						<div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6 truncate">Kilómetros
+									conciliados por línea</div>
+								<div class="ml-2">
+									<button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+										[matMenuTriggerFor]="conversionMenukmlines">
+										<span class="font-medium text-sm text-secondary">{{selectedTimeKmLines}}</span>
+									</button>
+									<mat-menu #conversionMenukmlines="matMenu">
+										<button mat-menu-item (click)="updateKmLinesData('thirty_days')">30
+											días</button>
+										<button mat-menu-item (click)="updateKmLinesData('three_months')">3
+											meses</button>
+										<button mat-menu-item (click)="updateKmLinesData('twelve_months')">12
+											meses</button>
+									</mat-menu>
+								</div>
+							</div>
+							<div class="flex flex-col sm:flex-col md:flex-col lg:flex-row">
+								<div class="flex flex-col flex-auto mt-6 h-44 lg:w-60">
+									<apx-chart class="flex flex-auto items-center justify-center w-full h-full"
+										[chart]="chartKmLine?.chart" [colors]="chartKmLine?.colors"
+										[labels]="chartKmLine?.labels" [plotOptions]="chartKmLine?.plotOptions"
+										[series]="chartKmLine?.series" [states]="chartKmLine?.states"
+										[tooltip]="chartKmLine?.tooltip"></apx-chart>
+								</div>
+								<div class="mt-8 max-h-44 overflow-y-auto px-2">
+									<div class="-my-3 divide-y">
+										<ng-container *ngFor="let dataset of chartKmLine?.series; let i = index">
+											<div class="grid grid-cols-3 py-3">
+												<div class="flex items-center">
+													<div class="flex-0 w-2 h-2 rounded-full"
+														[style.backgroundColor]="chartKmLine?.colors[i]">
+													</div>
+													<div class="ml-3 truncate">{{chartKmLine?.labels[i]}}</div>
+												</div>
+												<div class="font-medium text-right">{{chartKmLine?.records_number *
+													dataset / 100 | currency:'USD':'symbol'}}</div>
+												<div class="text-right text-secondary">{{dataset | number:'1.2-2'}}%
+												</div>
+											</div>
+										</ng-container>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- chartkmBus -->
+						<div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
+							<div class="flex items-start justify-between">
+								<div class="text-lg font-medium tracking-tight leading-6 truncate">Kilómetros
+									conciliados por tipo de
+									autobús</div>
+								<div class="ml-2">
+									<button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+										[matMenuTriggerFor]="conversionMenukmBus">
+										<span class="font-medium text-sm text-secondary">{{selectedTimeKmBus}}</span>
+									</button>
+									<mat-menu #conversionMenukmBus="matMenu">
+										<button mat-menu-item (click)="updateKmBusData('thirty_days')">30 días</button>
+										<button mat-menu-item (click)="updateKmBusData('three_months')">3 meses</button>
+										<button mat-menu-item (click)="updateKmBusData('twelve_months')">12
+											meses</button>
+									</mat-menu>
+								</div>
+							</div>
+							<div class="flex flex-col sm:flex-col md:flex-col lg:flex-row">
+								<div class="flex flex-col flex-auto mt-6 h-44 lg:w-60 min-w-[220px]">
+									<apx-chart class="flex flex-auto items-center justify-center w-full h-full"
+										[chart]="chartKmBus?.chart" [colors]="chartKmBus?.colors"
+										[labels]="chartKmBus?.labels" [plotOptions]="chartKmBus?.plotOptions"
+										[series]="chartKmBus?.series" [states]="chartKmBus?.states"
+										[tooltip]="chartKmBus?.tooltip"></apx-chart>
+								</div>
+								<div class="mt-8 max-h-44 overflow-y-auto px-2">
+									<div class="-my-3 divide-y">
+										<ng-container *ngFor="let dataset of chartKmBus?.series; let i = index">
+											<div class="grid grid-cols-3 py-3">
+												<div class="flex items-center">
+													<div class="flex-0 w-2 h-2 rounded-full"
+														[style.backgroundColor]="chartKmBus?.colors[i]">
+													</div>
+													<div class="ml-3 truncate">{{chartKmBus?.labels[i]}}</div>
+												</div>
+												<div class="font-medium text-right">{{chartKmBus?.records_number *
+													dataset / 100 | currency:'USD':'symbol'}}</div>
+												<div class="text-right text-secondary">{{dataset | number:'1.2-2'}}%
+												</div>
+											</div>
+										</ng-container>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Facturas en revision -->
+					<div class="flex flex-col flex-auto p-6 mt-8 bg-card rounded-2xl overflow-hidden">
+						<div class="xl:col-span-2 flex flex-col flex-auto bg-card rounded-2xl overflow-hidden">
+							<div class="flex flex-col justify-between m-6 mb-6">
+								<div class="flex text-lg items-start font-medium tracking-tight leading-6 truncate">
+									Facturas en proceso
+								</div>
+								<!-- Paginacion -->
+								<div class="flex flex-col items-center sm:items-end justify-between mt-4">
+									<div class="flex flex-1 justify-between sm:hidden pt-2">
+										<a (click)="onPageChange(-1)"
+											class="relative mr-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Anterior</a>
+										<div class="flex flex-col w-auto">
+											<p class="text-sm text-gray-700 text-center">
+												Mostrando
+											</p>
+											<p class="text-sm text-gray-700 text-center">
+												<span class="font-medium">{{ considerationsPaginadas?.length }}</span>
+												de
+												<span class="font-medium">{{ numTotal }}</span>
+											</p>
+											<p class="text-sm text-gray-700 text-center">
+												Resultados
+											</p>
+										</div>
+										<a (click)="onPageChange('s')"
+											class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Siguiente</a>
+									</div>
+
+									<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+										<div class="mr-3">
+											<p class="text-sm text-gray-700">
+												Mostrando
+												<span class="font-medium">{{ considerationsPaginadas?.length }}</span>
+												de
+												<span class="font-medium">{{ numTotal }}</span>
+												Resultados
+											</p>
+										</div>
+										<nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+											aria-label="Pagination">
+											<!-- control de retroceder -->
+											<a (click)="onPageChange(-1)"
+												class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+												<span class="sr-only">Anterior</span>
+												<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+													aria-hidden="true">
+													<path fill-rule="evenodd"
+														d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+														clip-rule="evenodd" />
+												</svg>
+											</a>
+
+											<ng-container *ngFor="let pages of pagination">
+												<!-- numeraciones -->
+												<a (click)="onPageChange(pages)" *ngIf="pages != 'md'"
+													class="relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 bg_color_blue"
+													[class.bg-primary]="pages === page"
+													[class.text-white]="pages === page"
+													[class.text-gray-900]="pages !== page"
+													[class.hover:bg-gray-50]="pages !== page"
+													[class.ring-1]="pages !== page" [class.ring-inset]="pages !== page"
+													[class.ring-gray-300]="pages !== page"
+													[class.focus:outline-offset-0]="pages !== page"
+													[class.focus:outline-offset-0]="pages !== page">
+													{{ pages }}
+												</a>
+
+												<span *ngIf="pages === 'md'"
+													class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">...</span>
+
+											</ng-container>
+
+											<!-- control de avanzar -->
+											<a (click)="onPageChange('s')"
+												class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+												<span class="sr-only">Siguiente</span>
+												<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+													aria-hidden="true">
+													<path fill-rule="evenodd"
+														d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+														clip-rule="evenodd" />
+												</svg>
+											</a>
+										</nav>
+									</div>
+								</div>
+							</div>
+							<div class="flex flex-col">
+								<mat-table class="max-h-auto hidden sm:contents" #table [dataSource]="dataSource"
+									matSort fusePerfectScrollbar>
+
+									<!-- Definir las columnas -->
+									<ng-container *ngFor="let colum of tableColumns" [matColumnDef]="colum.id">
+										<mat-header-cell *matHeaderCellDef mat-sort-header="{{ colum.id }}">
+											{{ colum.name }}
+										</mat-header-cell>
+										<mat-cell *matCellDef="let element">
+											<ng-container class="border-spacing-x-2.5"
+												*ngIf="colum.id === 'state_name'">
+												<mat-chip [style.background-color]="element.state_color"
+													class="rounded-2xl text-sm text-white px-2 truncate ..." selected>{{
+													element.state_name
+													}}</mat-chip>
+											</ng-container>
+											<ng-container *ngIf="colum.id === 'total_amount'">
+												{{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+											</ng-container>
+											<ng-container
+												*ngIf="colum.id !== 'state_name' && colum.id !== 'total_amount'">
+												{{ getColumnValue(element, colum.key) }}
+											</ng-container>
+										</mat-cell>
+									</ng-container>
+
+									<!-- Definir las filas -->
+									<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+									<ng-container>
+										<mat-row *matRowDef="let element; columns: displayedColumns;" class="product"
+											matRipple (click)="showDetails(element.id)"></mat-row>
+									</ng-container>
+
+									<ng-container matColumnDef="recentOrdersTableFooter" class="py-6 border-0">
+										<mat-footer-cell *matFooterCellDef colspan="6" class="py-6 px-6 border-0 ">
+											<button mat-stroked-button (click)="goToConsiderations()"
+												class="footer-button">Ver todas las facturas</button>
+										</mat-footer-cell>
+									</ng-container>
+									<mat-footer-row class="h-16 border-0"
+										*matFooterRowDef="['recentOrdersTableFooter']"></mat-footer-row>
+
+								</mat-table>
+								<mat-list role="list" class="contents sm:hidden">
+									<mat-list-item role="listitem" *ngFor="let data of considerationsPaginadas"
+										class="mx-0 mb-2">
+										<div class="info-container">
+											<div class="title" (click)="showDetails(data.id)">
+												<h4 class="order-numero text-sm">Folio: <span
+														class="text-sm">{{data.name}}</span></h4>
+											</div>
+											<div class="information" (click)="showDetails(data.id)">
+												<h5 class="order-vendedor">Fecha de gasto: {{data.date}}</h5>
+												<h5 class="order-vendedor">Tipo de gasto: {{data.expense_type_name}}
+												</h5>
+												<h5 class="order-vendedor">Línea rel.: {{data.linea.name_short}}</h5>
+												<h5 class="order-vendedor border-solid border-[#BABABA] border-b">Total:
+													{{data.total_amount |
+													currency:'USD':'symbol'}}</h5>
+												<div class="flex justify-end py-1">
+													<mat-chip [style.border-style]="borderStyle"
+														[style.border-color]="data.state_color"
+														[style.border-width]="borderWidth"
+														[style.color]="data.state_color"
+														class="rounded-2xl px-2 truncate ... text-sm font-bold"
+														selected>{{
+														data.state_name }}</mat-chip>
+												</div>
+											</div>
+										</div>
+									</mat-list-item>
+									<button mat-stroked-button (click)="goToConsiderations()"
+										class="footer-button mt-8">
+										<div class="flex items-center">
+											<div class="text-sm">Ver todas las facturas </div>
+											<div class="text-sm"><mat-icon class="icon-size-3 " color="black"
+													[svgIcon]="'heroicons_solid:chevron-right'"></mat-icon></div>
+										</div>
+									</button>
+								</mat-list>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</mat-tab>
+		</mat-tab-group>
+	</div>
+</div>

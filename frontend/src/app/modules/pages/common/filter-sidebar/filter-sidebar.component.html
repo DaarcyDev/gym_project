@@ -1,0 +1,118 @@
+<div class="mx-5">
+    <div class="my-5">
+        <h4 class="flex justify-center text-2xl font-medium tracking-wide color_blue">Filtros avanzados</h4>
+    </div>
+    <div>
+        <form name="filtros" [formGroup]="filtersFormGroup">
+            <!-- Filtros select para contraprestaciones -->
+            <div *ngIf="type === 'c'">
+                <div class="mb-2 text-base">
+                    <span> Ordernar por fecha de validez</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Sleccionar</mat-label>
+                    <mat-select formControlName="date">
+                        <mat-option *ngFor="let orden of orderFecha" [value]="orden.id" >
+                            {{orden.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- Filtros checkbox -->
+            <div *ngIf="type === 'c'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por tipo de gasto</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Seleccionar</mat-label>
+                    <mat-select formControlName="expense_type" multiple>
+                        <mat-option *ngFor="let type of orderExpense" [value]="type.id">
+                            {{type.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="type === 'c'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por tipo de pago</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Seleccionar</mat-label>
+                    <mat-select formControlName="payment_type" multiple>
+                        <mat-option *ngFor="let type of orderPayment" [value]="type.id">
+                            {{type.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="type === 'c'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por estado</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Seleccionar</mat-label>
+                    <mat-select formControlName="state" multiple>
+                        <mat-option *ngFor="let state of orderState" [value]="state.id">
+                            {{state.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div *ngIf="type === 'k'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por rango de fechas</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Rango de fechas</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate formControlName="date_start" placeholder="Fecha de inicio">
+                        <input matEndDate formControlName="date_end" placeholder="Fecha de fin">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="type === 'k'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por línea</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Seleccionar</mat-label>
+                    <mat-select formControlName="linea" multiple>
+                        <mat-option *ngFor="let linea of orderLinea" [value]="linea.id">
+                            {{linea.name_short}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="type === 'k'">
+                <div class="mb-2 text-base">
+                    <span>Filtrar por estatus</span>
+                </div>
+                <mat-form-field appearance="outline" class="flex">
+                    <mat-label>Seleccionar</mat-label>
+                    <mat-select formControlName="estatus" multiple>
+                        <mat-option *ngFor="let state of orderEstatus" [value]="state.id">
+                            {{state.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="flex justify-center my-8 sm:my-6 md:my-4">
+        <button mat-button class="bg_color_blue" (click)="advancedSearch()">Filtrar</button>
+    </div>
+    <div class="flex justify-center">
+        <span class="color_blue mt-2 " (click)="clearAllFilters()">Limpiar filtros</span>
+    </div>
+</div>

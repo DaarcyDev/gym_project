@@ -1,0 +1,441 @@
+// @import "../../../../../styles/breakpoints.scss";
+
+// ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+// 	color: #004689 !important;
+// }
+
+// ::ng-deep .mdc-tab-indicator .mdc-tab-indicator__content {
+// 	border-color: #004689 !important;
+// }
+
+// #profile-usuario {
+// 	font-family: "Montserrat";
+
+// 	::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-content {
+// 		@include media-breakpoint(xs) {
+// 			padding: 1em 0 5em 0 !important;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			padding: 1em 0 5em 0 !important;
+// 		}
+// 	}
+
+// 	.actions-profile-detalle,
+// 	.actions-profile-editar {
+// 		display: grid;
+// 		grid-template-columns: 8em;
+// 		grid-template-rows: 2.5em;
+// 		gap: 1px 1px;
+// 		grid-template-areas: "." ".";
+// 		/* @include media-breakpoint(xs) {
+// 			grid-template-columns: 7em;
+// 		} */
+// 		margin: 0em 0em 1.5em 0em;
+// 		padding: 10px 0px;
+// 		background-color: white;
+
+// 		.action {
+// 			padding: 0 1em;
+// 			display: grid;
+// 			justify-content: center;
+// 			align-items: center;
+// 			border-radius: 5px;
+// 			cursor: pointer;
+// 			width: 100%;
+// 			height: 100%;
+// 		}
+
+// 		.action-outline {
+// 			margin-left: 1.5em;
+// 			background-color: #FFF;
+// 			color: #004689;
+// 			border: 1px solid #004689;
+// 		}
+
+// 		.action-filled {
+// 			margin-left: 1.5em;
+// 			background-color: #004689;
+// 			color: #FFF;
+// 			border: 1px solid #004689;
+// 		}
+// 	}
+
+// 	.contacto-form-div {
+// 		display: grid;
+// 		grid-template-columns: 1fr 1fr;
+// 		gap: 1em;
+// 	}
+
+// 	.direccion-form-one {
+// 		display: grid;
+// 		grid-template-columns: 1fr 1fr 1fr;
+// 		gap: 1em;
+
+// 		@include media-breakpoint(xs) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			grid-template-columns: 1fr;
+// 		}
+// 	}
+
+// 	.direccion-form-two {
+// 		display: grid;
+// 		grid-template-columns: 1fr 1fr;
+// 		gap: 1em;
+
+// 		@include media-breakpoint(xs) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			grid-template-columns: 1fr;
+// 		}
+// 	}
+
+// 	.direccion-form-three {
+// 		display: grid;
+// 		grid-template-columns: 1fr 1fr;
+// 		gap: 1em;
+
+// 		@include media-breakpoint(xs) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			grid-template-columns: 1fr;
+// 		}
+// 	}
+
+// 	.direccion-form-four {
+// 		display: grid;
+// 		grid-template-columns: 1fr 1fr;
+// 		gap: 1em;
+
+// 		@include media-breakpoint(xs) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			grid-template-columns: 1fr;
+// 		}
+// 	}
+
+// 	.actions-profile-editar {
+// 		grid-template-columns: 8em 8em;
+// 		gap: 1px 1em;
+
+// 		@include media-breakpoint(xs) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		@include media-breakpoint(sm) {
+// 			grid-template-columns: 1fr;
+// 		}
+
+// 		/* @include media-breakpoint(xs) {
+// 			grid-template-columns: 7em 7em;
+// 		} */
+// 	}
+
+// 	// Acciones hover
+// 	.action:hover {
+// 		opacity: 0.7;
+// 		background: #BABABA36;
+// 	}
+
+// 	// Acciones active
+// 	.action:active {
+// 		.description {
+// 			font-weight: bold;
+// 		}
+
+// 		background: #BABABA24;
+// 	}
+
+
+// 	.content {
+// 		display: flex;
+// 		justify-content: center;
+// 		overflow: auto;
+// 		background-color: #FFF;
+
+// 		.tab-historial {
+// 			/* @include media-breakpoint(xs) {
+// 				display: none !important;
+// 			} */
+// 		}
+
+// 		.forma-content {
+// 			display: grid;
+// 			grid-template-columns: 1fr;
+// 			grid-template-rows: auto auto;
+// 			gap: 1px 1px;
+// 			grid-template-areas: "formulario" "lista-interna";
+// 			padding-top: 0px !important;
+// 			width: 100%;
+
+// 			// Icono
+// 			.active-icon {
+// 				border-radius: 50%;
+// 			}
+
+// 			.delete-icon {
+// 				color: red;
+// 			}
+
+// 			// Estilo botón de activar o desactivar
+// 			.toggle-option {
+// 				display: grid;
+// 				grid-template-columns: 4em 1fr;
+// 				grid-template-rows: 1fr;
+// 				gap: 1px 5px;
+// 				grid-template-areas: "title toggle";
+// 				margin-top: 0.5em;
+// 				margin-bottom: 1.3em;
+// 			}
+
+// 			.title {
+// 				grid-area: title;
+// 				margin-top: auto;
+// 				margin-bottom: auto;
+// 			}
+
+// 			.toggle {
+// 				grid-area: toggle;
+// 				margin-top: auto;
+// 				margin-bottom: auto;
+
+// 				.mat-slide-toggle.mat-disabled {
+// 					opacity: 1;
+// 				}
+// 			}
+
+// 			.direccion,
+// 			.seguridad {
+// 				padding-top: 1em;
+
+// 				// Estilo botón de activar o desactivar
+// 				.toggle-option {
+// 					grid-template-columns: 1fr 1fr;
+// 					/* @include media-breakpoint(xs) {
+// 						grid-template-columns: 1fr auto;
+// 					} */
+// 				}
+// 			}
+
+// 			// Grid container para el formulario y lista interna
+// 			.formulario {
+// 				grid-area: formulario;
+// 			}
+
+// 			.usuario {
+// 				display: grid;
+// 				grid-template-columns: 0.5fr 1.5fr;
+// 				grid-template-rows: auto auto;
+// 				gap: 1px 1.5em;
+// 				grid-template-areas: "imagen information-acceso";
+
+// 				@include media-breakpoint(xs) {
+// 					grid-template-columns: 1fr;
+// 					grid-template-areas: "imagen" "information-acceso";
+// 				}
+
+// 				@include media-breakpoint(sm) {
+// 					grid-template-columns: 1fr;
+// 					grid-template-areas: "imagen" "information-acceso";
+// 				}
+
+// 				/* @include media-breakpoint(xs) {
+// 					grid-template-columns: 1fr;
+// 					grid-template-rows: auto auto auto;
+// 					gap: 1px;
+// 					grid-template-areas:
+// 					"imagen" "information-acceso" "information-contacto";
+// 				} */
+
+// 			}
+
+// 			.imagen {
+// 				grid-area: imagen;
+// 				text-align: center;
+// 				position: relative;
+
+// 				/* @include media-breakpoint(xs) {
+// 					height: 100px;
+// 					margin-bottom: 1.5em;
+// 				}
+// 				@include media-breakpoint(md) {
+// 					margin-top: auto;
+// 					margin-bottom: auto;
+// 				}
+// 				@include media-breakpoint(lg) {
+// 					margin-top: auto;
+// 					margin-bottom: auto;
+// 				}
+// 				@include media-breakpoint(xl) {
+// 					margin-top: auto;
+// 					margin-bottom: auto;
+// 				} */
+// 				.user_imagen {
+// 					width: 200px !important;
+// 					// height: 200px !important;
+// 					margin-bottom: 1.5em;
+// 					z-index: -1;
+
+// 					@include media-breakpoint(xs) {
+// 						width: 100% !important;
+// 					}
+
+// 					@include media-breakpoint(sm) {
+// 						width: 100% !important;
+// 					}
+
+// 					/* @include media-breakpoint(sm) {
+// 						width: 150px !important;
+// 						// height: 150px !important;
+// 					}
+// 					@include media-breakpoint(xs) {
+// 						width: 100px !important;
+// 						// height: 100px !important;
+// 					} */
+// 				}
+
+// 				.camera_icon {
+// 					right: 0.3em;
+// 					bottom: 1.8em;
+// 					height: 50px;
+// 					width: 50px;
+// 					cursor: pointer;
+// 					border-radius: 50%;
+// 					z-index: 1;
+// 					position: absolute;
+// 					/* 	@include media-breakpoint(sm) {
+// 						right: 0.8em;
+// 						bottom: 9em;
+// 						height: 45px;
+// 						width: 45px;
+// 					}
+// 					@include media-breakpoint(xs) {
+// 						right: 5em;
+// 						bottom: 0.2em;
+// 						height: 35px;
+// 						width: 35px;
+// 					} */
+// 				}
+
+// 				.d-none {
+// 					display: none;
+// 				}
+
+// 			}
+
+// 			.information-acceso {
+// 				grid-area: information-acceso;
+// 				display: grid;
+// 				align-items: center;
+// 			}
+
+// 			.information-contacto {
+// 				grid-area: information-contacto;
+// 			}
+
+// 			.lista-interna {
+// 				display: grid;
+// 				grid-template-columns: 1fr;
+// 				grid-template-rows: auto auto;
+// 				gap: 1px 1px;
+// 				grid-template-areas: "lista-header" "lista-body";
+// 				grid-area: lista-interna;
+// 			}
+
+// 			.lista-header {
+// 				display: grid;
+// 				grid-template-columns: 0.5 1.5fr;
+// 				grid-template-rows: 1fr;
+// 				gap: 1px 1px;
+// 				grid-template-areas: "lista-title lista-actions";
+// 				grid-area: lista-header;
+// 				/* @include media-breakpoint(xs) {
+// 					grid-template-columns: auto 1.5fr;
+// 				} */
+// 			}
+
+// 			.lista-actions {
+// 				grid-area: lista-actions;
+// 				margin-top: auto;
+// 				margin-bottom: auto;
+// 				display: grid !important;
+// 				grid-template-columns: 1fr 1fr 1fr;
+// 				grid-template-rows: 1fr;
+// 				grid-template-areas: ". . .";
+// 				/* @include media-breakpoint(xs) {
+// 					grid-template-columns: 1fr;
+// 					grid-template-rows: auto 1fr 1fr;
+// 					grid-template-areas: "." "." ".";
+// 				} */
+
+// 				.search {
+// 					border: 1px solid #BABABA;
+// 					border-radius: 0.5em;
+// 					margin: 1em 0;
+// 				}
+
+// 				.paginador {
+// 					margin: auto;
+// 				}
+// 			}
+
+// 			.lista-title {
+// 				grid-area: lista-title;
+// 				margin-top: auto;
+// 				margin-bottom: auto;
+// 				/* @include media-breakpoint(xs) {
+// 					width: 0 !important;
+// 				}
+// 				@include media-breakpoint(md) {
+// 					width: 0 !important;
+// 				} */
+
+
+// 			}
+
+// 			.lista-body {
+// 				grid-area: lista-body;
+// 			}
+// 		}
+// 	}
+// }
+
+
+// .style-button{
+// 	font-family: "Inter var";
+// }
+// .mdc-tab__content{
+// 	.mdc-tab__text-label {
+// 		color: #0b172a !important;
+// 	}
+// 	.mdc-tab-indicator{
+// 		.mdc-tab-indicator__content .mdc-tab-indicator__content--underline{
+// 			color: #0b172a !important;
+// 		}
+// 	}
+// }
+
+::ng-deep .required-field-edit .mat-mdc-form-field-flex {
+	background-color: rgb(238 242 255) !important;
+}
+::ng-deep .read-only-field-edit .mat-mdc-form-field-flex {
+	background-color: #F6F6F6 !important;
+}
+
+.bg_color_blue {
+	background-color: #5d8da8 !important;
+	color: #fff !important;
+}
+
+.color_blue {
+	color: #5d8da8 !important;
+}

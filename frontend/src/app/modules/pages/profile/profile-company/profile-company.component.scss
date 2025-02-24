@@ -1,0 +1,224 @@
+@import "../../../../../styles/breakpoints.scss";
+
+::ng-deep .required-field-edit .mat-mdc-form-field-flex {
+	background-color: rgb(238 242 255) !important;
+}
+
+::ng-deep .read-only-field-edit .mat-mdc-form-field-flex {
+	background-color: #F6F6F6 !important;
+}
+
+.button-container{
+	min-height: 40px;
+}
+
+::ng-deep .mat-mdc-tab-body-content{
+	padding: 24px 0 !important;
+}
+
+.mb-action-bar {
+	display: flex;
+	gap: 0;
+	font-size: 1em;
+	background: #FFF;
+	height: 3.5em;
+	border-bottom: 1px solid #d8d8d8;
+
+	.mb-action {
+		display: flex;
+		gap: 1px 5px;
+		padding: 0rem 0.3rem;
+		border: 1px solid #d8d8d8;
+		background: #FFF;
+		color: #0b172a;
+		cursor: pointer;
+		height: 100%;
+
+		@include media-breakpoint(sm) {
+			height: 3.5em;
+			grid-template-columns: 1fr;
+			grid-template-rows: 0.5fr 1fr;
+			grid-template-areas: "icono" "description";
+		}
+
+		@include media-breakpoint(xs) {
+			height: 3.5em;
+			grid-template-columns: 1fr;
+			grid-template-rows: 0.5fr 1fr;
+			grid-template-areas: "icono" "description";
+		}
+	}
+
+	.icono {
+		grid-area: icono;
+		font-size: 3rem;
+		color: #00C3D1;
+		font-weight: 500;
+		//margin: auto;
+		margin-top: auto;
+		margin-bottom: auto;
+		display: flex;
+		align-items: center;
+
+		@include media-breakpoint(md) {
+			height: 0em;
+		}
+
+		@include media-breakpoint(sm) {
+			height: 0em;
+		}
+	}
+
+	.description {
+		color: #5d8da8 !important;
+		grid-area: description;
+		//font-weight: 500;
+		margin-top: auto;
+		margin-bottom: auto;
+		line-height: 1;
+		text-align: left;
+
+		@include media-breakpoint(md) {
+			margin: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+			// height: 2em;
+		}
+
+		@include media-breakpoint(sm) {
+			margin: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		@include media-breakpoint(xs) {
+			margin: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+			text-align: center;
+		}
+	}
+
+	.mb-indicador {
+		display: grid;
+		grid-template-columns: 0.5fr 1.5fr;
+		grid-template-rows: 1fr;
+		gap: 1px 5px;
+		grid-template-areas: "indicador information";
+		// min-height: 5em;
+		padding: 0.5rem 0.5rem;
+		border: 1px solid #00C3D1;
+		background: #FFF;
+		color: #3D4151;
+		cursor: pointer;
+		height: 100%;
+
+		@include media-breakpoint(md) {
+			grid-template-columns: 1fr;
+			grid-template-rows: 0.5fr 1fr;
+			grid-template-areas: "indicador" "information";
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+			grid-template-rows: 0.5fr 1fr;
+			grid-template-areas: "indicador" "information";
+		}
+	}
+
+	.indicador {
+		grid-area: indicador;
+		color: #00C3D1;
+		font-size: 3rem;
+		font-weight: 500;
+		margin: auto;
+		margin-top: auto;
+		margin-bottom: auto;
+
+		@include media-breakpoint(md) {
+			height: 1em;
+		}
+
+		@include media-breakpoint(sm) {
+			height: 1em;
+		}
+	}
+
+	.information {
+		grid-area: information;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+		gap: 1px 1px;
+		grid-template-areas: "contador" "titulo";
+
+		font-weight: 500;
+		margin-top: auto;
+		margin-bottom: auto;
+
+		.count {
+			font-weight: bold;
+			margin-right: 0.5em;
+		}
+
+		@include media-breakpoint(md) {
+			margin: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		@include media-breakpoint(sm) {
+			margin: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+	}
+
+	.contador {
+		grid-area: contador;
+		text-align: left;
+	}
+
+	.titulo {
+		grid-area: titulo;
+	}
+
+	// Cuando esta deshabilitada la opción
+
+	.mb-action-disabled {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.mb-action-disabled:hover {
+		opacity: 1;
+		background: #FFF;
+	}
+
+	.mb-action-disabled:active {
+		background: #FFF;
+
+		.description {
+			font-weight: normal;
+		}
+	}
+
+	.mb-indicador-disabled {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.mb-indicador-disabled:hover {
+		opacity: 1;
+		background: #FFF;
+	}
+
+	.mb-indicador-disabled:active {
+		background: #FFF;
+
+		.description {
+			font-weight: normal;
+		}
+	}
+
+}

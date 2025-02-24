@@ -15,8 +15,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class FuseFullscreenComponent
 {
-    @Input() iconTpl!: TemplateRef<any>;
-    @Input() tooltip!: string;
+    @Input() iconTpl: TemplateRef<any>;
+    @Input() tooltip: string;
 
     /**
      * Constructor
@@ -34,7 +34,6 @@ export class FuseFullscreenComponent
     {
         if (!this._document.fullscreenEnabled)
         {
-            console.log('Fullscreen is not available in this browser.');
             return;
         }
 

@@ -1,0 +1,117 @@
+import { NgIf } from '@angular/common';
+import { Component, inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RouterLink } from '@angular/router';
+import { fuseAnimations } from '@fuse/animations';
+import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
+import { AuthService } from 'app/core/auth/auth.service';
+import { AuthPopUpComponent } from 'app/modules/pages/common/auth-pop-up/auth-pop-up.component';
+
+@Component({
+    selector     : 'auth-forgot-password',
+    templateUrl  : './forgot-password.component.html',
+    styleUrls: ['./forgot-password.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    animations   : fuseAnimations,
+    standalone   : true,
+    imports      : [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatProgressSpinnerModule, RouterLink],
+})
+export class AuthForgotPasswordComponent implements OnInit
+{
+    @ViewChild('forgotPasswordNgForm') forgotPasswordNgForm: NgForm;
+	readonly dialog = inject(MatDialog);
+
+    alert: { type: FuseAlertType; message: string } = {
+        type   : 'success',
+        message: '',
+    };
+    forgotPasswordForm: UntypedFormGroup;
+    showAlert: boolean = false;
+    odooResponse: any;
+
+    /**
+     * Constructor
+     */
+    constructor(
+        private _authService: AuthService,
+        private _formBuilder: UntypedFormBuilder,
+    )
+    {
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * On init
+     */
+    ngOnInit(): void
+    {
+        // Create the form
+        this.forgotPasswordForm = this._formBuilder.group({
+            email: ['', [Validators.required, Validators.email]],
+        });
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Send the reset link
+     */
+    sendResetLink(): void
+    {
+        // Return if the form is invalid
+        if ( this.forgotPasswordForm.invalid )
+        {
+            return;
+        }
+
+        // Disable the form
+        this.forgotPasswordForm.disable();
+        let params = {
+            email: this.forgotPasswordForm.value.email,
+        }
+
+        // Hide the alert
+        this.showAlert = false;
+
+        // Forgot password
+        this._authService.forgotPassword(params)
+            .subscribe({
+                next: (res) => {
+                    // Re-enable the form
+                    this.forgotPasswordForm.enable();
+                    // Reset the form
+                    this.forgotPasswordNgForm.resetForm();
+                    // Show the alert
+                    this.showAlert = true;
+
+                    this.odooResponse = res?.result;
+                    if (this.odooResponse?.status) {
+						this.alert = {
+							type: 'success',
+							message: 'Contraseña enviada a su correo.',
+						};
+						const dialogRef = this.dialog.open(AuthPopUpComponent, {
+							maxWidth: "764px",
+							data: { user: params.email, message: this.odooResponse?.data?.message, type: "change-password", close: true },
+						});
+                    }
+                    else {
+                        this.alert = {
+                            type: 'error',
+                            message: 'Correo no encontrado.',
+                        };
+                    }
+                }
+            })
+    }
+}

@@ -1,0 +1,56 @@
+<h1 mat-dialog-title class="title">Envio de archivos</h1>
+<div mat-dialog-content *ngIf="showData" class="content">
+    <div class="read-file" *ngIf="!showDocumentPdf">
+        <p class="read-file-title">
+            <mat-icon class="add-icon-file">attach_file</mat-icon>
+            Documento PDF:
+        </p>
+        <input id="user_document_pdf" (change)="upDocumentPdf($event)" type="file" accept="application/pdf" class="d-none"
+            style="display: none;">
+        <p class="add-file-name" onclick="document.getElementById('user_document_pdf').click();">
+            Anexar PDF
+            <mat-icon class="add-icon">add_circle_outline</mat-icon>
+        </p>
+    </div>
+    <div class="read-file" *ngIf="showDocumentPdf">
+        <p class="read-file-title">
+            <mat-icon class="aprove-icon">check_circle_outline</mat-icon>
+            Archivo PDF:
+        </p>
+    <span class="name-file">
+            <p class="file-name" (click)="downloadFile('pdf')">{{ fileNamePdf }}</p>
+            <button (click)="removeFile('pdf')" class="btn-close">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </span>
+    </div>
+
+    <div class="read-file" *ngIf="!showDocumentXml">
+        <p class="read-file-title">
+            <mat-icon class="add-icon-file">attach_file</mat-icon>
+            Documento XML:
+        </p>
+        <input id="user_document_xml" (change)="upDocumentXml($event)" type="file" accept="application/xml" class="d-none"
+            style="display: none;">
+        <p class="add-file-name" onclick="document.getElementById('user_document_xml').click();">
+            Anexar XML
+            <mat-icon class="add-icon">add_circle_outline</mat-icon>
+        </p>
+    </div>
+    <div class="read-file" *ngIf="showDocumentXml">
+        <p class="read-file-title">
+            <mat-icon class="aprove-icon">check_circle_outline</mat-icon>
+            Archivo XML:
+        </p>
+        <span class="name-file">
+            <p class="file-name" (click)="downloadFile('xml')">{{ fileNameXml }}</p>
+            <button (click)="removeFile('xml')" class="btn-close">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="buttons" mat-dialog-actions>
+    <button mat-button class="button-cancel" (click)="cerrar()">Cancelar</button>
+    <button *ngIf="showDocumentXml && showDocumentPdf" mat-button class="button-acept" (click)="enviar()">Enviar</button>
+</div>

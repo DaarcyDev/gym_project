@@ -1,0 +1,55 @@
+.mdc-list {
+    padding: 8px 1em;
+}
+
+mat-list-item:nth-child(n) {
+    height: min-content;
+}
+
+mat-list-item {
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid #BABABA;
+    margin: 1rem 0;
+}
+
+.info-container {
+    display: grid;
+    grid-template-areas:
+        'title'
+        'info';
+    gap: 1px 0px;
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+
+    h6 {
+        font-size: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    h5 {
+        font-size: 0.7rem;
+        margin: 0;
+    }
+
+    h4 {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    .title {
+        grid-area: title;
+        border-bottom: 1px solid grey;
+
+        .order-numero {
+            span {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+mat-list-item:nth-child(1) {
+	margin-top: 0;
+}

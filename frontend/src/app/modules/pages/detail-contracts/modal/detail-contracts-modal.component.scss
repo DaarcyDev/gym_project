@@ -1,0 +1,48 @@
+.mdc-dialog__content>:first-child{
+    font-size: 17px;
+    text-align: center;
+    color: black;
+    margin-bottom: 15px;
+}
+
+.mat-mdc-form-field {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.actions-profile-editar {
+    display: flex;
+    flex-wrap: nowrap;
+
+    .action {
+        padding: 0 0.5em;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .action-outline {
+        margin-left: 5px;
+        padding: 5px 25px;
+        background-color: #FFF;
+        color: #004689;
+        border: 1px solid #004689;
+    }
+
+    .action-filled {
+        padding: 5px 25px;
+        background-color: #004689;
+        color: #FFF;
+        border: 1px solid #004689;
+    }
+}
+
+.mat-mdc-button{
+    border-radius: 5px !important;
+}
+
+.mat-mdc-dialog-content{
+    padding: 15px;
+}

@@ -1,0 +1,65 @@
+<div id="contraprestaciones" class="page-layout simple left-sidebar inner-sidebar inner-scroll general-list">
+	<div class="content">
+		<div class="card-table" fxFlex>
+
+
+			<mat-table class="min-h-lvh max-h-auto" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+				<!-- Definir las columnas -->
+				<ng-container *ngFor="let colum of tableColumns" [matColumnDef]="colum.id">
+					<mat-header-cell *matHeaderCellDef mat-sort-header="{{ colum.id }}">
+						{{ colum.name }}
+					</mat-header-cell>
+					<mat-cell *matCellDef="let element">
+						<ng-container class="border-spacing-x-2.5" *ngIf="colum.id === 'state_periodo_linea'">
+							<mat-chip [style.background-color]="element.state_periodo_linea_color"
+								class="rounded-2xl text-sm text-white px-2 truncate ..." selected>{{ element.state_periodo_linea_name }}</mat-chip>
+						</ng-container>
+						<ng-container class="border-spacing-x-2.5" *ngIf="colum.id === 'state_periodo'">
+							<mat-chip [style.background-color]="element.state_periodo_color" class="rounded-2xl text-sm text-white px-2 truncate ..."
+								selected>{{ element.state_periodo_name }}</mat-chip>
+						</ng-container>
+						<ng-container class="border-spacing-x-2.5" *ngIf="colum.id === 'state'">
+							<mat-chip [style.background-color]="element.state_color" class="rounded-2xl text-sm text-white px-2 truncate ..."
+								selected>{{ element.state_name }}</mat-chip>
+						</ng-container>
+						<ng-container *ngIf="colum.id != 'state' && colum.id != 'monto_total' && colum.id != 'monto_pagado' && colum.id != 'monto_por_pagar' && colum.id != 'cantidad_total'">
+							{{ getColumnValue(element, colum.key) }}
+						</ng-container>
+						<ng-container *ngIf="colum.id === 'monto_total' || colum.id === 'monto_pagado' || colum.id === 'monto_por_pagar'">
+							{{ getColumnValue(element, colum.key) | currency:'USD':'symbol' }}
+						</ng-container>
+						<ng-container *ngIf="colum.id === 'cantidad_total'">
+							{{ getColumnValue(element, colum.key) | number:'1.2-2'}}
+						</ng-container>
+					</mat-cell>
+				</ng-container>
+
+				<!-- Ocultar columnas
+				<ng-container matColumnDef="actions">
+					<mat-header-cell class="hidden md:contents" *matHeaderCellDef>
+						<button [matMenuTriggerFor]="columnMenu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #columnMenu="matMenu">
+							<mat-checkbox *ngFor="let col of hideColumns" [checked]="displayedColumns.includes(col.id)"
+								(change)="toggleColumn(col.id)">
+								{{ col.name }}
+							</mat-checkbox>
+						</mat-menu>
+					</mat-header-cell>
+					<mat-cell *matCellDef="let element">
+					</mat-cell>
+				</ng-container>-->
+
+				<!-- Definir las filas -->
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+				<ng-container>
+					<mat-row *matRowDef="let element; columns: displayedColumns;" matRipple	(click)="showDetails(element)">
+					</mat-row>
+				</ng-container>
+			</mat-table>
+		</div>
+	</div>
+</div>

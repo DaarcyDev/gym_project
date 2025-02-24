@@ -22,8 +22,8 @@ import { FuseHorizontalNavigationSpacerItemComponent } from './components/spacer
 })
 export class FuseHorizontalNavigationComponent implements OnChanges, OnInit, OnDestroy
 {
-    @Input() name: string;
-    @Input() navigation!: FuseNavigationItem[];
+    @Input() name: string = this._fuseUtilsService.randomId();
+    @Input() navigation: FuseNavigationItem[];
 
     onRefreshed: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -37,8 +37,6 @@ export class FuseHorizontalNavigationComponent implements OnChanges, OnInit, OnD
         private _fuseUtilsService: FuseUtilsService,
     )
     {
-        // Initialize name
-        this.name = this._fuseUtilsService.randomId();
     }
 
     // -----------------------------------------------------------------------------------------------------

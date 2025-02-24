@@ -15,7 +15,9 @@ import { FuseVerticalNavigationGroupItemComponent } from '@fuse/components/navig
 import { FuseVerticalNavigationSpacerItemComponent } from '@fuse/components/navigation/vertical/components/spacer/spacer.component';
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
-import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil, tap } from 'rxjs';
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -40,8 +42,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     @Input() autoCollapse: boolean = true;
     @Input() inner: boolean = false;
     @Input() mode: FuseVerticalNavigationMode = 'side';
-    @Input() name!: string;
-    @Input() navigation!: FuseNavigationItem[];
+    @Input() name: string = this._fuseUtilsService.randomId();
+    @Input() navigation: FuseNavigationItem[];
     @Input() opened: boolean = true;
     @Input() position: FuseVerticalNavigationPosition = 'left';
     @Input() transparentOverlay: boolean = false;
@@ -49,23 +51,24 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     @Output() readonly modeChanged: EventEmitter<FuseVerticalNavigationMode> = new EventEmitter<FuseVerticalNavigationMode>();
     @Output() readonly openedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() readonly positionChanged: EventEmitter<FuseVerticalNavigationPosition> = new EventEmitter<FuseVerticalNavigationPosition>();
-    @ViewChild('navigationContent') private _navigationContentEl!: ElementRef;
+    @ViewChild('navigationContent') private _navigationContentEl: ElementRef;
 
     activeAsideItemId: string | null = null;
+	user: User;
     onCollapsableItemCollapsed: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onCollapsableItemExpanded: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onRefreshed: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
     private _animationsEnabled: boolean = false;
-    private _asideOverlay!: HTMLElement;
+    private _asideOverlay: HTMLElement;
     private readonly _handleAsideOverlayClick: any;
     private readonly _handleOverlayClick: any;
     private _hovered: boolean = false;
-    private _mutationObserver!: MutationObserver;
-    private _overlay!: HTMLElement;
-    private _player!: AnimationPlayer;
-    private _scrollStrategy!: ScrollStrategy;
+    private _mutationObserver: MutationObserver;
+    private _overlay: HTMLElement;
+    private _player: AnimationPlayer;
+    private _scrollStrategy: ScrollStrategy = this._scrollStrategyOptions.block();
     private _fuseScrollbarDirectives!: QueryList<FuseScrollbarDirective>;
-    private _fuseScrollbarDirectivesSubscription!: Subscription;
+    private _fuseScrollbarDirectivesSubscription: Subscription;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -81,8 +84,13 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _scrollStrategyOptions: ScrollStrategyOptions,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseUtilsService: FuseUtilsService,
+		private userService: UserService,
     )
     {
+		this.userService.user$.pipe(
+			takeUntil(this._unsubscribeAll),
+			tap((user) => this.user = user)
+		).subscribe()
         this._handleAsideOverlayClick = (): void =>
         {
             this.closeAside();
@@ -91,9 +99,6 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         {
             this.close();
         };
-
-        // Initialize the scroll strategy
-        this._scrollStrategy = this._scrollStrategyOptions.block();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -220,22 +225,22 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         if ( 'appearance' in changes )
         {
             // Execute the observable
-            this.appearanceChanged.next(changes['appearance'].currentValue);
+            this.appearanceChanged.next(changes.appearance.currentValue);
         }
 
         // Inner
         if ( 'inner' in changes )
         {
             // Coerce the value to a boolean
-            this.inner = coerceBooleanProperty(changes['inner'].currentValue);
+            this.inner = coerceBooleanProperty(changes.inner.currentValue);
         }
 
         // Mode
         if ( 'mode' in changes )
         {
             // Get the previous and current values
-            const currentMode = changes['mode'].currentValue;
-            const previousMode = changes['mode'].previousValue;
+            const currentMode = changes.mode.currentValue;
+            const previousMode = changes.mode.previousValue;
 
             // Disable the animations
             this._disableAnimations();
@@ -284,7 +289,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         if ( 'opened' in changes )
         {
             // Coerce the value to a boolean
-            this.opened = coerceBooleanProperty(changes['opened'].currentValue);
+            this.opened = coerceBooleanProperty(changes.opened.currentValue);
 
             // Open/close the navigation
             this._toggleOpened(this.opened);
@@ -294,14 +299,14 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         if ( 'position' in changes )
         {
             // Execute the observable
-            this.positionChanged.next(changes['position'].currentValue);
+            this.positionChanged.next(changes.position.currentValue);
         }
 
         // Transparent overlay
         if ( 'transparentOverlay' in changes )
         {
             // Coerce the value to a boolean
-            this.transparentOverlay = coerceBooleanProperty(changes['transparentOverlay'].currentValue);
+            this.transparentOverlay = coerceBooleanProperty(changes.transparentOverlay.currentValue);
         }
     }
 
@@ -310,8 +315,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
-        // Initialize the name if it's not provided
-        if ( !this.name )
+        // Make sure the name input is not an empty string
+        if ( this.name === '' )
         {
             this.name = this._fuseUtilsService.randomId();
         }
@@ -681,10 +686,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
                 this._overlay.removeEventListener('click', this._handleOverlayClick);
 
                 // Remove the overlay
-                if (this._overlay && this._overlay.parentNode) {
-                    this._overlay.parentNode.removeChild(this._overlay);
-                }
-                this._overlay = undefined as unknown as HTMLElement;
+                this._overlay.parentNode.removeChild(this._overlay);
+                this._overlay = null;
             }
 
             // Disable block scroll strategy
@@ -760,10 +763,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
                 this._asideOverlay.removeEventListener('click', this._handleAsideOverlayClick);
 
                 // Remove the aside overlay
-                if (this._asideOverlay && this._asideOverlay.parentNode) {
-                    this._asideOverlay.parentNode.removeChild(this._asideOverlay);
-                }
-                this._asideOverlay = undefined as unknown as HTMLElement;
+                this._asideOverlay.parentNode.removeChild(this._asideOverlay);
+                this._asideOverlay = null;
             }
         });
     }

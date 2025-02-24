@@ -31,8 +31,7 @@ export class FuseMediaWatcherService
                     for ( const [query] of matchingBreakpoints )
                     {
                         // Find the alias of the matching query
-                        const matchingEntry = Object.entries(screens).find(([alias, q]) => q === query);
-                        const matchingAlias = matchingEntry ? matchingEntry[0] : null;
+                        const matchingAlias = Object.entries(screens).find(([alias, q]) => q === query)[0];
 
                         // Add the matching query to the observable values
                         if ( matchingAlias )

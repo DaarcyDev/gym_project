@@ -1,0 +1,1 @@
+window['server_odoo'] = 'https://metrobusdev.opit.mx';

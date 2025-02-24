@@ -2,3 +2,28 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+.success-snackbar {
+	--mdc-snackbar-container-color: #58995a;
+	// --mdc-snackbar-container-color: #4caf50;
+	/* Fondo verde para éxito */
+	--mdc-snackbar-supporting-text-color: #ffffff;
+	--mdc-snackbar-container-shape: 10px;
+}
+
+.error-snackbar {
+	--mdc-snackbar-container-color: #c43f36;
+	/* Fondo rojo para error */
+	--mdc-snackbar-supporting-text-color: #ffffff;
+	--mdc-snackbar-container-shape: 10px;
+}
+
+.center-text-snackbar {
+	text-align: center;
+	/* Centra el texto horizontalmente */
+	justify-content: center;
+	/* Centra el contenido dentro del snackbar */
+	display: flex;
+	/* Asegura que justify-content funcione */
+	align-items: center;
+	/* Centra verticalmente si hay varias líneas */
+}
