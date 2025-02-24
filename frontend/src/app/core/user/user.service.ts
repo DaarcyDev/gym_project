@@ -34,30 +34,30 @@ export class UserService {
 	/**
 	 * Get the current signed-in user data
 	 */
-	get(): Observable<User> {
-		/* return this._httpClient.get<User>('api/common/user').pipe(
-		    tap((user) => {
-			   this._user.next(user);
-		    })
-		); */
-		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
-	}
+	// get(): Observable<User> {
+	// 	/* return this._httpClient.get<User>('api/common/user').pipe(
+	// 	    tap((user) => {
+	// 		   this._user.next(user);
+	// 	    })
+	// 	); */
+	// 	this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
+	// 	return JSON.parse(localStorage.getItem('accessToken')) ?? {};
+	// }
 
 	/**
 	 * Update the user
 	 *
 	 * @param user
 	 */
-	update(user: User): Observable<any> {
-		/* return this._httpClient.patch<User>('api/common/user', {user}).pipe(
-		    map((response) => {
-			   this._user.next(response);
-		    })
-		); */
-		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
-	}
+	// update(user: User): Observable<any> {
+	// 	/* return this._httpClient.patch<User>('api/common/user', {user}).pipe(
+	// 	    map((response) => {
+	// 		   this._user.next(response);
+	// 	    })
+	// 	); */
+	// 	this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
+	// 	return JSON.parse(localStorage.getItem('accessToken')) ?? {};
+	// }
 
 	logOutCall(): Observable<any> {
 

@@ -30,16 +30,16 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
 	// for the protected API routes which our response interceptor will
 	// catch and delete the access token from the local storage while logging
 	// the user out from the app.
-	if (authService.accessToken && !authService.accessTokenExpired) {
-		newReq = req.clone({
-			headers: req.headers.set('Authorization', 'Bearer ' + authService.accessToken),
-		});
-	}
-	else if (authService.accessTokenExpired) {
-		newReq = req.clone({
-			headers: req.headers.set('Authorization', 'Bearer ' + authService.refresh_token),
-		});
-	}
+	// if (authService.accessToken && !authService.accessTokenExpired) {
+	// 	newReq = req.clone({
+	// 		headers: req.headers.set('Authorization', 'Bearer ' + authService.accessToken),
+	// 	});
+	// }
+	// else if (authService.accessTokenExpired) {
+	// 	newReq = req.clone({
+	// 		headers: req.headers.set('Authorization', 'Bearer ' + authService.refresh_token),
+	// 	});
+	// }
 
 
 	// Response
@@ -66,19 +66,19 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
 				authService.signOut();
 			}
 			if (error.status === 303) {
-				authService.accessTokenExpired = true;
+				// authService.accessTokenExpired = true;
 				return authService.validateRefreshTokenCall().pipe(
 					switchMap(refreshRes => {
 						if (refreshRes?.result?.success) {
-							authService.accessToken = JSON.stringify(refreshRes?.result?.data?.new_access_token).slice(1, -1);
-							authService.refresh_token = JSON.stringify(refreshRes?.result?.data?.new_refresh_token).slice(1, -1);
-							authService.accessTokenExpired = false;
-							const newAuthReq = req.clone({
-								headers: req.headers.set('Authorization', 'Bearer ' + authService.accessToken),
-							});
-							let newRequest = http.request(newAuthReq);
-							//window.location.reload();
-							return next(newAuthReq);
+							// authService.accessToken = JSON.stringify(refreshRes?.result?.data?.new_access_token).slice(1, -1);
+							// authService.refresh_token = JSON.stringify(refreshRes?.result?.data?.new_refresh_token).slice(1, -1);
+							// authService.accessTokenExpired = false;
+							// const newAuthReq = req.clone({
+							// 	headers: req.headers.set('Authorization', 'Bearer ' + authService.accessToken),
+							// });
+							// let newRequest = http.request(newAuthReq);
+							// //window.location.reload();
+							// return next(newAuthReq);
 						} else {
 							authService.signOut();
 							return next(null);

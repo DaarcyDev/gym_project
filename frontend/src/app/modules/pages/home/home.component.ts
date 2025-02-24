@@ -166,10 +166,10 @@ export class HomeComponent {
 
 	getData(){
 		console.log('get data');
-		// this.userService.user$.pipe(
-		// 	takeUntil(this._unsubscribeAll),
-		// 	tap((user) => this.user = user)
-		// ).subscribe()
+		this.userService.user$.pipe(
+			takeUntil(this._unsubscribeAll),
+			tap((user) => this.user = user)
+		).subscribe()
 	}
 
 	private _fixSvgFill(element: Element): void {

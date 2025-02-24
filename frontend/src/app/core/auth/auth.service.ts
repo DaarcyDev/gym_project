@@ -23,21 +23,21 @@ export class AuthService {
 	/**
 	 * Setter & getter for access token
 	 */
-	set accessToken(token: string) {
-		localStorage.setItem('accessToken', token);
-	}
+	// set accessToken(token: string) {
+	// 	localStorage.setItem('accessToken', token);
+	// }
 
-	get accessToken(): string {
-		return localStorage.getItem('accessToken') ?? '';
-	}
+	// get accessToken(): string {
+	// 	return localStorage.getItem('accessToken') ?? '';
+	// }
 
-	set accessTokenExpired(value: boolean) {
-		localStorage.setItem('accessTokenExpired', JSON.stringify(value));
-	}
+	// set accessTokenExpired(value: boolean) {
+	// 	localStorage.setItem('accessTokenExpired', JSON.stringify(value));
+	// }
 
-	get accessTokenExpired(): boolean {
-		return JSON.parse(localStorage.getItem('accessTokenExpired')) ?? false;
-	}
+	// get accessTokenExpired(): boolean {
+	// 	return JSON.parse(localStorage.getItem('accessTokenExpired')) ?? false;
+	// }
 
 	set refresh_token(token: string) {
 		localStorage.setItem('refresh_token', token);
@@ -113,57 +113,36 @@ export class AuthService {
 		if (this._authenticated) {
 			return throwError('User is already logged in.');
 		}
-		// Simula la respuesta exitosa
-		const simulatedResponse = {
-			result: {
-				status: true,
-				data: {
-					access_token: 'dummyAccessToken',
-					refresh_token: 'dummyRefreshToken',
-					user: {
-						name: 'Dummy User',
-						email: 'dummy@example.com',
-						image: 'asd',
-						// Puedes incluir otros datos necesarios
-					}
-				}
-			}
-		};
-
-		// Marca como autenticado
 		this._authenticated = true;
-
-		// Retorna el observable simulado (puedes usar "of" de rxjs)
-		return of(simulatedResponse);
-		// return this._httpClient.post(environment.apiURL + '/api/web/user/login', { params }).pipe(
-		// 	switchMap((response: any) => {
-		// 		if (response?.result?.status) {
-		// 			this.accessToken = JSON.stringify(response?.result?.data?.access_token).slice(1, -1);
-		// 			this.refresh_token = JSON.stringify(response?.result?.data?.refresh_token).slice(1, -1);
-		// 			this.userName = JSON.stringify(response?.result?.data?.user?.name).slice(1, -1);
-		// 			this.userEmail = JSON.stringify(response?.result?.data?.user?.email).slice(1, -1);
-		// 			this.companyType = JSON.stringify(response?.result?.data?.user?.company_type).slice(1, -1);
-		// 			if (response?.result?.data?.user?.image != false) {
-		// 				this.userImage = JSON.stringify(response?.result?.data?.user?.image).slice(1, -1);
-		// 			}
-		// 			else {
-		// 				this.userImage = ""
-		// 			}
-		// 			this.accessTokenExpired = false;
-		// 			this._authenticated = true;
-		// 			this._userService.user = {
-		// 				name: this.userName,
-		// 				email: this.userEmail,
-		// 				image: this.userImage,
-		// 				accessToken: this.accessToken,
-		// 				refresh_token: this.refresh_token,
-		// 				companyType: this.companyType
-		// 			}
-		// 			this.updateProfileImage(this.userImage)
-		// 		}
-		// 		return of(response);
-		// 	})
-		// );
+		return this._httpClient.post(environment.apiURL + '/api/users/signin/', { params }).pipe(
+			switchMap((response: any) => {
+				if (response?.result?.status) {
+					// this.accessToken = JSON.stringify(response?.result?.data?.access_token).slice(1, -1);
+					this.refresh_token = JSON.stringify(response?.result?.data?.refresh_token).slice(1, -1);
+					this.userName = JSON.stringify(response?.result?.data?.user?.name).slice(1, -1);
+					this.userEmail = JSON.stringify(response?.result?.data?.user?.email).slice(1, -1);
+					this.companyType = JSON.stringify(response?.result?.data?.user?.company_type).slice(1, -1);
+					if (response?.result?.data?.user?.image != false) {
+						this.userImage = JSON.stringify(response?.result?.data?.user?.image).slice(1, -1);
+					}
+					else {
+						this.userImage = ""
+					}
+					// this.accessTokenExpired = false;
+					this._authenticated = true;
+					this._userService.user = {
+						name: this.userName,
+						email: this.userEmail,
+						image: this.userImage,
+						// accessToken: this.accessToken,
+						refresh_token: this.refresh_token,
+						companyType: this.companyType
+					}
+					this.updateProfileImage(this.userImage)
+				}
+				return of(response);
+			})
+		);
 	}
 
 	signInTFA(params: { user: string, password: string, code:string }): Observable<any> {
@@ -241,7 +220,7 @@ export class AuthService {
 	signInUsingToken(): Observable<any> {
 		// Sign in using the token
 		return this._httpClient.post('api/auth/sign-in-with-token', {
-			accessToken: this.accessToken
+			// accessToken: this.accessToken
 		}).pipe(
 			catchError(() =>
 
@@ -257,9 +236,9 @@ export class AuthService {
 				// in using the token, you should generate a new one on the server
 				// side and attach it to the response object. Then the following
 				// piece of code can replace the token with the refreshed one.
-				if (response.accessToken) {
-					this.accessToken = response.accessToken;
-				}
+				// if (response.accessToken) {
+				// 	this.accessToken = response.accessToken;
+				// }
 
 				// Set the authenticated flag to true
 				this._authenticated = true;
@@ -321,9 +300,9 @@ export class AuthService {
 		}
 
 		// Check the access token availability
-		if (!this.accessToken) {
-			return of(false);
-		}
+		// if (!this.accessToken) {
+		// 	return of(false);
+		// }
 
 		// Check the access token expire date
 		/*  if ( AuthUtils.isTokenExpired(this.accessToken) )
@@ -331,7 +310,7 @@ export class AuthService {
 			return of(false);
 		 } */
 		this._userService.user = {
-			accessToken: this.accessToken,
+			// accessToken: this.accessToken,
 			refresh_token: this.refresh_token
 		};
 
@@ -355,7 +334,7 @@ export class AuthService {
 	}
 
 	validateRefreshTokenCall(): Observable<any> {
-		this.accessTokenExpired = true;
+		// this.accessTokenExpired = true;
 		return this._httpClient.post(environment.apiURL + '/api/v1/refresh', {});
 	}
 }

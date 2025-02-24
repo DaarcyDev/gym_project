@@ -90,10 +90,10 @@ export class UserComponent implements OnInit, OnDestroy
         }
 
         // Update the user
-        this._userService.update({
-            ...this.user,
-            status,
-        }).subscribe();
+        // this._userService.update({
+        //     ...this.user,
+        //     status,
+        // }).subscribe();
     }
 
     /**

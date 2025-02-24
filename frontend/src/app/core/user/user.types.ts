@@ -10,6 +10,6 @@ export interface User {
 	tipo_usuario?: string;
 	companyType?: string;
 	user?: string;
-	accessToken: string;
+	// accessToken: string;
 	refresh_token: string;
 }
