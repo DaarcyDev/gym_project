@@ -17,24 +17,14 @@ import { ApexOptions, NgApexchartsModule, ApexAxisChartSeries } from 'ng-apexcha
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
-import { mergeMap, Subject, takeUntil, tap } from 'rxjs';
-import { ConcesDashboards } from '../common/conces-dashboards/conces-dashboards.component';
-// import { ProviderDashboards } from '../common/provider-dashboards/provider-dashboards.component';
-import { MainDashboardComponent } from '../common/main-dashboard/main-dashboard.component';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
-import { DashboardsService } from 'app/core/dashboards/dashboards.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'home',
 	standalone: true,
 	templateUrl: './home.component.html',
 	encapsulation: ViewEncapsulation.None,
-	imports: [RouterLink, FuseAlertComponent, NgIf, NgFor, FormsModule, ReactiveFormsModule, MatTableModule,
-		MatRippleModule, MatRippleModule, MatButtonToggleModule, MatMenuModule, MatFormFieldModule, MatTabsModule,
-		MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule, ConcesDashboards,
-		MainDashboardComponent
-	],
+	imports: [RouterLink, FuseAlertComponent, NgIf, NgFor, FormsModule, ReactiveFormsModule, MatTableModule, MatRippleModule, MatRippleModule, MatButtonToggleModule, MatMenuModule, MatFormFieldModule, MatTabsModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule],
 })
 export class HomeComponent {
 	/**
@@ -130,25 +120,16 @@ export class HomeComponent {
 		}
 	};
 
-	user: User;
-	dashboardData: any;
-	dashboardTableData: any;
-
 	constructor(
 		private _authService: AuthService,
 		private _router: Router,
-		private userService: UserService,
-		private dashboardsService: DashboardsService,
 	) {
-		this.getData();
 	}
 
-	ngOnInit() : void
+	ngOnIt() : void
 	{
 		// Get the data
 		this._prepareChartData();
-		localStorage.removeItem('filtersConsiderations');
-		localStorage.removeItem('filtersConces');
 
 		window['Apex'] = {
 			chart: {
@@ -162,14 +143,6 @@ export class HomeComponent {
 				},
 			},
 		};
-	}
-
-	getData(){
-		console.log('get data');
-		this.userService.user$.pipe(
-			takeUntil(this._unsubscribeAll),
-			tap((user) => this.user = user)
-		).subscribe()
 	}
 
 	private _fixSvgFill(element: Element): void {

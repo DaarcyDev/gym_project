@@ -1,7 +1,7 @@
 export interface Profile {
-	method?: string;
-	user?: string;
-	hash?: string;
+	method: string;
+	user: string;
+	hash: string;
 	name: string;
 	image: string | boolean;
 	regimen_fiscal: string | boolean;
@@ -18,9 +18,9 @@ export interface Profile {
 }
 
 export interface ProfileCompany {
-	method?: string;
-	user?: string;
-	hash?: string;
+	method: string;
+	user: string;
+	hash: string;
 	name: string;
 	image: string | boolean;
 	legal_id: string;
@@ -35,9 +35,4 @@ export interface ProfileCompany {
 	state_id: number | boolean;
 	country_id: number | boolean;
 	movil: string;
-}
-
-export interface ProfileCSituacionFiscal {
-	c_situacion_f?:string;
-	c_situacion_f_name?:string;
 }

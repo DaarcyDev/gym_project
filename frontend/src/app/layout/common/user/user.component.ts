@@ -90,10 +90,10 @@ export class UserComponent implements OnInit, OnDestroy
         }
 
         // Update the user
-        // this._userService.update({
-        //     ...this.user,
-        //     status,
-        // }).subscribe();
+        this._userService.update({
+            ...this.user,
+            status,
+        }).subscribe();
     }
 
     /**
@@ -101,16 +101,6 @@ export class UserComponent implements OnInit, OnDestroy
      */
     signOut(): void
     {
-		this._userService.logOutCall().subscribe({
-		});
         this._router.navigate(['/sign-out']);
     }
-
-	/**
-	 *  Profile
-	 */
-	goToProfile(): void
-	{
-		this._router.navigate(['/profile']);
-	}
 }

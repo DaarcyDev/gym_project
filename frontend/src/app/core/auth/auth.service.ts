@@ -13,8 +13,6 @@ export class AuthService {
 	private _userService = inject(UserService);
 
 	private _data: BehaviorSubject<any> = new BehaviorSubject(null);
-	private profileImageSubject = new BehaviorSubject<string>(this.getDefaultImage());
-	profileImage$ = this.profileImageSubject.asObservable();
 
 	// -----------------------------------------------------------------------------------------------------
 	// @ Accessors
@@ -23,62 +21,13 @@ export class AuthService {
 	/**
 	 * Setter & getter for access token
 	 */
-	// set accessToken(token: string) {
-	// 	localStorage.setItem('accessToken', token);
-	// }
-
-	// get accessToken(): string {
-	// 	return localStorage.getItem('accessToken') ?? '';
-	// }
-
-	// set accessTokenExpired(value: boolean) {
-	// 	localStorage.setItem('accessTokenExpired', JSON.stringify(value));
-	// }
-
-	// get accessTokenExpired(): boolean {
-	// 	return JSON.parse(localStorage.getItem('accessTokenExpired')) ?? false;
-	// }
-
-	set refresh_token(token: string) {
-		localStorage.setItem('refresh_token', token);
+	set accessToken(token: string) {
+		localStorage.setItem('accessToken', token);
 	}
 
-	get refresh_token(): string {
-		return localStorage.getItem('refresh_token') ?? '';
+	get accessToken(): string {
+		return localStorage.getItem('accessToken') ?? '';
 	}
-
-	set userName(token: string) {
-		localStorage.setItem('userName', token);
-	}
-
-	get userName(): string {
-		return localStorage.getItem('userName') ?? '';
-	}
-
-	set userEmail(token: string) {
-		localStorage.setItem('userEmail', token);
-	}
-
-	get userEmail(): string {
-		return localStorage.getItem('userEmail') ?? '';
-	}
-
-	set userImage(token: string) {
-		localStorage.setItem('userImage', token);
-	}
-
-	get userImage(): string {
-		return localStorage.getItem('userImage') ?? '';
-	}
-
-	set companyType(token: string) {
-		localStorage.setItem('companyType', token);
-	}
-
-	get companyType(): string {
-		return localStorage.getItem('companyType') ?? '';
-	}
-
 
 	// -----------------------------------------------------------------------------------------------------
 	// @ Public methods
@@ -90,7 +39,7 @@ export class AuthService {
 	 * @param email
 	 */
 	forgotPassword(params: { email: string }): Observable<any> {
-		return this._httpClient.post(environment.apiURL + '/api/web/user/recover/password/step-one', { params });
+		return this._httpClient.post(environment.apiURL + '/api/web/user/recover_password_1', { params });
 	}
 
 	/**
@@ -99,7 +48,7 @@ export class AuthService {
 	 * @param password
 	 */
 	resetPassword(params: { email: string, code: string, password: string, password_confirm: string }): Observable<any> {
-		return this._httpClient.post(environment.apiURL + '/api/web/user/recover/password/step-two', { params });
+		return this._httpClient.post(environment.apiURL + '/api/web/user/recover_password_2', { params });
 	}
 
 	/**
@@ -107,111 +56,29 @@ export class AuthService {
 	 *
 	 * @param credentials
 	 */
-	signIn(params: { user: string, password: string}): Observable<any> {
-		console.log('sign in service');
-		// Throw error, if the user is already logged in
+	signIn(params: { user: string, password: string }): Observable<any> {
 		if (this._authenticated) {
-			return throwError('User is already logged in.');
+			return throwError(() => new Error('User is already logged in.'));
 		}
-		this._authenticated = true;
+		console.log("auth.service signIn");
 		return this._httpClient.post(environment.apiURL + '/api/users/signin/', { params }).pipe(
 			switchMap((response: any) => {
+				console.log('response',response);
+				console.log('response.result', response.result);
+				console.log('response.result.status', response.result.status);
 				if (response?.result?.status) {
-					// this.accessToken = JSON.stringify(response?.result?.data?.access_token).slice(1, -1);
-					this.refresh_token = JSON.stringify(response?.result?.data?.refresh_token).slice(1, -1);
-					this.userName = JSON.stringify(response?.result?.data?.user?.name).slice(1, -1);
-					this.userEmail = JSON.stringify(response?.result?.data?.user?.email).slice(1, -1);
-					this.companyType = JSON.stringify(response?.result?.data?.user?.company_type).slice(1, -1);
-					if (response?.result?.data?.user?.image != false) {
-						this.userImage = JSON.stringify(response?.result?.data?.user?.image).slice(1, -1);
-					}
-					else {
-						this.userImage = ""
-					}
-					// this.accessTokenExpired = false;
+					console.log("si entro al if");
+					this.accessToken = JSON.stringify(response.result.data);
 					this._authenticated = true;
-					this._userService.user = {
-						name: this.userName,
-						email: this.userEmail,
-						image: this.userImage,
-						// accessToken: this.accessToken,
-						refresh_token: this.refresh_token,
-						companyType: this.companyType
-					}
-					this.updateProfileImage(this.userImage)
+					this._userService.user = response.result.data;
 				}
 				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
 			})
 		);
-	}
-
-	signInTFA(params: { user: string, password: string, code:string }): Observable<any> {
-		console.log('signInTFA service');
-		// Throw error, if the user is already logged in
-		if (this._authenticated) {
-			return throwError('User is already logged in.');
-		}
-		// return this._httpClient.get(`${this.baseUrl}signin/`);
-		// return this._httpClient.post(environment.apiURL + '/api/web/user/login/2fa', { params }).pipe(
-		// 	switchMap((response: any) => {
-		// 		if (response?.result?.status) {
-		// 			this.accessToken = JSON.stringify(response?.result?.data?.access_token).slice(1, -1);
-		// 			this.refresh_token = JSON.stringify(response?.result?.data?.refresh_token).slice(1, -1);
-		// 			this.userName = JSON.stringify(response?.result?.data?.user?.name).slice(1, -1);
-		// 			this.userEmail = JSON.stringify(response?.result?.data?.user?.email).slice(1, -1);
-		// 			this.companyType = JSON.stringify(response?.result?.data?.user?.company_type).slice(1, -1);
-		// 			if (response?.result?.data?.user?.image != false){
-		// 				this.userImage = JSON.stringify(response?.result?.data?.user?.image).slice(1, -1);
-		// 			}
-		// 			else{
-		// 				this.userImage = ""
-		// 			}
-		// 			this.accessTokenExpired = false;
-		// 			this._authenticated = true;
-		// 			this._userService.user = {
-		// 				name: this.userName,
-		// 				email: this.userEmail,
-		// 				image: this.userImage,
-		// 				accessToken: this.accessToken,
-		// 				refresh_token: this.refresh_token,
-		// 				companyType: this.companyType
-		// 			}
-		// 			this.updateProfileImage(this.userImage)
-		// 		}
-		// 		return of(response);
-		// 	})
-		// );
-	}
-
-	resendVerificationCode(params: { user: string, type: '2fa' | 'change_password' }): Observable<any> {
-		console.log('resendVerificationCode service');
-		return this._httpClient.post(environment.apiURL + '/api/web/user/get/verification/code', { params }).pipe(
-			switchMap((response: any) => {
-				return of(response);
-			})
-		);
-	}
-
-	changePasswordFirstStep(params: { user: string, current_password: string}): Observable<any>{
-		return this._httpClient.post(environment.apiURL + '/api/web/user/change/password/step-one', { params }).pipe(
-			switchMap((response: any) => {
-				return of(response);
-			})
-		);
-	}
-	changePasswordSecondStep(params: { user: string, current_password: string, code: string, password: string, password_confirm: string }): Observable<any>{
-		return this._httpClient.post(environment.apiURL + '/api/web/user/change/password/step-two', { params }).pipe(
-			switchMap((response: any) => {
-				return of(response);
-			})
-		);
-	}
-
-	private getDefaultImage(): string {
-		return this.userImage;
-	}
-	updateProfileImage(newImageUrl: string) {
-		this.profileImageSubject.next(newImageUrl);
 	}
 
 	/**
@@ -220,7 +87,7 @@ export class AuthService {
 	signInUsingToken(): Observable<any> {
 		// Sign in using the token
 		return this._httpClient.post('api/auth/sign-in-with-token', {
-			// accessToken: this.accessToken
+			accessToken: this.accessToken
 		}).pipe(
 			catchError(() =>
 
@@ -236,9 +103,9 @@ export class AuthService {
 				// in using the token, you should generate a new one on the server
 				// side and attach it to the response object. Then the following
 				// piece of code can replace the token with the refreshed one.
-				// if (response.accessToken) {
-				// 	this.accessToken = response.accessToken;
-				// }
+				if (response.accessToken) {
+					this.accessToken = response.accessToken;
+				}
 
 				// Set the authenticated flag to true
 				this._authenticated = true;
@@ -258,12 +125,6 @@ export class AuthService {
 	signOut(): Observable<any> {
 		// Remove the access token from the local storage
 		localStorage.removeItem('accessToken');
-		localStorage.removeItem('accessTokenExpired');
-		localStorage.removeItem('refresh_token');
-		localStorage.removeItem('userName');
-		localStorage.removeItem('userEmail');
-		localStorage.removeItem('userImage');
-		localStorage.removeItem('companyType');
 
 		// Set the authenticated flag to false
 		this._authenticated = false;
@@ -300,19 +161,16 @@ export class AuthService {
 		}
 
 		// Check the access token availability
-		// if (!this.accessToken) {
-		// 	return of(false);
-		// }
+		if (!this.accessToken) {
+			return of(false);
+		}
 
 		// Check the access token expire date
 		/*  if ( AuthUtils.isTokenExpired(this.accessToken) )
-		 {
+		{
 			return of(false);
 		 } */
-		this._userService.user = {
-			// accessToken: this.accessToken,
-			refresh_token: this.refresh_token
-		};
+		// this._userService.user = JSON.parse(this.accessToken);
 
 		// If the access token exists and it didn't expire, sign in using it
 		/* return this.signInUsingToken(); */
@@ -331,10 +189,5 @@ export class AuthService {
 				this._data.next(response);
 			}),
 		);
-	}
-
-	validateRefreshTokenCall(): Observable<any> {
-		// this.accessTokenExpired = true;
-		return this._httpClient.post(environment.apiURL + '/api/v1/refresh', {});
 	}
 }

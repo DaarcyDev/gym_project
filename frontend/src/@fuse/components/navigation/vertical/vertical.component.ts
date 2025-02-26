@@ -15,9 +15,7 @@ import { FuseVerticalNavigationGroupItemComponent } from '@fuse/components/navig
 import { FuseVerticalNavigationSpacerItemComponent } from '@fuse/components/navigation/vertical/components/spacer/spacer.component';
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
-import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil, tap } from 'rxjs';
+import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -54,7 +52,6 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     @ViewChild('navigationContent') private _navigationContentEl: ElementRef;
 
     activeAsideItemId: string | null = null;
-	user: User;
     onCollapsableItemCollapsed: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onCollapsableItemExpanded: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onRefreshed: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
@@ -84,13 +81,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _scrollStrategyOptions: ScrollStrategyOptions,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseUtilsService: FuseUtilsService,
-		private userService: UserService,
     )
     {
-		this.userService.user$.pipe(
-			takeUntil(this._unsubscribeAll),
-			tap((user) => this.user = user)
-		).subscribe()
         this._handleAsideOverlayClick = (): void =>
         {
             this.closeAside();

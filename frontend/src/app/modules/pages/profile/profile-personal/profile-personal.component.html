@@ -1,88 +1,175 @@
-<div class="flex flex-col flex-auto min-w-0">
-	<!-- Actions bar -->
-	<div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-4 px-6 sm:py-5 sm:px-10 border-b bg-card dark:bg-transparent">
-		<div class="flex-1 min-w-0">
-			<div class="flex gap-2">
-				<button class="rounded bg_color_blue" mat-flat-button  *ngIf="!editMode" (click)="editProfile()">Editar</button>
-				<button class="rounded" mat-flat-button color="accent" *ngIf="!editMode" (click)="editPassword()">Cambiar contraseña</button>
-				<button class="rounded bg_color_blue" mat-flat-button  *ngIf="editMode" (click)="updateProfile()">Guardar</button>
-				<button class="rounded" mat-flat-button color="accent" *ngIf="editMode" (click)="discardChanges()">Descartar</button>
-			</div>
+<div id="profile-usuario" class="page-layout carded fullwidth">
+	<!-- ACTIONS -->
+	<div class="actions-profile-detalle" *ngIf="!edit_enable">
+		<div class="action action-filled" (click)="editarPerfil()">
+			<span>Editar</span>
 		</div>
 	</div>
-	<!-- Content -->
-	<div class="flex-auto py-4 px-6 sm:py-8 sm:px-10">
-		<!-- Forms -->
-		<div class="h-300 min-h-300 bg-card rounded-2xl shadow">
-			<div class="flex flex-col gap-0 py-6 px-6 sm:py-8 sm:px-10">
-				<div class="flex flex-col sm:flex-row">
-					<div class="flex w-full items-center justify-center sm:w-1/2 md:w-2/5">
-						<div class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card sm:w-50 sm:h-50 md:w-60 md:h-60">
-							<!-- Upload / Remove avatar -->
-							<div class="absolute inset-0 bg-black bg-opacity-50 z-10" *ngIf="editMode"></div>
-							<div class="absolute inset-0 flex items-center justify-center z-20" *ngIf="editMode">
-								<div>
-									<input
-										id="avatar-file-input"
-										class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
-										type="file"
-										[multiple]="false"
-										[accept]="'image/jpeg, image/png'"
-										(change)="uploadAvatar(avatarFileInput.files)"
-										#avatarFileInput>
-									<label
-										class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer hover:bg-hover sm:w-15 sm:h-15 md:w-20 md:h-20"
-										for="avatar-file-input"
-										matRipple>
-										<mat-icon class="text-white w-9 h-9 sm:w-12 sm:h-12 md:w-15 md:h-15" [svgIcon]="'heroicons_outline:camera'"></mat-icon>
-									</label>
-								</div>
+	<div class="actions-profile-editar" *ngIf="edit_enable">
+		<div class="action action-filled" (click)="updateProfile()">
+			<span>Guardar</span>
+		</div>
+		<div class="action action-outline" (click)="cancelarEdicion()">
+			<span>Descartar</span>
+		</div>
+	</div>
+	<!-- ACTIONS -->
+
+	<!-- CONTENT CARD -->
+	<div class="content-card" fusePerfectScrollbar>
+		<!-- CONTENT -->
+		<div class="content">
+			<!-- FORMA CONTENT -->
+			<div class="forma-content m-16" fusePerfectScrollbar>
+				<!-- FORMULARIO -->
+				<div class="formulario" fusePerfectScrollbar>
+					<form name="usuarioForm" [formGroup]="usuarioForm" class="product w-100-p" fxLayout="column"
+						fxFlex>
+
+						<div class="usuario">
+							<div class="imagen">
+								<input id="user_img" (change)="changeProfilePhoto($event)" type="file"
+									accept="image/png, image/jpeg" class="d-none">
+								<img class="camera_icon" onclick="document.getElementById('user_img').click();"
+									src="./assets/images/pages/profile/camera_profile.svg" alt="Camera"
+									*ngIf="edit_enable">
+								<img class="user_imagen" *ngIf="!profile?.image && imagen == ''"
+									src="./assets/images/pages/profile/default_user.png" alt="Usuario">
+								<img class="user_imagen" *ngIf="!profile?.image && imagen != ''"
+									[src]="'data:image/png;base64,'+imagen" alt="Usuario">
+								<img class="user_imagen" *ngIf="profile?.image && imagen != ''"
+									[src]="'data:image/png;base64,'+imagen" alt="Usuario">
+								<img class="user_imagen" *ngIf="profile?.image && imagen == ''"
+									src="{{profile?.image}}" alt="User img">
 							</div>
-							<!-- Image/Letter -->
-							<img class="object-cover w-full h-full" *ngIf="userForm.value.avatar && !userForm.value.avatar.includes('http')" [src]="'data:image/png;base64,'+userForm.value.avatar">
-							<img class="object-cover w-full h-full" *ngIf="userForm.value.avatar.includes('http')" [src]="userForm.value.avatar">
-							<div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200 sm:text-9xl md:text-10xl" *ngIf="!userForm.value.avatar">
-								{{profileData?.name.charAt(0)}}
-							</div>
-						</div>
-					</div>
-					<div class="flex w-full sm:w-1/2 md:w-3/5">
-						<form class="flex flex-col w-full" [formGroup]="userForm">
-							<div class="flex flex-col gap-0">
-								<mat-form-field class="flex-auto" [ngClass]="{'required-field-edit': editMode}" subscriptSizing="dynamic">
-									<mat-label floatlLabel="never">Nombre</mat-label>
-									<input matInput type="text" formControlName="name" [placeholder]="'CDMX'" disabled="true">
-									<mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user'"></mat-icon>
+							<div class="information-acceso">
+								<mat-form-field appearance="outline" floatLabel="always"
+									class="w-100-p zs-form-field-required">
+									<mat-label>Nombre<span *ngIf="edit_enable"></span></mat-label>
+									<input matInput placeholder="Nombre" name="name" formControlName="name"
+										[readonly]="!edit_enable">
 								</mat-form-field>
-								<ng-container *ngFor="let validation of validationMessages.name">
-									<mat-error *ngIf="userForm.get('name').hasError(validation.type) && (userForm.get('name').dirty || userForm.get('name').touched) && editMode">
-										{{ validation.message }}
-									</mat-error>
-								</ng-container>
-							</div>
-							<div class="flex mt-4">
-								<mat-form-field class="flex-auto" subscriptSizing="dynamic" [ngClass]="{'read-only-field-edit': editMode}">
-									<mat-label>Correo electrónico</mat-label>
-									<input matInput type="email" formControlName="email" [placeholder]="'mail@https://www.metrobus.cdmx.gob.mx'" disabled="true">
-									<mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:envelope'"></mat-icon>
+
+								<mat-form-field appearance="outline" floatLabel="always"
+									class="w-100-p zs-form-field-required" class="zs-form-field-required">
+									<mat-label>Email</mat-label>
+									<input matInput placeholder="Email" name="email" formControlName="email"
+										disabled="true">
 								</mat-form-field>
-							</div>
-							<div class="flex flex-col gap-0 mt-4">
-								<mat-form-field class="flex-auto" [ngClass]="{'required-field-edit': editMode}" subscriptSizing="dynamic">
+
+								<mat-form-field appearance="outline" floatLabel="always"
+									class="w-100-p zs-form-field-required">
 									<mat-label>Teléfono</mat-label>
-									<input matInput type="tel" formControlName="phone" [placeholder]="'5555555555'"  [required]="editMode" [readonly]="!editMode">
-									<mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+									<input matInput placeholder="Teléfono" name="telefono"
+										formControlName="telefono" [readonly]="!edit_enable">
 								</mat-form-field>
-								<ng-container *ngFor="let validation of validationMessages.phone">
-									<mat-error *ngIf="userForm.get('phone').hasError(validation.type) && (userForm.get('phone').dirty || userForm.get('phone').touched) && editMode">
-										{{ validation.message }}
-									</mat-error>
-								</ng-container>
 							</div>
-						</form>
-					</div>
+
+						</div>
+
+
+					</form>
 				</div>
+				<!-- FORMULARIO -->
+
+				<!-- LISTA INTERNA -->
+				<div class="lista-interna" fusePerfectScrollbar>
+					<mat-tab-group fxLayout="column" fxFlex>
+
+						<mat-tab label="Dirección">
+							<div class="formulario direccion w-100-p">
+								<form name="direccionForm" [formGroup]="direccionForm" class="product w-100-p"
+									fxLayout="column" fxFlex>
+
+									<div class="direccion-form-one">
+										<mat-form-field appearance="outline"
+											class="w-100-p zs-form-field-required" floatLabel="always"
+											fxFlex="30">
+											<mat-label>Calle</mat-label>
+											<input matInput placeholder="Calle" name="calle"
+												formControlName="calle" [readonly]="!edit_enable">
+										</mat-form-field>
+
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="30">
+											<mat-label>Número exterior</mat-label>
+											<input matInput placeholder="Número exterior" name="numero_ext"
+												formControlName="numero_ext" [readonly]="!edit_enable">
+										</mat-form-field>
+
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="30">
+											<mat-label>Número interior</mat-label>
+											<input matInput placeholder="Número interior" name="numero_int"
+												formControlName="numero_int" [readonly]="!edit_enable">
+										</mat-form-field>
+
+									</div>
+
+									<div class="direccion-form-two">
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="47">
+											<mat-label>Colonia</mat-label>
+											<input matInput placeholder="Colonia" name="colonia"
+												formControlName="colonia" [readonly]="!edit_enable">
+										</mat-form-field>
+
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="47">
+											<mat-label>Municipio</mat-label>
+											<input matInput placeholder="Ciudad" name="ciudad"
+												formControlName="ciudad" [readonly]="!edit_enable">
+										</mat-form-field>
+
+									</div>
+
+									<div class="direccion-form-three">
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="47">
+											<mat-label>CP</mat-label>
+											<input matInput placeholder="Código postal" name="cp"
+												formControlName="cp" [readonly]="!edit_enable">
+										</mat-form-field>
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="47">
+											<mat-label>Estado</mat-label>
+											<input matInput placeholder="Estado" name="estado"
+												formControlName="estado" [readonly]="true"
+												*ngIf="!edit_enable">
+											<mat-select disableRipple placeholder="Estado" name="estado"
+												formControlName="estado" *ngIf="edit_enable">
+												<mat-option [value]="option.id"
+													*ngFor="let option of estados">{{option.name}}</mat-option>
+											</mat-select>
+										</mat-form-field>
+
+
+									</div>
+
+									<div class="direccion-form-four">
+
+										<mat-form-field appearance="outline" floatLabel="always" fxFlex="47">
+											<mat-label>País</mat-label>
+											<input matInput placeholder="País" name="pais"
+												formControlName="pais" [readonly]="true"
+												*ngIf="!edit_enable">
+											<mat-select disableRipple placeholder="País" name="pais"
+												formControlName="pais" (ngModelChange)="changePais($event)"
+												*ngIf="edit_enable">
+												<mat-option [value]="option.country_id"
+													*ngFor="let option of paises">{{option.name}}</mat-option>
+											</mat-select>
+										</mat-form-field>
+
+
+									</div>
+								</form>
+							</div>
+						</mat-tab>
+
+					</mat-tab-group>
+
+				</div>
+				<!-- LISTA INTERNA -->
 			</div>
+			<!-- FORMA CONTENT -->
 		</div>
+		<!-- CONTENT -->
 	</div>
+	<!-- CONTENT CARD -->
+
 </div>

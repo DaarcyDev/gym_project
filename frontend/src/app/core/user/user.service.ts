@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from 'app/core/user/user.types';
-import { environment } from 'environments/environment';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -34,35 +33,28 @@ export class UserService {
 	/**
 	 * Get the current signed-in user data
 	 */
-	// get(): Observable<User> {
-	// 	/* return this._httpClient.get<User>('api/common/user').pipe(
-	// 	    tap((user) => {
-	// 		   this._user.next(user);
-	// 	    })
-	// 	); */
-	// 	this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-	// 	return JSON.parse(localStorage.getItem('accessToken')) ?? {};
-	// }
+	get(): Observable<User> {
+		/* return this._httpClient.get<User>('api/common/user').pipe(
+		    tap((user) => {
+			   this._user.next(user);
+		    })
+		); */
+		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
+		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
+	}
 
 	/**
 	 * Update the user
 	 *
 	 * @param user
 	 */
-	// update(user: User): Observable<any> {
-	// 	/* return this._httpClient.patch<User>('api/common/user', {user}).pipe(
-	// 	    map((response) => {
-	// 		   this._user.next(response);
-	// 	    })
-	// 	); */
-	// 	this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-	// 	return JSON.parse(localStorage.getItem('accessToken')) ?? {};
-	// }
-
-	logOutCall(): Observable<any> {
-
-		return this._httpClient.post(environment.apiURL + '/api/web/user/logout', {});
+	update(user: User): Observable<any> {
+		/* return this._httpClient.patch<User>('api/common/user', {user}).pipe(
+		    map((response) => {
+			   this._user.next(response);
+		    })
+		); */
+		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
+		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
 	}
-
-	
 }

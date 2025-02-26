@@ -1,6 +1,5 @@
-import { user } from './../../../mock-api/common/user/data';
 import { NgIf } from '@angular/common';
-import { Component, inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -12,8 +11,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AuthPopUpComponent } from 'app/modules/pages/common/auth-pop-up/auth-pop-up.component';
 
 @Component({
 	selector: 'auth-sign-in',
@@ -26,7 +23,6 @@ import { AuthPopUpComponent } from 'app/modules/pages/common/auth-pop-up/auth-po
 })
 export class AuthSignInComponent implements OnInit {
 	@ViewChild('signInNgForm') signInNgForm: NgForm;
-	readonly dialog = inject(MatDialog);
 
 	alert: { type: FuseAlertType; message: string } = {
 		type: 'success',
@@ -34,10 +30,11 @@ export class AuthSignInComponent implements OnInit {
 	};
 	signInForm: UntypedFormGroup;
 	showAlert: boolean = false;
+	odooResponse: any;
 
 	/**
 	 * Constructor
-	*/
+	 */
 	constructor(
 		private _activatedRoute: ActivatedRoute,
 		private _authService: AuthService,
@@ -51,7 +48,7 @@ export class AuthSignInComponent implements OnInit {
 
 	/**
 	 * On init
-	*/
+	 */
 	ngOnInit(): void {
 		// Create the form
 		this.signInForm = this._formBuilder.group({
@@ -66,9 +63,8 @@ export class AuthSignInComponent implements OnInit {
 
 	/**
 	 * Sign in
-	*/
+	 */
 	signIn(): void {
-		console.log('sign in');
 		// Return if the form is invalid
 		if (this.signInForm.invalid) {
 			return;
@@ -78,43 +74,49 @@ export class AuthSignInComponent implements OnInit {
 		this.signInForm.disable();
 		let params = {
 			user: this.signInForm.value.user,
-			password: this.signInForm.value.password
+			password: this.signInForm.value.password,
 		}
-		// Hide the alert
+
+		console.log(params)
+		// Hide the alert 
 		this.showAlert = false;
 
 		// Sign in
-		this._authService.signIn(this.signInForm.value)
-			.subscribe(
-				() => {
-					// Set the redirect url.
-					// The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
-					// to the correct page after a successful sign in. This way, that url can be set via
-					// routing file and we don't have to touch here.
-
+		this._authService
+			.signIn(params)
+			.subscribe({
+				next: (res) => {
 					const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
-					console.log('redirectURL', redirectURL);
+					console.log("redirectURL", redirectURL);
+
 					// Navigate to the redirect url
 					this._router.navigateByUrl(redirectURL);
+					// this.odooResponse = res?.result;
+					// if (this.odooResponse?.status) {
+					// 	this.odooResponse = res?.result;
+
+					// 	const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
+					// 	//const redirectURL = '/pages/home';
+					// 	//Navigate to the redirect url
+					// 	this._router.navigateByUrl(redirectURL);
+
+					// 	// Re-enable the form
 					this.signInForm.enable();
-				},
-				(response) => {
-					console.log('response', response);
-					// Re-enable the form
-					this.signInForm.enable();
+					// }
+					// else {
+					// 	// Re-enable the form
+					// 	this.signInForm.enable();
 
-					// Reset the form
-					this.signInNgForm.resetForm();
+					// 	// Set the alert
+					// 	this.alert = {
+					// 		type: 'error',
+					// 		message: 'Usuario o contraseña incorrectos',
+					// 	};
 
-					// Set the alert
-					this.alert = {
-						type: 'error',
-						message: 'Wrong email or password',
-					};
-
-					// Show the alert
-					this.showAlert = true;
-				},
-			);
+					// 	// Show the alert
+					// 	this.showAlert = true;
+					// }
+				}
+			})
 	}
 }

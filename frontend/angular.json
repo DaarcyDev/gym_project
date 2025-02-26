@@ -57,10 +57,7 @@
                             "src/styles/vendors.scss",
                             "src/@fuse/styles/main.scss",
                             "src/styles/styles.scss",
-                            "src/styles/tailwind.scss",
-							{
-								"input": "src/styles/variables.scss"
-							}
+                            "src/styles/tailwind.scss"
                         ],
                         "scripts": []
                     },

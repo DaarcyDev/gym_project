@@ -15,8 +15,8 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
 {
     countdown: number = 5;
     countdownMapping: any = {
-        '=1'   : '# segundo',
-        'other': '# segundos',
+        '=1'   : '# second',
+        'other': '# seconds',
     };
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -39,8 +39,6 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-		localStorage.removeItem('filtersConsiderations');
-		localStorage.removeItem('filtersConces');
         // Sign out
         this._authService.signOut();
 

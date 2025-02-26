@@ -1,1 +1,1 @@
-window['server_odoo'] = 'https://metrobusdev.opit.mx';
+window['server_odoo'] = 'https://metrobus.opit.mx';

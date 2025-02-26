@@ -11,7 +11,6 @@ import { UserService } from 'app/core/user/user.service';
 import { ProfileService } from 'app/core/profile/profile.service';
 import { Subject } from 'rxjs';
 import { mergeMap, takeUntil, tap } from 'rxjs/operators';
-import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 //Types
 import { User } from 'app/core/user/user.types';
 import { ProfileCompany } from 'app/core/profile/profile.types';
@@ -21,75 +20,29 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from 'app/core/auth/auth.service';
-
-import { AttachCSituacionFiscalComponent } from 'app/modules/pages/common/attach-c-situacion-fiscal/attach-c-situacion-fiscal.component';
 
 @Component({
 	selector: 'app-profile-company',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatTabsModule, MatSelectModule, MatIconModule,MatDrawer, MatSidenavModule, AttachCSituacionFiscalComponent],
+	imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatTabsModule, MatSelectModule],
 	templateUrl: './profile-company.component.html',
 	styleUrl: './profile-company.component.scss'
 })
 export class ProfileCompanyComponent {
-	@ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+
 	private _unsubscribeAll: Subject<any> = new Subject<any>();
 	// catalogos
 	perfiles: Array<any> = [];
-	countries: Array<any> = [];
-	states: Array<any> = [];
+	paises: Array<any> = [];
+	estados: Array<any> = [];
 	tipo_login: Array<any> = [];
 
 	quick_search: string;
 
 	// Formularios
-	userForm: FormGroup;
-	directionForm: FormGroup;
-	companyForm: FormGroup;
-
-	validationMessages = {
-		//userForm
-		'name': [
-			{ type: 'required', message: 'El nombre es requerido.' },
-		],
-		'rfc': [
-			{ type: 'minlength', message: 'Recuerda que el RFC debe tener minimo 12 caracteres.' },
-			{ type: 'maxlength', message: 'Recuerda que el RFC debe tener máximo 13 caracteres.' },
-		],
-		//companyForm
-		'email': [
-			{ type: 'email', message: 'Ingrese un correo valido.' },
-		],
-		'telefono': [
-			{ type: 'minlength', message: 'El teléfono debe tener 10 caracteres.' },
-			{ type: 'maxlength', message: 'El teléfono debe tener 10 caracteres.' },
-		],
-		'movil': [
-			{ type: 'minlength', message: 'El teléfono debe tener 10 caracteres.' },
-			{ type: 'maxlength', message: 'El teléfono debe tener 10 caracteres.' },
-		],
-		//directionForm
-		'cp': [
-			{ type: 'required', message: 'El CP es requerido.' },
-			{ type: 'minlength', message: 'El CP debe tener 5 caracteres.' },
-			{ type: 'maxlength', message: 'El CP debe tener 5 caracteres.' },
-		],
-		'calle': [
-			{ type: 'required', message: 'La calle es requerida.' },
-		],
-		'colonia': [
-			{ type: 'required', message: 'La colonia es requerida.' },
-		],
-		'ciudad': [
-			{ type: 'required', message: 'La ciudad es requerida.' },
-		],
-		'estado': [
-			{ type: 'required', message: 'El estado es requerido.' },
-		],
-	};
+	usuarioForm: FormGroup;
+	direccionForm: FormGroup;
+	empresaForm: FormGroup;
 
 	// Controla el menú de las acciones, que se muestre al inicio o no
 	menu_acciones = {
@@ -105,21 +58,10 @@ export class ProfileCompanyComponent {
 	usuario_id: number;
 	usuario_id_str: string;
 
-	editMode: boolean = false;
-
-	errorUser: boolean = false;
-	errorCompany: boolean = false;
-	errorDirection: boolean = false;
+	edit_enable: boolean = false;
 
 	// Imagen de perfil
 	imagen: string = "";
-
-	// Respuesta de odoo
-	odooResult: any;
-
-	dataSource: any;
-	sendDoc: boolean = false;
-	showDoc: boolean = false;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -129,283 +71,201 @@ export class ProfileCompanyComponent {
 		private activatedRoute: ActivatedRoute,
 		iconRegistry: MatIconRegistry,
 		sanitizer: DomSanitizer,
-		private authService: AuthService
 	) {
 		// Inicialización de los formularios
-		this.userForm = this.formBuilder.group({
-			avatar: [{ value: '', disabled: true }],
-			name: [{ value: '', disabled: true }],
-			rfc: [{ value: '', disabled: true }],
-			email: [{ value: '', disabled: true }],
-			telefono: [{ value: '', disabled: true }],
+		this.usuarioForm = this.formBuilder.group({
+			imagen: ['', []],
+			name: ['', [Validators.required]],
+			rfc: ['', []],
 		});
 
-		this.companyForm = this.formBuilder.group({
-			website: [{ value: '', disabled: true }],
-			movil: [{ value: '', disabled: true }],
-			legal_id: [{ value: '', disabled: true }],
+		this.empresaForm = this.formBuilder.group({
+			email: ['', []],
+			telefono: ['', []],
+			website: ['', []],
+			movil: ['', []],
+			legal_id: ['', []],
 		});
 
-		this.directionForm = this.formBuilder.group({
-			calle: [{ value: '', disabled: true }],
-			numero_int: [{ value: '', disabled: true }],
-			numero_ext: [{ value: '', disabled: true }],
-			colonia: [{ value: '', disabled: true }],
-			ciudad: [{ value: '', disabled: true }],
-			municipio: [{ value: '', disabled: true }],
-			cp: [{ value: '', disabled: true }],
-			pais: [{ value: '', disabled: true }],
-			estado: [{ value: '', disabled: true }],
+		this.direccionForm = this.formBuilder.group({
+			calle: ['', [Validators.required]],
+			numero: ['', []],
+			colonia: ['', [Validators.required]],
+			ciudad: ['', [Validators.required]],
+			municipio: ['', []],
+			cp: ['', [Validators.required]],
+			pais: ['', [Validators.required]],
+			estado: ['', [Validators.required]],
 
 		});
+		// Iconos propios
+		iconRegistry.addSvgIcon(
+			'flag-zensale',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/pais_negro.svg'));
 
-		this.userForm.valueChanges.subscribe(() => {
-			this.errorUser = this.userForm.invalid;
-		});
+		iconRegistry.addSvgIcon(
+			'zs-desvincular',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/desvincular_negro.svg'));
 
-		this.companyForm.valueChanges.subscribe(() => {
-			this.errorCompany = this.companyForm.invalid;
-		});
+		iconRegistry.addSvgIcon(
+			'zs-password',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/contrasenia_negro.svg'));
 
-		this.directionForm.valueChanges.subscribe(() => {
-			this.errorDirection = this.directionForm.invalid;
-		});
+		iconRegistry.addSvgIcon(
+			'estado-zensale',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/estado.svg'));
+
+		iconRegistry.addSvgIcon(
+			'zs-activo',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/activo.svg'));
+		iconRegistry.addSvgIcon(
+			'zs-inactivo',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/inactivo.svg'));
 
 	}
 
 	ngOnInit() {
-		localStorage.removeItem('filtersConsiderations');
-		localStorage.removeItem('filtersConces');
 		this.userService.user$.pipe(
 			takeUntil(this._unsubscribeAll),
 			tap((user) => this.user = user),
 			mergeMap((user) => {
-				let profileResponse = this.profileService.getProfilePersonal()
-				return profileResponse
+				let request = {
+					user: user.user,
+					hash: user.hash,
+					method: user.tipo_login
+				}
+				return this.profileService.getProfilePersonal(request)
 			}),
 			takeUntil(this._unsubscribeAll)
 		).subscribe((res) => {
 			if (res.result.status) {
-				this.odooResult = res;
 				this.reloadDataForms(res);
 			}
 		})
-		/* this.userForm.disable();
-		this.companyForm.disable();
-		this.directionForm.disable(); */
+		/* this.usuarioForm.disable();
+		this.empresaForm.disable();
+		this.direccionForm.disable(); */
 	}
 
 	ngOnDestroy(): void {
 		this._unsubscribeAll.next(null);
 		this._unsubscribeAll.complete();
 	}
-	editProfile() {
-		this.editMode = true;
-
-		this.userForm.enable();
-		this.userForm.controls["telefono"].setValidators([Validators.minLength(10), Validators.maxLength(10)]);
-		this.userForm.controls["email"].setValidators([Validators.email]);
-
-		this.directionForm.enable();
-		this.directionForm.controls["calle"].setValidators([]);
-		this.directionForm.controls["colonia"].setValidators([]);
-		this.directionForm.controls["ciudad"].setValidators([]);
-		this.directionForm.controls["cp"].setValidators([]);
-		this.directionForm.controls["estado"].setValidators([]);
+	editarPerfil() {
+		this.edit_enable = true;
+		/* this.usuarioForm.enable(); */
+		/* this.empresaForm.enable(); */
+		/* this.direccionForm.enable(); */
 	}
 	reloadDataForms(res) {
 		if (res.result.status) {
 			// Catalogos
-			this.countries = res.result.data.catalog.countries;
+			this.paises = res.result.data.catalogos.paises;
 			// Detalle del perfil
-			this.profile = res.result.data.user.company;
+			this.profile = res.result.data.principal.company;
 			// Datos del Formulario
-			/*this.userForm.patchValue({
-				avatar: this.profile?.image ? this.profile.image : '',
-				name: this.profile?.name ? this.profile.name : '',
-				rfc: this.profile.legal_id ? this.profile.legal_id : '',
+			this.usuarioForm.patchValue({
+				name: this.profile.name,
+				rfc: this.profile.legal_id,
 			});
 
-			this.companyForm.patchValue({
-				email: this.profile?.email ? this.profile.email : '',
-				telefono: this.profile?.phone ? this.profile.phone : '',
-				website: this.profile?.website ? this.profile.website : '',
-				movil: this.profile?.mobile ? this.profile.mobile : '',
-			});
-
-			// País y estado
-			if (this.profile.country) {
-				this.directionForm.patchValue({
-					pais: this.profile?.country ? this.profile.country : '',
-				});
-			}
-			if (this.profile.state) {
-				this.directionForm.patchValue({
-					estado: this.profile?.state.id ? this.profile.state.id : '',
+			if (this.profile.tipo_usuario) {
+				this.usuarioForm.patchValue({
+					nivel_acceso: this.profile.tipo_usuario.name
 				});
 			}
 
-			this.directionForm.patchValue({
-				calle: this.profile?.address ? this.profile.address : '',
-				colonia: this.profile?.neighborhood ? this.profile.neighborhood : '',
-				ciudad: this.profile?.city ? this.profile.city : '',
-				municipio: this.profile?.neighborhood ? this.profile.neighborhood : '',
-				cp: this.profile?.zip ? this.profile.zip : '',
-			});*/
-
-			this.states = ["CDMX","Puebla","Veracruz"]
-			this.countries = ["Mexico", "USA", "Canada"]
-
-			this.userForm.patchValue({
-				avatar: this.profile?.image ? this.profile.image : '',
-				name: this.profile?.name ? this.profile.name : '',
-				rfc: "IOO120934HYSE",
-				email: "miusuario@correo.com",
-				telefono: "5555555555",
-			});
-
-			this.companyForm.patchValue({
-				website: "www.miwebsite.com.mx",
-				movil: "5555555555",
+			this.empresaForm.patchValue({
+				email: this.profile.email,
+				telefono: this.profile.telefono,
+				website: this.profile.website,
+				movil: this.profile.movil,
 			});
 
 			// País y estado
 			if (this.profile.country) {
-				this.directionForm.patchValue({
-					pais: "Mexico",
+				this.direccionForm.patchValue({
+					pais: this.profile.country.id,
 				});
 			}
 			if (this.profile.state) {
-				this.directionForm.patchValue({
-					estado: "CDMX",
+				this.direccionForm.patchValue({
+					estado: this.profile.state.id
 				});
 			}
 
-			this.directionForm.patchValue({
-				calle: "Calzada del Hueso",
-				numero_ext: "151",
-				numero_int: "59",
-				colonia: "Vergel Coapa",
-				ciudad: "CDMX",
-				municipio: "Coyoacan",
-				cp: "04980",
+			this.direccionForm.patchValue({
+				calle: this.profile.calle,
+				colonia: this.profile.colonia,
+				ciudad: this.profile.ciudad,
+				municipio: this.profile.municipio,
+				cp: this.profile.cp,
 			});
 		}
 	}
 
-	discardChanges() {
-		this.editMode = false;
-
-		this.userForm.markAsUntouched();
-		this.userForm.disable();
-		this.userForm.controls["name"].setValidators([]);
-		this.userForm.controls["rfc"].setValidators([]);
-		this.userForm.controls["telefono"].setValidators([]);
-		this.userForm.controls["email"].setValidators([]);
-
-		this.companyForm.markAsUntouched();
-		this.companyForm.disable();
-		this.companyForm.controls["movil"].setValidators([]);
-
-		this.directionForm.markAsUntouched();
-		this.directionForm.disable();
-		this.directionForm.controls["calle"].setValidators([]);
-		this.directionForm.controls["colonia"].setValidators([]);
-		this.directionForm.controls["ciudad"].setValidators([]);
-		this.directionForm.controls["cp"].setValidators([]);
-		this.directionForm.controls["estado"].setValidators([]);
-
-		this.reloadDataForms(this.odooResult);
+	cancelarEdicion() {
+		this.edit_enable = false;
+		/* this.usuarioForm.disable();
+		this.direccionForm.disable();
+		this.usuarioForm.markAsUntouched(); */
 	}
 
 
 	updateProfile() {
 		/* this.overlayService.setloading(true); */
-		this.userForm.markAllAsTouched();
-		this.directionForm.markAllAsTouched();
-		if (this.userForm.valid && this.directionForm.valid) {
+		this.usuarioForm.markAllAsTouched();
+		this.direccionForm.markAllAsTouched();
+		this.empresaForm.markAllAsTouched();
+		if (this.usuarioForm.valid && this.empresaForm.valid && this.direccionForm.valid) {
 			this.profile_update = {
-				name: this.userForm.value.name,
+				method: this.user.tipo_login,
+				user: this.user.user,
+				hash: this.user.hash,
+				name: this.usuarioForm.value.name,
 				image: this.imagen ? this.imagen : false,
-				legal_id: this.userForm.value.rfc,
+				legal_id: this.usuarioForm.value.rfc,
 				regimen_fiscal: false,
-				email: this.userForm.value.email,
-				telefono: this.userForm.value.telefono,
-				website: "",
-				movil: "",
-				calle: this.directionForm.value.calle,
-				colonia: this.directionForm.value.colonia,
-				ciudad: this.directionForm.value.ciudad,
-				cp: this.directionForm.value.cp,
-				state_id: this.directionForm.value.estado,
-				country_id: this.directionForm.value.pais,
+				email: this.empresaForm.value.email,
+				website: this.empresaForm.value.website,
+				telefono: this.empresaForm.value.telefono,
+				movil: this.empresaForm.value.movil,
+				calle: this.direccionForm.value.calle,
+				colonia: this.direccionForm.value.colonia,
+				ciudad: this.direccionForm.value.ciudad,
+				cp: this.direccionForm.value.cp,
+				state_id: this.direccionForm.value.estado,
+				country_id: this.direccionForm.value.pais,
 			}
 			this.profileService.updateProfileCompany(this.profile_update).subscribe((res) => {
 				if (res.result.status) {
 					this.reloadDataForms(res);
 				}
 			});
-			this.editMode = false;
-			this.userForm.disable();
-			this.directionForm.disable();
+			this.edit_enable = false;
+			/* this.usuarioForm.disable();
+			this.empresaForm.disable();
+			this.direccionForm.disable(); */
 		}
 	}
 
-	changeCountry(evento) {
-		let index: number = this.countries.findIndex(d => d.country_id === evento);
+	changePais(evento) {
+		let index: number = this.paises.findIndex(d => d.country_id === evento);
 		if (index != -1) {
-			this.directionForm.patchValue({
-				pais: ''
-			});
-			this.states = this.countries[index].states;
-		}
-	}
-
-	changeState(evento) {
-		let index: number = this.states.findIndex(d => d.states === evento);
-		if (index != -1) {
-			this.directionForm.patchValue({
+			this.direccionForm.patchValue({
 				estado: ''
 			});
-			this.states = this.countries[index].states;
+			this.estados = this.paises[index].estados;
 		}
 	}
 
-	uploadAvatar(fileList: FileList): void {
-		// Return if canceled
-		if (!fileList.length) {
-			return;
-		}
-
-		const allowedTypes = ['image/jpeg', 'image/png'];
-		const file = fileList[0];
-
-		// Return if the file is not allowed
-		if (!allowedTypes.includes(file.type)) {
-			return;
-		}
-		// Convert to Base64
+	changeProfilePhoto(event) {
+		this.imagen = "";
+		let file: File = event.target.files[0];
 		let myReader: FileReader = new FileReader();
 		myReader.readAsDataURL(file);
 		myReader.onloadend = (e) => {
-			let newAvatar = (myReader.result as string).split(",", 2)[1];
-			this.userForm.patchValue({
-				avatar: newAvatar,
-			});
-		}
-	}
-
-	closeSidebar(datos: any) {
-		this.matDrawer.close();
-		this.dataSource.cfdi_pdf_binary = datos?.cfdi_pdf_binary
-		this.dataSource.cfdi_pdf_binary_filename = datos.cfdi_pdf_binary_filename
-		this.dataSource.cfdi_binary = datos.cfdi_binary
-		this.dataSource.cfdi_binary_filename = datos.cfdi_binary_filename
-		if (this.dataSource.cfdi_pdf_binary || this.dataSource.cfdi_binary) {
-			this.showDoc = true;
-		}
-		if (this.dataSource.cfdi_pdf_binary && this.dataSource.cfdi_binary) {
-			this.sendDoc = true;
+			this.imagen = (myReader.result as string).split(",", 2)[1];
 		}
 	}
 }

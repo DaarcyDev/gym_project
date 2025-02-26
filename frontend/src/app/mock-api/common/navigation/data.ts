@@ -10,32 +10,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
 		link: '/home'
 	},
 	{
-		id: 'considerations',
-		title: 'Finanzas',
-		type: 'basic',
-		icon: 'heroicons_outline:currency-dollar',
-		link: '/considerations'
-	},
-	{
-		id: 'conces',
-		title: 'Kilometraje',
-		type: 'basic',
-		icon: 'heroicons_outline:truck',
-		link: '/conces'
-	},
-	{
 		id: 'profile',
 		title: 'Perfil',
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	},
-	{
-		id: 'sing-out',
-		title: 'Cerrar sesión',
-		type: 'basic',
-		icon: 'heroicons_outline:arrow-right-on-rectangle',
-		link: '/sign-out'
 	}
 ];
 export const compactNavigation: FuseNavigationItem[] = [
@@ -52,20 +31,6 @@ export const compactNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	},
-	{
-		id: 'considerations',
-		title: 'Finanzas',
-		type: 'basic',
-		icon: 'heroicons_outline:currency-dollar',
-		link: '/considerations'
-	},
-	{
-		id: 'conces',
-		title: 'Kilometraje',
-		type: 'basic',
-		icon: 'heroicons_outline:truck',
-		link: '/conces'
 	}
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
@@ -82,20 +47,6 @@ export const futuristicNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	},
-	{
-		id: 'considerations',
-		title: 'Finanzas',
-		type: 'basic',
-		icon: 'heroicons_outline:currency-dollar',
-		link: '/considerations'
-	},
-	{
-		id: 'conces',
-		title: 'Kilometraje',
-		type: 'basic',
-		icon: 'heroicons_outline:truck',
-		link: '/conces'
 	}
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -112,19 +63,5 @@ export const horizontalNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	},
-	{
-		id: 'considerations',
-		title: 'Finanzas',
-		type: 'basic',
-		icon: 'heroicons_outline:currency-dollar',
-		link: '/considerations'
-	},
-	{
-		id: 'conces',
-		title: 'Kilometraje',
-		type: 'basic',
-		icon: 'heroicons_outline:truck',
-		link: '/conces'
 	}
 ];

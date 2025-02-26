@@ -20,18 +20,12 @@ def users_login(request):
 @api_view(['POST'])
 def users_signin(request):
 	return Response({
-		'result': {
-				'status': True,
-				'data': {
-					'access_token': 'dummyAccessToken',
-					'refresh_token': 'dummyRefreshToken',
-					'user': {
-						'name': 'Dummy User',
-						'email': 'dummy@example.com',
-						'image': 'asd',
-					}
-				}
-			}
+		"result": {
+			"access_token": "asd",
+			"status": True,
+			"user": "asd",
+			"password": "asd"
+		}
 	})
 
 @api_view(['GET'])

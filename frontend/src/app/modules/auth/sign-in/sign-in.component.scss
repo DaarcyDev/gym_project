@@ -1,0 +1,49 @@
+.signin-main-container {
+	width: 100% !important;
+	display: grid !important;
+	grid-template-columns: 1fr 1fr !important;
+	height: 100% !important;
+	justify-content: center !important;
+	align-items: center !important;
+}
+
+.metrobus-logo-container {
+	img {
+		height: 4em;
+		width: auto;
+	}
+}
+
+.side-a-signin {
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.side-b-signin {
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+	padding: 1em 3em 1em 3em !important;
+	height: 100% !important;
+	background-color: rgb(42 93 80/ var(--tw-bg-opacity)) !important;
+}
+
+.fuse-mat-button-large {
+	// Estilos básicos del botón
+	--mdc-filled-button-container-color: rgb(117 41 61/ var(--tw-bg-opacity)) !important;
+}
+
+.text-md {
+	color: rgb(117 41 61/ var(--tw-bg-opacity)) !important;
+}
+
+.text-7xl {
+	display: flex;
+	align-items: center;
+
+	img {
+		height: 1.5em;
+		width: auto;
+		padding-left: 30px;
+	}
+}

@@ -60,7 +60,7 @@
     /* Fix: Disabled placeholder color is too faded on Safari */
     input[disabled] {
         opacity: 1;
-        -webkit-text-fill-color: rgba(30, 41, 59, 0.87);
+        -webkit-text-fill-color: currentColor;
     }
 
     /* Set the background and foreground colors */

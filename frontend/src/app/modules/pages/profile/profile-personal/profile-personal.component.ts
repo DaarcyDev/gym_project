@@ -1,6 +1,10 @@
 // Dependencias del componente
-import { Component, ViewChild, ElementRef, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
+// Dependencias para obtener datos de la URL
+import { ActivatedRoute } from '@angular/router';
 // Servicios propios
 import { UserService } from 'app/core/user/user.service';
 import { ProfileService } from 'app/core/profile/profile.service';
@@ -8,273 +12,252 @@ import { Subject } from 'rxjs';
 import { mergeMap, takeUntil, tap } from 'rxjs/operators';
 //Types
 import { User } from 'app/core/user/user.types';
-
-import { FormsModule } from '@angular/forms';
+import { Profile } from 'app/core/profile/profile.types';
 
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from '@angular/material/select';
-import { MatDividerModule } from '@angular/material/divider';
-import { AuthService } from 'app/core/auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AuthPopUpComponent } from 'app/modules/pages/common/auth-pop-up/auth-pop-up.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 
 @Component({
 	selector: 'app-profile-personal',
 	standalone: true,
-	imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatTabsModule, MatSelectModule, MatDividerModule, MatSnackBarModule],
+	imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatTabsModule, MatSelectModule],
 	templateUrl: './profile-personal.component.html',
 	styleUrl: './profile-personal.component.scss'
 })
 export class ProfilePersonalComponent {
 
-	@ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
 
 	private _unsubscribeAll: Subject<any> = new Subject<any>();
-	readonly dialog = inject(MatDialog);
+	// catalogos
+	perfiles: Array<any> = [];
+	paises: Array<any> = [];
+	estados: Array<any> = [];
+	tipo_login: Array<any> = [];
 
-	// Catalogs
-	countries: Array<any> = [];
-	states: Array<any> = [];
+	quick_search: string;
 
-	// General variables
-	user: User;
-	profileData: any;
-	profileLocalData: any;
+	// Formularios
+	usuarioForm: FormGroup;
+	direccionForm: FormGroup;
 
-	// Control for editing mode
-	editMode: boolean = false;
-
-	// Forms
-	userForm: FormGroup;
-	addressForm: FormGroup;
-
-	private _snackBar = inject(MatSnackBar);
-
-	validationMessages = {
-		'name': [
-			{ type: 'required', message: 'El nombre es requerido.' },
-			{ type: 'pattern', message: 'Ingrese un nombre válido.' }
-		],
-		'phone': [
-			{ type: 'required', message: 'El teléfono es requerido.' },
-			{ type: 'minlength', message: 'Recuerda que el teléfono debe tener 10 caracteres.' },
-			{ type: 'maxlength', message: 'Recuerda que el teléfono debe tener máximo 10 caracteres.' },
-			{ type: 'pattern', message: 'Ingrese un teléfono válido.' }
-		],
+	// Controla el menú de las acciones, que se muestre al inicio o no
+	menu_acciones = {
+		folded: false
 	};
+	// Información de usuario obtenida de las cookies
+	user: User;
+	//Detalle del perfil obtendo
+	profile: any;
+	//Detalle del perfil a actualizar
+	profile_update: Profile;
+	// Id del país obtenido de la url
+	usuario_id: number;
+	usuario_id_str: string;
 
-	//odoo respuesta
-	odooResult: any;
+	edit_enable: boolean = false;
+
+	// Imagen de perfil
+	imagen: string = "";
 
 	constructor(
 		private formBuilder: FormBuilder,
+		/* private overlayService: OverlayService, */
 		private userService: UserService,
 		private profileService: ProfileService,
-		private authService: AuthService,
-		private _changeDetectorRef: ChangeDetectorRef,
+		private activatedRoute: ActivatedRoute,
+		iconRegistry: MatIconRegistry,
+		sanitizer: DomSanitizer,
 	) {
-		// Initialization of forms
-		this.userForm = this.formBuilder.group({
-			avatar: [{ value: '', disabled: true }],
-			name: [{ value: '', disabled: true }],
+		// Inicialización de los formularios
+		this.usuarioForm = this.formBuilder.group({
+			imagen: ['', []],
+			name: ['', [Validators.required]],
+			cargo: ['', []],
+			nivel_acceso: ['', []],
 			email: [{ value: '', disabled: true }],
-			phone: [{ value: '', disabled: true }],
-			user_type: [{ value: '', disabled: true }],
+			telefono: ['', [Validators.required]],
+			celular: ['', []],
 		});
-		this.addressForm = this.formBuilder.group({
-			address: [{ value: '', disabled: true }],
-			num_ext: [{ value: '', disabled: true }],
-			num_int: [{ value: '', disabled: true }],
-			neighborhood: [{ value: '', disabled: true }],
-			city: [{ value: '', disabled: true }],
-			zip: [{ value: '', disabled: true }],
-			state: [{ value: '', disabled: true }],
-			country: [{ value: '', disabled: true }]
+
+		this.direccionForm = this.formBuilder.group({
+			calle: ['', [Validators.required]],
+			numero: ['', []],
+			numero_ext: ['', [Validators.required]],
+			numero_int: ['', []],
+			colonia: ['', [Validators.required]],
+			ciudad: ['', [Validators.required]],
+			municipio: ['', []],
+			cp: ['', [Validators.required]],
+			pais: ['', [Validators.required]],
+			estado: ['', [Validators.required]],
+
 		});
+		// Iconos propios
+		iconRegistry.addSvgIcon(
+			'flag-zensale',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/pais_negro.svg'));
+
+		iconRegistry.addSvgIcon(
+			'zs-desvincular',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/desvincular_negro.svg'));
+
+		iconRegistry.addSvgIcon(
+			'zs-password',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/configuracion/imagenes_negro/contrasenia_negro.svg'));
+
+		iconRegistry.addSvgIcon(
+			'estado-zensale',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/estado.svg'));
+
+		iconRegistry.addSvgIcon(
+			'zs-activo',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/activo.svg'));
+		iconRegistry.addSvgIcon(
+			'zs-inactivo',
+			sanitizer.bypassSecurityTrustResourceUrl('assets/toolbar_actions/inactivo.svg'));
 
 	}
 
 	ngOnInit() {
-
-		localStorage.removeItem('filtersConsiderations');
-		localStorage.removeItem('filtersConces');
-		// Gets user information from the cookie or local storage
 		this.userService.user$.pipe(
 			takeUntil(this._unsubscribeAll),
 			tap((user) => this.user = user),
 			mergeMap((user) => {
-				let profileResponse = this.profileService.getProfilePersonal()
-				return profileResponse
+				let request = {
+					user: user.user,
+					hash: user.hash,
+					method: user.tipo_login
+				}
+				return this.profileService.getProfilePersonal(request)
 			}),
 			takeUntil(this._unsubscribeAll)
 		).subscribe((res) => {
-			if (res?.result?.status == true) {
-				this.odooResult = res?.result?.data;
-				this.loadInformation();
+			if (res.result.status) {
+				this.reloadDataForms(res);
 			}
 		})
+		/* this.usuarioForm.disable();
+		this.direccionForm.disable(); */
 	}
 
 	ngOnDestroy(): void {
 		this._unsubscribeAll.next(null);
 		this._unsubscribeAll.complete();
 	}
-
-	loadInformation(){
-		// Catalogs
-		this.countries = this.odooResult?.catalog?.countries;
-		// Profile data
-		this.profileData = this.odooResult?.user;
-		// Form data
-		this.userForm.patchValue({
-			avatar: this.profileData?.image ? this.profileData.image:'',
-			name: this.profileData?.name ? this.profileData.name:'',
-			email: this.profileData?.email ? this.profileData.email : '',
-			phone: this.profileData?.phone ? this.profileData.phone : '',
-			user_type: this.profileData?.user_type ? this.profileData.user_type : '',
-		});
-		this.addressForm.patchValue({
-			address: this.profileData?.address ? this.profileData.address :'',
-			num_ext: this.profileData?.num_ext ? this.profileData.num_ext :'',
-			num_int: this.profileData?.num_int ? this.profileData.num_int :'',
-			neighborhood: this.profileData?.neighborhood ? this.profileData.neighborhood :'',
-			city: this.profileData?.city ? this.profileData.city :'',
-			zip: this.profileData?.zip ? this.profileData.zip :'',
-		});
-		// Country & State
-		if (this.profileData?.country) {
-			this.addressForm.patchValue({
-				country: this.profileData.country.id,
+	editarPerfil() {
+		this.edit_enable = true;
+		/* this.usuarioForm.enable();
+		this.usuarioForm.controls["email"].disable();
+		this.direccionForm.enable(); */
+	}
+	reloadDataForms(res) {
+		if (res.result.status) {
+			// Catalogos
+			this.paises = res.result.data.catalogos.paises;
+			// Detalle del perfil
+			this.profile = res.result.data.principal;
+			// Datos del Formulario
+			this.usuarioForm.patchValue({
+				name: this.profile.name,
+				cargo: this.profile.cargo,
+				email: this.profile.email,
+				telefono: this.profile.telefono,
 			});
-			this.changeCountry(this.profileData.country.id);
-		}
-		if (this.profileData?.state) {
-			this.addressForm.patchValue({
-				state: this.profileData.state.id
+
+			if (this.profile.tipo_usuario) {
+				this.usuarioForm.patchValue({
+					nivel_acceso: this.profile.tipo_usuario.name
+				});
+			}
+
+			// País y estado
+			if (this.profile.country) {
+				this.direccionForm.patchValue({
+					pais: this.profile.country.id,
+				});
+				this.changePais(this.profile.country.id);
+			}
+			if (this.profile.state) {
+				this.direccionForm.patchValue({
+					estado: this.profile.state.id
+				});
+			}
+
+			this.direccionForm.patchValue({
+				calle: this.profile.calle,
+				numero_ext: this.profile.numero_exterior,
+				numero_int: this.profile.numero_interior,
+				colonia: this.profile.colonia,
+				ciudad: this.profile.ciudad,
+				municipio: this.profile.municipio,
+				cp: this.profile.cp,
 			});
 		}
-		this.authService.updateProfileImage("");
-		this.authService.updateProfileImage(this.profileData?.image);
-		this._changeDetectorRef.detectChanges();
 	}
 
-	editProfile() {
-		this.editMode = true;
-		this.userForm.controls["avatar"].enable();
-		this.userForm.controls["name"].setValidators([Validators.required]);
-		this.userForm.controls["phone"].setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-		this.userForm.controls["name"].enable();
-		this.userForm.controls["phone"].enable();
-		this.addressForm.enable();
+	cancelarEdicion() {
+		this.edit_enable = false;
+		/* this.usuarioForm.disable(); */
+		/* this.direccionForm.disable(); */
+		/* this.usuarioForm.markAsUntouched(); */
 	}
 
-	discardChanges() {
-		this.editMode = false;
-		this.loadInformation();
-		this.userForm.disable();
-		this.userForm.markAsUntouched();
-		this.userForm.controls["phone"].setValidators([]);
-		this.userForm.controls["name"].setValidators([]);
-		this.addressForm.disable();
-		this.addressForm.markAsUntouched();
-	}
-
-	openSnackBar(message: string, isSuccess: boolean): void {
-		this._snackBar.open(message, '', {
-			horizontalPosition: 'right',
-			verticalPosition: 'top',
-			duration: 4000, // Duración en milisegundos
-			panelClass: [isSuccess ? 'success-snackbar' : 'error-snackbar', 'center-text-snackbar'],
-		});
-	}
 
 	updateProfile() {
-		this.userForm.markAllAsTouched();
-		this.addressForm.markAllAsTouched();
-		if (this.userForm.valid && this.addressForm.valid) {
-			this.profileLocalData = {
-				name: this.userForm.value.name ? this.userForm.value.name : this.profileData.name,
-				image: this.userForm.value.avatar ? this.userForm.value.avatar : false,
+		/* this.overlayService.setloading(true); */
+		this.usuarioForm.markAllAsTouched();
+		this.direccionForm.markAllAsTouched();
+		if (this.usuarioForm.valid && this.direccionForm.valid) {
+			this.profile_update = {
+				method: this.user.tipo_login,
+				user: this.user.user,
+				hash: this.user.hash,
+				name: this.usuarioForm.value.name,
+				image: this.imagen ? this.imagen : false,
 				regimen_fiscal: false,
-				email: this.profileData.email,
-				telefono: this.userForm.value.phone,
-				calle: this.addressForm.value.address,
-				numero_exterior: this.addressForm.value.num_ext,
-				numero_interior: this.addressForm.value.num_int,
-				colonia: this.addressForm.value.neighborhood,
-				ciudad: this.addressForm.value.city,
-				cp: this.addressForm.value.zip,
-				state_id: this.addressForm.value.state,
-				country_id: this.addressForm.value.country
+				email: this.profile.email,
+				telefono: this.usuarioForm.value.telefono,
+				calle: this.direccionForm.value.calle,
+				numero_exterior: this.direccionForm.value.numero_ext,
+				numero_interior: this.direccionForm.value.numero_int,
+				colonia: this.direccionForm.value.colonia,
+				ciudad: this.direccionForm.value.ciudad,
+				cp: this.direccionForm.value.cp,
+				state_id: this.direccionForm.value.estado,
+				country_id: this.direccionForm.value.pais,
 			}
-			this.profileService.updateProfilePersonal(this.profileLocalData).subscribe((res) => {
-				if (res?.result?.status == true) {
-					this.openSnackBar('Perfil actualizado correctamente.', true)
-					this.odooResult = res?.result?.data;
-					this.loadInformation();
-					this.userForm.disable();
-					this.userForm.markAsUntouched();
-					this.userForm.controls["phone"].setValidators([]);
-					this.userForm.controls["name"].setValidators([]);
-					this.addressForm.disable();
-					this.addressForm.markAsUntouched();
-					this.editMode = false;
-					window.location.reload();
-				}
-				else {
-					this.openSnackBar('Error al actualizar perfil.', false)
+			this.profileService.updateProfilePersonal(this.profile_update).subscribe((res) => {
+				if (res.result.status) {
+					this.reloadDataForms(res);
 				}
 			});
-			this.editMode = false;
+			this.edit_enable = false;
+			/* this.usuarioForm.disable();
+			this.direccionForm.disable(); */
 		}
 	}
 
-	changeCountry(evento) {
-		let index: number = this.countries.findIndex(d => d.country_id === evento);
+	changePais(evento) {
+		let index: number = this.paises.findIndex(d => d.country_id === evento);
 		if (index != -1) {
-			this.addressForm.patchValue({
-				state: ''
+			this.direccionForm.patchValue({
+				estado: ''
 			});
-			this.states = this.countries[index].states;
+			this.estados = this.paises[index].estados;
 		}
 	}
 
-	uploadAvatar(fileList: FileList): void {
-		// Return if canceled
-		if (!fileList.length) {
-			return;
-		}
-		const allowedTypes = ['image/jpeg', 'image/png'];
-		const file = fileList[0];
-		// Return if the file is not allowed
-		if (!allowedTypes.includes(file.type)) {
-			return;
-		}
-		// Convert to Base64
+	changeProfilePhoto(event) {
+		this.imagen = "";
+		let file: File = event.target.files[0];
 		let myReader: FileReader = new FileReader();
 		myReader.readAsDataURL(file);
 		myReader.onloadend = (e) => {
-			let newAvatar = (myReader.result as string).split(",", 2)[1];
-			this.userForm.patchValue({
-				avatar: newAvatar,
-			});
-			this._changeDetectorRef.detectChanges();
+			this.imagen = (myReader.result as string).split(",", 2)[1];
 		}
-	}
-
-	editPassword(): void{
-		const dialogRef = this.dialog.open(AuthPopUpComponent, {
-			maxWidth: "764px",
-			data: { user: this.userForm.value.email, message: "Complete los formularios para cambiar su contraseña.", type: "step-one", close: true },
-		});
 	}
 
 }

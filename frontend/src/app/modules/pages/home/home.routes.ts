@@ -7,8 +7,8 @@ export default [
 	{
 		path: '',
 		component: HomeComponent,
-		// resolve: {
-		// 	data: () => inject(AuthService).getData(),
-		// },
+		resolve: {
+			data: () => inject(AuthService).getData(),
+		},
 	},
 ] as Routes;

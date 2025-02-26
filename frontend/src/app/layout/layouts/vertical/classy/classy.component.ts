@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -7,7 +7,6 @@ import { FuseFullscreenComponent } from '@fuse/components/fullscreen';
 import { FuseLoadingBarComponent } from '@fuse/components/loading-bar';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { AuthService } from 'app/core/auth/auth.service';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { Navigation } from 'app/core/navigation/navigation.types';
 import { UserService } from 'app/core/user/user.service';
@@ -45,8 +44,6 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
-		private _authService: AuthService,
-		private _changeDetectorRef: ChangeDetectorRef
     )
     {
     }
@@ -79,30 +76,15 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
             {
                 this.navigation = navigation;
             });
+
         // Subscribe to the user service
         this._userService.user$
             .pipe((takeUntil(this._unsubscribeAll)))
             .subscribe((user: User) =>
             {
                 this.user = user;
-				if (!this.user.name){
-					this.user.name = this._authService.userName;
-				}
-				if (!this.user.email){
-					this.user.email = this._authService.userEmail;
-				}
-				if (!this.user.avatar){
-					this.user.avatar = this._authService.userImage;
-				}
-                if (!this.user.companyType) {
-                    this.user.companyType = this._authService.companyType;
-                }
             });
 
-		this._authService.profileImage$.subscribe(newImageUrl => {
-			this.user.avatar = newImageUrl;
-			this._changeDetectorRef.detectChanges();
-		});
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -143,11 +125,4 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
             navigation.toggle();
         }
     }
-
-	detect_image_change(){
-		this.user.avatar = "";
-		this._changeDetectorRef.detectChanges();
-		this.user.avatar = this._authService.userImage;
-		this._changeDetectorRef.detectChanges();
-	}
 }

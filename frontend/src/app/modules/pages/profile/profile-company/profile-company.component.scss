@@ -1,224 +1,406 @@
 @import "../../../../../styles/breakpoints.scss";
 
-::ng-deep .required-field-edit .mat-mdc-form-field-flex {
-	background-color: rgb(238 242 255) !important;
-}
+#profile-usuario {
+	font-family: "Montserrat";
 
-::ng-deep .read-only-field-edit .mat-mdc-form-field-flex {
-	background-color: #F6F6F6 !important;
-}
-
-.button-container{
-	min-height: 40px;
-}
-
-::ng-deep .mat-mdc-tab-body-content{
-	padding: 24px 0 !important;
-}
-
-.mb-action-bar {
-	display: flex;
-	gap: 0;
-	font-size: 1em;
-	background: #FFF;
-	height: 3.5em;
-	border-bottom: 1px solid #d8d8d8;
-
-	.mb-action {
-		display: flex;
-		gap: 1px 5px;
-		padding: 0rem 0.3rem;
-		border: 1px solid #d8d8d8;
-		background: #FFF;
-		color: #0b172a;
-		cursor: pointer;
-		height: 100%;
-
-		@include media-breakpoint(sm) {
-			height: 3.5em;
-			grid-template-columns: 1fr;
-			grid-template-rows: 0.5fr 1fr;
-			grid-template-areas: "icono" "description";
-		}
-
+	::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-content {
 		@include media-breakpoint(xs) {
-			height: 3.5em;
-			grid-template-columns: 1fr;
-			grid-template-rows: 0.5fr 1fr;
-			grid-template-areas: "icono" "description";
-		}
-	}
-
-	.icono {
-		grid-area: icono;
-		font-size: 3rem;
-		color: #00C3D1;
-		font-weight: 500;
-		//margin: auto;
-		margin-top: auto;
-		margin-bottom: auto;
-		display: flex;
-		align-items: center;
-
-		@include media-breakpoint(md) {
-			height: 0em;
+			padding: 1em 0 5em 0 !important;
 		}
 
 		@include media-breakpoint(sm) {
-			height: 0em;
+			padding: 1em 0 5em 0 !important;
 		}
 	}
 
-	.description {
-		color: #5d8da8 !important;
-		grid-area: description;
-		//font-weight: 500;
-		margin-top: auto;
-		margin-bottom: auto;
-		line-height: 1;
-		text-align: left;
-
-		@include media-breakpoint(md) {
-			margin: auto;
-			margin-top: auto;
-			margin-bottom: auto;
-			// height: 2em;
-		}
-
-		@include media-breakpoint(sm) {
-			margin: auto;
-			margin-top: auto;
-			margin-bottom: auto;
-		}
-
-		@include media-breakpoint(xs) {
-			margin: auto;
-			margin-top: auto;
-			margin-bottom: auto;
-			text-align: center;
-		}
-	}
-
-	.mb-indicador {
+	.actions-profile-detalle,
+	.actions-profile-editar {
 		display: grid;
-		grid-template-columns: 0.5fr 1.5fr;
-		grid-template-rows: 1fr;
-		gap: 1px 5px;
-		grid-template-areas: "indicador information";
-		// min-height: 5em;
-		padding: 0.5rem 0.5rem;
-		border: 1px solid #00C3D1;
-		background: #FFF;
-		color: #3D4151;
-		cursor: pointer;
-		height: 100%;
-
-		@include media-breakpoint(md) {
-			grid-template-columns: 1fr;
-			grid-template-rows: 0.5fr 1fr;
-			grid-template-areas: "indicador" "information";
-		}
-
-		@include media-breakpoint(sm) {
-			grid-template-columns: 1fr;
-			grid-template-rows: 0.5fr 1fr;
-			grid-template-areas: "indicador" "information";
-		}
-	}
-
-	.indicador {
-		grid-area: indicador;
-		color: #00C3D1;
-		font-size: 3rem;
-		font-weight: 500;
-		margin: auto;
-		margin-top: auto;
-		margin-bottom: auto;
-
-		@include media-breakpoint(md) {
-			height: 1em;
-		}
-
-		@include media-breakpoint(sm) {
-			height: 1em;
-		}
-	}
-
-	.information {
-		grid-area: information;
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: auto 1fr;
+		grid-template-columns: 8em;
+		grid-template-rows: 2.5em;
 		gap: 1px 1px;
-		grid-template-areas: "contador" "titulo";
+		grid-template-areas: "." ".";
+		/* @include media-breakpoint(xs) {
+			grid-template-columns: 7em;
+		} */
+		margin: 1.5em 1em 1.5em 1em;
 
-		font-weight: 500;
-		margin-top: auto;
-		margin-bottom: auto;
-
-		.count {
-			font-weight: bold;
-			margin-right: 0.5em;
+		.action {
+			padding: 0 1em;
+			display: grid;
+			justify-content: center;
+			align-items: center;
+			border-radius: 5px;
+			cursor: pointer;
+			width: 100%;
+			height: 100%;
 		}
 
-		@include media-breakpoint(md) {
-			margin: auto;
-			margin-top: auto;
-			margin-bottom: auto;
+		.action-outline {
+			background-color: #FFF;
+			color: #00C3D1;
+			border: 1px solid #00C3D1;
+		}
+
+		.action-filled {
+			background-color: #00C3D1;
+			color: #FFF;
+			border: 1px solid #00C3D1;
+		}
+	}
+
+	.contacto-form-div {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
 		}
 
 		@include media-breakpoint(sm) {
-			margin: auto;
-			margin-top: auto;
-			margin-bottom: auto;
+			grid-template-columns: 1fr;
 		}
 	}
 
-	.contador {
-		grid-area: contador;
-		text-align: left;
+	.direccion-form-one {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1em;
+
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+		}
 	}
 
-	.titulo {
-		grid-area: titulo;
+	.direccion-form-two {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+		}
 	}
 
-	// Cuando esta deshabilitada la opción
+	.direccion-form-three {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
 
-	.mb-action-disabled {
-		cursor: default;
-		pointer-events: none;
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+		}
 	}
 
-	.mb-action-disabled:hover {
-		opacity: 1;
-		background: #FFF;
+	.direccion-form-four {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+		}
 	}
 
-	.mb-action-disabled:active {
-		background: #FFF;
+	.actions-profile-editar {
+		grid-template-columns: 8em 8em;
+		gap: 1px 1em;
 
+		@include media-breakpoint(xs) {
+			grid-template-columns: 1fr;
+		}
+
+		@include media-breakpoint(sm) {
+			grid-template-columns: 1fr;
+		}
+
+		/* @include media-breakpoint(xs) {
+			grid-template-columns: 7em 7em;
+		} */
+	}
+
+	// Acciones hover
+	.action:hover {
+		opacity: 0.7;
+		background: #BABABA36;
+	}
+
+	// Acciones active
+	.action:active {
 		.description {
-			font-weight: normal;
+			font-weight: bold;
+		}
+
+		background: #BABABA24;
+	}
+
+
+	.content {
+		display: flex;
+		justify-content: center;
+		overflow: auto;
+		background-color: #FFF;
+
+		.tab-historial {
+			/* @include media-breakpoint(xs) {
+				display: none !important;
+			} */
+		}
+
+		.forma-content {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto;
+			gap: 1px 1px;
+			grid-template-areas: "formulario" "lista-interna";
+			padding-top: 0px !important;
+			width: 100%;
+
+			// Icono
+			.active-icon {
+				border-radius: 50%;
+			}
+
+			.delete-icon {
+				color: red;
+			}
+
+			// Estilo botón de activar o desactivar
+			.toggle-option {
+				display: grid;
+				grid-template-columns: 4em 1fr;
+				grid-template-rows: 1fr;
+				gap: 1px 5px;
+				grid-template-areas: "title toggle";
+				margin-top: 0.5em;
+				margin-bottom: 1.3em;
+			}
+
+			.title {
+				grid-area: title;
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+
+			.toggle {
+				grid-area: toggle;
+				margin-top: auto;
+				margin-bottom: auto;
+
+				.mat-slide-toggle.mat-disabled {
+					opacity: 1;
+				}
+			}
+
+			.direccion,
+			.seguridad {
+				padding-top: 1em;
+
+				// Estilo botón de activar o desactivar
+				.toggle-option {
+					grid-template-columns: 1fr 1fr;
+					/* @include media-breakpoint(xs) {
+						grid-template-columns: 1fr auto;
+					} */
+				}
+			}
+
+			// Grid container para el formulario y lista interna
+			.formulario {
+				grid-area: formulario;
+			}
+
+			.usuario {
+				display: grid;
+				grid-template-columns: 0.5fr 1.5fr;
+				grid-template-rows: auto auto;
+				gap: 1px 1.5em;
+				grid-template-areas: "imagen information-acceso";
+
+				@include media-breakpoint(xs) {
+					grid-template-columns: 1fr;
+					grid-template-areas: "imagen" "information-acceso";
+				}
+
+				@include media-breakpoint(sm) {
+					grid-template-columns: 1fr;
+					grid-template-areas: "imagen" "information-acceso";
+				}
+
+				/* @include media-breakpoint(xs) {
+					grid-template-columns: 1fr;
+					grid-template-rows: auto auto auto;
+					gap: 1px;
+					grid-template-areas:
+					"imagen" "information-acceso" "information-contacto";
+				} */
+
+			}
+
+			.imagen {
+				grid-area: imagen;
+				text-align: center;
+				position: relative;
+
+				/* @include media-breakpoint(xs) {
+					height: 100px;
+					margin-bottom: 1.5em;
+				}
+				@include media-breakpoint(md) {
+					margin-top: auto;
+					margin-bottom: auto;
+				}
+				@include media-breakpoint(lg) {
+					margin-top: auto;
+					margin-bottom: auto;
+				}
+				@include media-breakpoint(xl) {
+					margin-top: auto;
+					margin-bottom: auto;
+				} */
+				.user_imagen {
+					width: 200px !important;
+					// height: 200px !important;
+					margin-bottom: 1.5em;
+					z-index: -1;
+
+					@include media-breakpoint(xs) {
+						width: 100% !important;
+					}
+
+					@include media-breakpoint(sm) {
+						width: 100% !important;
+					}
+
+					/* @include media-breakpoint(sm) {
+						width: 150px !important;
+						// height: 150px !important;
+					}
+					@include media-breakpoint(xs) {
+						width: 100px !important;
+						// height: 100px !important;
+					} */
+				}
+
+				.camera_icon {
+					right: 0.3em;
+					bottom: 1.8em;
+					height: 50px;
+					width: 50px;
+					cursor: pointer;
+					border-radius: 50%;
+					z-index: 1;
+					position: absolute;
+					/* 	@include media-breakpoint(sm) {
+						right: 0.8em;
+						bottom: 9em;
+						height: 45px;
+						width: 45px;
+					}
+					@include media-breakpoint(xs) {
+						right: 5em;
+						bottom: 0.2em;
+						height: 35px;
+						width: 35px;
+					} */
+				}
+
+				.d-none {
+					display: none;
+				}
+
+			}
+
+			.information-acceso {
+				grid-area: information-acceso;
+				display: grid;
+				align-items: center;
+			}
+
+			.information-contacto {
+				grid-area: information-contacto;
+			}
+
+			.lista-interna {
+				display: grid;
+				grid-template-columns: 1fr;
+				grid-template-rows: auto auto;
+				gap: 1px 1px;
+				grid-template-areas: "lista-header" "lista-body";
+				grid-area: lista-interna;
+			}
+
+			.lista-header {
+				display: grid;
+				grid-template-columns: 0.5 1.5fr;
+				grid-template-rows: 1fr;
+				gap: 1px 1px;
+				grid-template-areas: "lista-title lista-actions";
+				grid-area: lista-header;
+				/* @include media-breakpoint(xs) {
+					grid-template-columns: auto 1.5fr;
+				} */
+			}
+
+			.lista-actions {
+				grid-area: lista-actions;
+				margin-top: auto;
+				margin-bottom: auto;
+				display: grid !important;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-template-rows: 1fr;
+				grid-template-areas: ". . .";
+				/* @include media-breakpoint(xs) {
+					grid-template-columns: 1fr;
+					grid-template-rows: auto 1fr 1fr;
+					grid-template-areas: "." "." ".";
+				} */
+
+				.search {
+					border: 1px solid #BABABA;
+					border-radius: 0.5em;
+					margin: 1em 0;
+				}
+
+				.paginador {
+					margin: auto;
+				}
+			}
+
+			.lista-title {
+				grid-area: lista-title;
+				margin-top: auto;
+				margin-bottom: auto;
+				/* @include media-breakpoint(xs) {
+					width: 0 !important;
+				}
+				@include media-breakpoint(md) {
+					width: 0 !important;
+				} */
+
+
+			}
+
+			.lista-body {
+				grid-area: lista-body;
+			}
 		}
 	}
-
-	.mb-indicador-disabled {
-		cursor: default;
-		pointer-events: none;
-	}
-
-	.mb-indicador-disabled:hover {
-		opacity: 1;
-		background: #FFF;
-	}
-
-	.mb-indicador-disabled:active {
-		background: #FFF;
-
-		.description {
-			font-weight: normal;
-		}
-	}
-
 }
