@@ -19,14 +19,29 @@ def users_login(request):
 
 @api_view(['POST'])
 def users_signin(request):
-	return Response({
-		"result": {
-			"access_token": "asd",
-			"status": True,
-			"user": "asd",
-			"password": "asd"
-		}
-	})
+	print("prueba")
+	print(request.data)
+	user = request.data["params"]["user"]
+	password = request.data["params"]["password"]
+	if user == "asd" and password == "asd":
+		return Response({
+			"result": {
+				"status": True,
+				"data": {
+					"access_token": "asd",
+					"user": "asd",
+					"email": "dummy@example.com",
+					"password": "asd"
+				}
+			}
+		})
+	else:
+		return Response({
+			"result": {
+				"status": False,
+				"message": "Invalid credentials"
+			}
+		})
 
 @api_view(['GET'])
 def users_profile(request):

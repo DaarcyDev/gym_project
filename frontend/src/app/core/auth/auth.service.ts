@@ -63,11 +63,8 @@ export class AuthService {
 		console.log("auth.service signIn");
 		return this._httpClient.post(environment.apiURL + '/api/users/signin/', { params }).pipe(
 			switchMap((response: any) => {
-				console.log('response',response);
-				console.log('response.result', response.result);
-				console.log('response.result.status', response.result.status);
+				console.log('response.result.data', response.result.data);
 				if (response?.result?.status) {
-					console.log("si entro al if");
 					this.accessToken = JSON.stringify(response.result.data);
 					this._authenticated = true;
 					this._userService.user = response.result.data;

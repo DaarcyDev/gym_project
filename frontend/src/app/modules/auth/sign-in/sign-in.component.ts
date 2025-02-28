@@ -30,7 +30,7 @@ export class AuthSignInComponent implements OnInit {
 	};
 	signInForm: UntypedFormGroup;
 	showAlert: boolean = false;
-	odooResponse: any;
+	backResponse: any;
 
 	/**
 	 * Constructor
@@ -86,36 +86,37 @@ export class AuthSignInComponent implements OnInit {
 			.signIn(params)
 			.subscribe({
 				next: (res) => {
-					const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
-					console.log("redirectURL", redirectURL);
+					// console.log("res", res);
+					// const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
+					// console.log("redirectURL", redirectURL);
 
-					// Navigate to the redirect url
-					this._router.navigateByUrl(redirectURL);
-					// this.odooResponse = res?.result;
-					// if (this.odooResponse?.status) {
+					// // Navigate to the redirect url
+					// this._router.navigateByUrl(redirectURL);
+					this.backResponse = res?.result;
+					if (this.backResponse?.status) {
 					// 	this.odooResponse = res?.result;
 
-					// 	const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
+						const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
 					// 	//const redirectURL = '/pages/home';
 					// 	//Navigate to the redirect url
-					// 	this._router.navigateByUrl(redirectURL);
+						this._router.navigateByUrl(redirectURL);
 
 					// 	// Re-enable the form
-					this.signInForm.enable();
-					// }
-					// else {
+						this.signInForm.enable();
+					}
+					else {
 					// 	// Re-enable the form
-					// 	this.signInForm.enable();
+						this.signInForm.enable();
 
-					// 	// Set the alert
-					// 	this.alert = {
-					// 		type: 'error',
-					// 		message: 'Usuario o contraseña incorrectos',
-					// 	};
+						// 	// Set the alert
+						this.alert = {
+							type: 'error',
+							message: 'Usuario o contraseña incorrectos',
+						};
 
-					// 	// Show the alert
-					// 	this.showAlert = true;
-					// }
+						// Show the alert
+						this.showAlert = true;
+					}
 				}
 			})
 	}
