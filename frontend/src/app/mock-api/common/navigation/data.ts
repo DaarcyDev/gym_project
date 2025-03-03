@@ -15,7 +15,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	}
+	},
+	{
+		id: 'Users',
+		title: 'Usuarios',
+		type: 'basic',
+		icon: 'heroicons_outline:user',
+		link: '/contacts'
+	},
 ];
 export const compactNavigation: FuseNavigationItem[] = [
 	{
@@ -31,7 +38,14 @@ export const compactNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	}
+	},
+	{
+		id: 'Users',
+		title: 'Usuarios',
+		type: 'basic',
+		icon: 'heroicons_outline:user',
+		link: '/apps/contacts'
+	},
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
 	{
@@ -47,7 +61,14 @@ export const futuristicNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	}
+	},
+	{
+		id: 'Users',
+		title: 'Usuarios',
+		type: 'basic',
+		icon: 'heroicons_outline:user',
+		link: '/apps/contacts'
+	},
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
 	{
@@ -63,5 +84,12 @@ export const horizontalNavigation: FuseNavigationItem[] = [
 		type: 'basic',
 		icon: 'heroicons_outline:user',
 		link: '/profile'
-	}
+	},
+	{
+		id: 'Users',
+		title: 'Usuarios',
+		type: 'basic',
+		icon: 'heroicons_outline:user',
+		link: '/apps/contacts'
+	},
 ];

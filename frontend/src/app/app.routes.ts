@@ -33,7 +33,7 @@ export const appRoutes: Route[] = [
 			{ path: 'forgot-password', loadChildren: () => import('app/modules/auth/forgot-password/forgot-password.routes') },
 			{ path: 'reset-password', loadChildren: () => import('app/modules/auth/reset-password/reset-password.routes') },
 			{ path: 'sign-in', loadChildren: () => import('app/modules/auth/sign-in/sign-in.routes') },
-			{ path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') }
+			// { path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') }
 		]
 	},
 
@@ -76,7 +76,9 @@ export const appRoutes: Route[] = [
 		children: [
 			{ path: 'home', loadChildren: () => import('app/modules/pages/home/home.routes') },
 			{ path: 'profile', loadChildren: () => import('app/modules/pages/profile/profile.routes') },
-			{ path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes') }
+			{ path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes') },
+			{ path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') },
+			{ path: 'contacts', loadChildren: () => import('app/modules/pages/contacts/contacts.routes') },
 		]
 	}
 

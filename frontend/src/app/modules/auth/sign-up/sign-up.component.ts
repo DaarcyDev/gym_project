@@ -51,6 +51,7 @@ export class AuthSignUpComponent implements OnInit
      */
     ngOnInit(): void
     {
+        console.log("ngOnInit sign-up.component.ts");
         // Create the form
         this.signUpForm = this._formBuilder.group({
                 name      : ['', Validators.required],
