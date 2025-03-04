@@ -9,9 +9,10 @@ from django.http import HttpResponse
 # def test_api(request):
 # 	return Response({"message": "Hello, world! from Django test"})
 
-@api_view(['GET'])
+@api_view(['POST'])
 def users_register(request):
-	return Response({"message": "Hello, world! from Django register"})
+	print("request",request.data)
+	return Response({"result": "Hello, world! from Django register"})
 
 @api_view(['GET'])
 def users_login(request):

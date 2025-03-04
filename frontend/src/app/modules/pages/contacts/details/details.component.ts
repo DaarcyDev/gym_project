@@ -21,14 +21,15 @@ import { ContactsService } from 'app/modules/pages/contacts/contacts.service';
 import { Contact, Country, Tag } from 'app/modules/pages/contacts/contacts.types';
 import { ContactsListComponent } from 'app/modules/pages/contacts/list/list.component';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { AuthService } from 'app/core/auth/auth.service';
 @Component({
     selector       : 'contacts-details',
     templateUrl    : './details.component.html',
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports        : [NgIf, MatButtonModule, MatTooltipModule, RouterLink, MatIconModule, NgFor, FormsModule, ReactiveFormsModule, MatRippleModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, NgClass, MatSelectModule, MatOptionModule, MatDatepickerModule, TextFieldModule, FuseFindByKeyPipe, DatePipe],
+    imports: [NgIf, MatButtonModule, MatTooltipModule, RouterLink, MatIconModule, NgFor, FormsModule, ReactiveFormsModule, MatRippleModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, NgClass, MatSelectModule, MatOptionModule, MatDatepickerModule, TextFieldModule, FuseFindByKeyPipe, DatePipe, MatRadioModule],
 })
 export class ContactsDetailsComponent implements OnInit, OnDestroy
 {
@@ -61,6 +62,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         private _router: Router,
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
+        private _authService: AuthService,
     )
     {
     }
@@ -74,6 +76,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+
         // Open the drawer
         this._contactsListComponent.matDrawer.open();
 
@@ -82,14 +85,9 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             id          : [''],
             avatar      : [null],
             name        : ['', [Validators.required]],
-            emails      : this._formBuilder.array([]),
+            lastname    : ['', [Validators.required]],
+            gender      : ['', [Validators.required]],
             phoneNumbers: this._formBuilder.array([]),
-            title       : [''],
-            company     : [''],
-            birthday    : [null],
-            address     : [null],
-            notes       : [null],
-            tags        : [[]],
         });
 
         // Get the contacts
@@ -220,6 +218,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+        this.addPhoneNumberField();
     }
 
     /**
@@ -277,9 +276,9 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
     {
         // Get the contact object
         const contact = this.contactForm.getRawValue();
-
+        console.log(contact);
         // Go through the contact object and clear empty values
-        contact.emails = contact.emails.filter(email => email.email);
+        // contact.emails = contact.emails.filter(email => email.email);
 
         contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
 
@@ -289,6 +288,21 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             // Toggle the edit mode off
             this.toggleEditMode(false);
         });
+    }
+
+    creteContact(): void
+    {
+        console.log('create contact');
+        const contact = this.contactForm.getRawValue();
+        console.log(contact);
+
+        this._authService.createUser(contact)
+        .subscribe(
+            (response) =>
+            {
+                console.log(response);
+            }
+        );
     }
 
     /**
@@ -688,9 +702,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
     {
         // Create an empty phone number form group
         const phoneNumberFormGroup = this._formBuilder.group({
-            country    : ['us'],
             phoneNumber: [''],
-            label      : [''],
         });
 
         // Add the phone number form group to the phoneNumbers form array

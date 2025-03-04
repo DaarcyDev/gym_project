@@ -78,6 +78,26 @@ export class AuthService {
 		);
 	}
 
+
+	createUser(params: { name: string, lastname: string  }): Observable<any> {
+		console.log("auth.service createUser");
+		return this._httpClient.post(environment.apiURL + '/api/users/register/', { params }).pipe(
+			switchMap((response: any) => {
+				console.log('response.result', response.result);
+				// if (response?.result?.status) {
+				// 	this.accessToken = JSON.stringify(response.result.data);
+				// 	this._authenticated = true;
+				// 	this._userService.user = response.result.data;
+				// }
+				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
+			})
+		);
+	}
+
 	/**
 	 * Sign in using the access token
 	 */
