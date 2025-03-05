@@ -1,3 +1,4 @@
+import { contacts } from './../../mock-api/apps/chat/data';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
@@ -79,11 +80,13 @@ export class AuthService {
 	}
 
 
-	createUser(params: { name: string, lastname: string  }): Observable<any> {
+	createUser(params: { name: string, last_name: string, gender: string, phone: string }): Observable<any> {
 		console.log("auth.service createUser");
 		return this._httpClient.post(environment.apiURL + '/api/users/register/', { params }).pipe(
 			switchMap((response: any) => {
 				console.log('response.result', response.result);
+				console.log('paramas', params);
+				console.log('paramas.name', params.name);
 				// if (response?.result?.status) {
 				// 	this.accessToken = JSON.stringify(response.result.data);
 				// 	this._authenticated = true;

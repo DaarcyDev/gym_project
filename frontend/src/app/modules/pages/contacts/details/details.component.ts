@@ -294,13 +294,19 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
     {
         console.log('create contact');
         const contact = this.contactForm.getRawValue();
-        console.log(contact);
 
         this._authService.createUser(contact)
         .subscribe(
             (response) =>
             {
-                console.log(response);
+                console.log('response', response);
+                console.log('response', response.result.status);
+                if (response?.result?.status) {
+                    console.log('response.result.data', response.result.data);
+                    // mostrar un mensaje de exito
+                }else{
+                    // mostrar un mensaje de error
+                }
             }
         );
     }

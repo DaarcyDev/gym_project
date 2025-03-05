@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
-
 # Create your views here.
 
 # @api_view(['GET'])
@@ -12,6 +11,10 @@ from django.http import HttpResponse
 @api_view(['POST'])
 def users_register(request):
 	print("request",request.data)
+ 
+	
+	
+ 
 	return Response({"result": "Hello, world! from Django register"})
 
 @api_view(['GET'])
