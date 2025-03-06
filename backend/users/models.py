@@ -13,7 +13,6 @@ class Administrator(models.Model):
 	lastname = models.CharField(max_length=128)
 	gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=False)
 	phoneNumber = models.CharField(max_length=15)
-	# Puedes almacenar la contraseña (idealmente hasheada) si no usas el sistema de autenticación de Django
 	password = models.CharField(max_length=128)
 	created_at = models.DateTimeField(auto_now_add=True)
 	
