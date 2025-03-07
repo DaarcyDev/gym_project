@@ -15,6 +15,7 @@ class Administrator(models.Model):
 	phoneNumber = models.CharField(max_length=15)
 	password = models.CharField(max_length=128)
 	created_at = models.DateTimeField(auto_now_add=True)
+	acces_token = models.CharField(max_length=128)
 	
 	def __str__(self):
 		return self.username
@@ -32,6 +33,7 @@ class Trainer(models.Model):
 	phoneNumber = models.CharField(max_length=15)
 	password = models.CharField(max_length=128)
 	created_at = models.DateTimeField(auto_now_add=True)
+	acces_token = models.CharField(max_length=128)
 	created_by = models.ForeignKey(
 		Administrator, 
 		on_delete=models.CASCADE, 
@@ -54,6 +56,7 @@ class Member(models.Model):
 	gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=False)
 	phoneNumber = models.CharField(max_length=15)
 	create_at = models.DateTimeField(auto_now_add=True)
+	acces_token = models.CharField(max_length=128)
 	created_by = models.ForeignKey(
 		Administrator, 
 		on_delete=models.CASCADE, 

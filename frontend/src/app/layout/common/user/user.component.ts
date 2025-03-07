@@ -95,7 +95,9 @@ export class UserComponent implements OnInit, OnDestroy
             status,
         }).subscribe();
     }
-
+    redirectToSignUp(): void {
+        this._router.navigate(['/sign-up']);
+    }
     /**
      * Sign out
      */
