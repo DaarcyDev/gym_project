@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
-
+import { environment } from 'environments/environment';
 @Component({
     selector       : 'user',
     templateUrl    : './user.component.html',
@@ -27,7 +27,7 @@ export class UserComponent implements OnInit, OnDestroy
 
     @Input() showAvatar: boolean = true;
     user: User;
-
+    adminToken = environment.adminAccessToken;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -39,6 +39,22 @@ export class UserComponent implements OnInit, OnDestroy
         private _userService: UserService,
     )
     {
+        const storedToken = localStorage.getItem('accessToken');
+        
+        if (storedToken) {
+            const parsedToken = JSON.parse(storedToken);
+            const access_token = parsedToken['access_token'];
+            const user = parsedToken['user'];
+            const email = parsedToken['email'];
+            // Si están guardados, actualiza el objeto 'user'
+            this.user = JSON.parse(storedToken);
+            // Si quieres también, puedes asignar el token a una propiedad
+            this.user.access_token = access_token;
+            this.user.user = user;
+            this.user.email = email;
+            // Y luego, puedes hacer lo que quieras con el token
+            console.log("user", this.user);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -60,6 +76,8 @@ export class UserComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+        
+        
     }
 
     /**

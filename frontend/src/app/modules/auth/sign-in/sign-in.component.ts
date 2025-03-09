@@ -95,7 +95,9 @@ export class AuthSignInComponent implements OnInit {
 					this.backResponse = res?.result;
 					if (this.backResponse?.status) {
 					// 	this.odooResponse = res?.result;
-
+						localStorage.setItem('access_token', this.backResponse.data.access_token);
+						localStorage.setItem('user', JSON.stringify(this.backResponse.data.user));
+						localStorage.setItem('email', this.backResponse.data.email);
 						const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
 					// 	//const redirectURL = '/pages/home';
 					// 	//Navigate to the redirect url

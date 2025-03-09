@@ -26,7 +26,7 @@
     <button mat-menu-item>
         <span class="flex flex-col leading-none">
             <span>Signed in as</span>
-            <span class="mt-1.5 text-md font-medium">{{user?.email}}</span>
+            <span class="mt-1.5 text-md font-medium">{{user.email}}</span>
         </span>
     </button>
     <mat-divider class="my-2"></mat-divider>
@@ -39,7 +39,7 @@
         <span>Settings</span>
     </button>
     <button mat-menu-item 
-            *ngIf="user?.access_token === '8ff75e23-9ea4-4da9-9231-9d731e3ac486'"
+            *ngIf="user?.access_token === adminToken"
             (click)="redirectToSignUp()">
         <mat-icon [svgIcon]="'heroicons_outline:ellipsis-horizontal-circle'"></mat-icon>
         <span>Create admin</span>
