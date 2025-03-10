@@ -33,15 +33,39 @@
                 [formGroup]="signUpForm"
                 #signUpNgForm="ngForm">
 
+                <!--Username field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Username</mat-label>
+                    <input
+                        id="username"
+                        matInput
+                        [formControlName]="'username'">
+                    <mat-error *ngIf="signUpForm.get('username').hasError('required')">
+                        Username is required
+                    </mat-error>
+                </mat-form-field>
+                
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label>Name</mat-label>
                     <input
                         id="name"
                         matInput
                         [formControlName]="'name'">
                     <mat-error *ngIf="signUpForm.get('name').hasError('required')">
-                        Full name is required
+                        Name is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Name field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Last Name</mat-label>
+                    <input
+                        id="lastname"
+                        matInput
+                        [formControlName]="'lastname'">
+                    <mat-error *ngIf="signUpForm.get('lastname').hasError('required')">
+                        Lastname is required
                     </mat-error>
                 </mat-form-field>
 
@@ -57,6 +81,30 @@
                     </mat-error>
                     <mat-error *ngIf="signUpForm.get('email').hasError('email')">
                         Please enter a valid email address
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Geneder field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Gender</mat-label>
+                    <input
+                        id="gender"
+                        matInput
+                        [formControlName]="'gender'">
+                    <mat-error *ngIf="signUpForm.get('gender').hasError('required')">
+                        Gender is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Phone field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Phone number</mat-label>
+                    <input
+                        id="phoneNumber"
+                        matInput
+                        [formControlName]="'phoneNumber'">
+                    <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('required')">
+                        Phone Number is required
                     </mat-error>
                 </mat-form-field>
 
