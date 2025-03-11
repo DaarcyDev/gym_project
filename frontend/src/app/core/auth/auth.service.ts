@@ -79,6 +79,28 @@ export class AuthService {
 		);
 	}
 
+	/**
+	 * Sign up
+	 *
+	 * @param user
+	 */
+	signUpAdmins(admin: { username: string; name: string; lastname: string; email: string; gender: string; phoneNumber: string; password: string }): Observable<any> {
+		return this._httpClient.post(environment.apiURL + '/api/users/admin/register/', { admin }).pipe(
+			switchMap((response: any) => {
+				console.log('response.result.data', response.result.data);
+				// if (response?.result?.status) {
+				// 	this.accessToken = JSON.stringify(response.result.data);
+				// 	this._authenticated = true;
+				// 	this._userService.user = response.result.data;
+				// }
+				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
+			})
+		);
+	}
 
 	createUser(params: { name: string, last_name: string, gender: string, phone: string }): Observable<any> {
 		console.log("auth.service createUser");
@@ -153,14 +175,7 @@ export class AuthService {
 		return of(true);
 	}
 
-	/**
-	 * Sign up
-	 *
-	 * @param user
-	 */
-	signUp(user: { name: string; email: string; password: string; company: string }): Observable<any> {
-		return this._httpClient.post('api/auth/sign-up', user);
-	}
+	
 
 	/**
 	 * Unlock session

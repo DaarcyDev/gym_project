@@ -11,14 +11,14 @@ import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
-
+import { MatRadioModule } from '@angular/material/radio';
 @Component({
     selector     : 'auth-sign-up',
     templateUrl  : './sign-up.component.html',
     encapsulation: ViewEncapsulation.None,
     animations   : fuseAnimations,
     standalone   : true,
-    imports      : [RouterLink, NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule],
+    imports: [RouterLink, NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule, MatRadioModule],
 })
 export class AuthSignUpComponent implements OnInit
 {
@@ -54,15 +54,15 @@ export class AuthSignUpComponent implements OnInit
         console.log("ngOnInit sign-up.component.ts");
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                username      : ['', Validators.required],
-                name      : ['', Validators.required],
-                lastname      : ['', Validators.required],
-                email     : ['', [Validators.required, Validators.email]],
-                gender   : [''],
-                phoneNumber: ['', Validators.requiredTrue],
-                password  : ['', Validators.required],
-            },
-        );
+            username: ['', Validators.required],
+            name: ['', Validators.required],
+            lastname: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            gender: ['', Validators.required],
+            phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+            password: ['', Validators.required],
+        });
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ export class AuthSignUpComponent implements OnInit
         this.showAlert = false;
 
         // Sign up
-        this._authService.signUp(this.signUpForm.value)
+        this._authService.signUpAdmins(this.signUpForm.value)
             .subscribe(
                 (response) =>
                 {

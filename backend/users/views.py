@@ -13,11 +13,23 @@ from .models import Administrator
 @api_view(['POST'])
 def users_register(request):
 	print("request",request.data)
- 
-	
-	
- 
 	return Response({"result": "Hello, world! from Django register"})
+
+@api_view(['POST'])
+def admin_register(request):
+	print("request",request.data)
+	return Response({
+			"result": {
+				"status": True,
+				"data": {
+					"access_token": 'test',
+					"user": 'user',
+					"email": 'user',
+					"password": 'user'
+				}
+			}
+		})
+
 
 @api_view(['GET'])
 def users_login(request):
