@@ -84,7 +84,7 @@ export class AuthService {
 	 *
 	 * @param user
 	 */
-	signUpAdmins(admin: { username: string; name: string; lastname: string; email: string; gender: string; phoneNumber: string; password: string }): Observable<any> {
+	signUpAdmins(admin: { username: string; name: string; lastname: string; email: string; gender: string; phone_number: string; password: string }): Observable<any> {
 		return this._httpClient.post(environment.apiURL + '/api/users/admin/register/', { admin }).pipe(
 			switchMap((response: any) => {
 				console.log('response.result.data', response.result.data);

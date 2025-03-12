@@ -18,6 +18,40 @@ def users_register(request):
 @api_view(['POST'])
 def admin_register(request):
 	print("request",request.data)
+ 
+	if request.method == 'POST':
+		username = request.data["admin"]["username"]
+		name = request.data["admin"]["name"]
+		lastname = request.data["admin"]["lastname"]
+		email = request.data["admin"]["email"]
+		gender = request.data["admin"]["gender"]
+		phone_number = request.data["admin"]["phone_number"]
+		password = request.data["admin"]["password"]
+		password_confirm = request.data["admin"]["password_confirm"]
+		if password != password_confirm:
+			return Response({
+				"result": {
+					"status": False,
+					"data": {
+						"message": "Las contraseñas no coinciden"
+					}
+				}
+			})
+		else:
+			print("se registran los administradores")
+			admin = Administrator.objects.create(
+				username=username,
+				name=name,
+				lastname=lastname,
+				email=email,
+				gender=gender,
+				phone_number=phone_number,
+				password=password,
+				access_token='test'
+			)
+			admin.save()
+
+ 
 	return Response({
 			"result": {
 				"status": True,

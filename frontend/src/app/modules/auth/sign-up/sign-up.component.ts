@@ -51,7 +51,6 @@ export class AuthSignUpComponent implements OnInit
      */
     ngOnInit(): void
     {
-        console.log("ngOnInit sign-up.component.ts");
         // Create the form
         this.signUpForm = this._formBuilder.group({
             username: ['', Validators.required],
@@ -59,8 +58,9 @@ export class AuthSignUpComponent implements OnInit
             lastname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             gender: ['', Validators.required],
-            phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+            phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
             password: ['', Validators.required],
+            password_confirm: ['', Validators.required],
         });
 
     }
@@ -74,43 +74,58 @@ export class AuthSignUpComponent implements OnInit
      */
     signUp(): void
     {
+        console.log("signUp sign-up.component.ts");
         // Do nothing if the form is invalid
+        console.log('signUpForm', this.signUpForm);
         if ( this.signUpForm.invalid )
         {
+            console.log("signUpForm invalid");
             return;
         }
 
         // Disable the form
-        this.signUpForm.disable();
+        // this.signUpForm.disable();
 
         // Hide the alert
         this.showAlert = false;
-
+        
+        console.log("se va a llamar a signUpAdmins");
         // Sign up
         this._authService.signUpAdmins(this.signUpForm.value)
             .subscribe(
                 (response) =>
                 {
-                    // Navigate to the confirmation required page
-                    this._router.navigateByUrl('/confirmation-required');
+                    console.log("signUpAdmins response", response);
+                    if ( response?.result?.status == false)
+                    {
+                        console.log("signUpAdmins response1", response);
+                        // Set the alert
+                        this.alert = {
+                            type: 'error',
+                            message: response?.result?.data?.message || 'Something went wrong, please try again.',
+                        };
+                        this.showAlert = true;
+                    }
+                    
                 },
-                (response) =>
-                {
-                    // Re-enable the form
-                    this.signUpForm.enable();
+                // (response) =>
+                // {
+                //     console.log("signUpAdmins response2", response);
+                //     // Re-enable the form
+                //     this.signUpForm.enable();
 
-                    // Reset the form
-                    this.signUpNgForm.resetForm();
+                //     // Reset the form
+                //     this.signUpNgForm.resetForm();
 
-                    // Set the alert
-                    this.alert = {
-                        type   : 'error',
-                        message: 'Something went wrong, please try again.',
-                    };
+                //     // Set the alert
+                //     this.alert = {
+                //         type   : 'error',
+                //         message: 'Something went wrong, please try again.',
+                //     };
 
-                    // Show the alert
-                    this.showAlert = true;
-                },
+                //     // Show the alert
+                //     this.showAlert = true;
+                // },
             );
     }
 }

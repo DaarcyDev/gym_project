@@ -96,12 +96,12 @@
                 <mat-form-field class="w-full">
                     <mat-label>Numero de telefono</mat-label>
                     <input
-                        id="phoneNumber"
+                        id="phone_number"
                         matInput
                         type="text"
                         pattern="^[0-9]*$"
-                        [formControlName]="'phoneNumber'">
-                    <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('required')">
+                        [formControlName]="'phone_number'">
+                    <mat-error *ngIf="signUpForm.get('phone_number').hasError('required')">
                         El número de teléfono es requerido
                     </mat-error>
                 </mat-form-field>
@@ -131,6 +131,34 @@
                     </button>
                     <mat-error>
                         La contraseña es requerida
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- password confirmation -->
+                <mat-form-field class="w-full">
+                    <mat-label>Confirmar contraseña</mat-label>
+                    <input
+                        id="password_confirm"
+                        matInput
+                        type="password"
+                        [formControlName]="'password_confirm'"
+                        #passwordConfirmationField>
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="passwordConfirmationField.type === 'password' ? passwordConfirmationField.type = 'text' : passwordConfirmationField.type = 'password'"
+                        matSuffix>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordConfirmationField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordConfirmationField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                    </button>
+                    <mat-error>
+                        La confirmación de la contraseña es requerida
                     </mat-error>
                 </mat-form-field>
 
