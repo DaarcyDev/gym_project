@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -38,6 +38,7 @@ export class AuthSignUpComponent implements OnInit
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
         private _router: Router,
+        private _activatedRoute: ActivatedRoute,
     )
     {
     }
@@ -105,6 +106,10 @@ export class AuthSignUpComponent implements OnInit
                             message: response?.result?.data?.message || 'Something went wrong, please try again.',
                         };
                         this.showAlert = true;
+                    }
+                    else{
+                        const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
+                        this._router.navigateByUrl(redirectURL);
                     }
                     
                 },

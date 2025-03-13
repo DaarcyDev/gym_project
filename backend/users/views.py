@@ -1,14 +1,16 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from .models import Administrator
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
+import uuid
 # Create your views here.
 
-# @api_view(['GET'])
-# def test_api(request):
-# 	return Response({"message": "Hello, world! from Django test"})
+def create_uuid(username, name, lastname, email):
+    unique_string = f"{username}-{name}-{lastname}-{email}"
+    return str(uuid.uuid5(uuid.NAMESPACE_DNS, unique_string))
+    
 
 @api_view(['POST'])
 def users_register(request):
@@ -39,6 +41,7 @@ def admin_register(request):
 			})
 		else:
 			print("se registran los administradores")
+			hashed_password = make_password(password) 
 			admin = Administrator.objects.create(
 				username=username,
 				name=name,
@@ -46,8 +49,8 @@ def admin_register(request):
 				email=email,
 				gender=gender,
 				phone_number=phone_number,
-				password=password,
-				access_token='test'
+				password=hashed_password,
+				access_token= create_uuid(username, name, lastname, email)
 			)
 			admin.save()
 
@@ -86,24 +89,25 @@ def users_signin(request):
 					"access_token": token,
 					"user": user.username,
 					"email": user.email,
-					"password": user.password
+					# "password": user.password
 				}
 			}
 		})
 	else:
 		try:
-			admin = Administrator.objects.get(username=username, password=password)
+			admin = Administrator.objects.get(username=username)
 		except Administrator.DoesNotExist:
 			admin = None
-		if admin is not None:
+		if admin is not None and check_password(password, admin.password):
+			print("check_password(password, admin.password)",check_password(password, admin.password))
 			return Response({
 				"result": {
 					"status": True,
 					"data": {
-						"access_token": admin.acces_token,
+						"access_token": admin.access_token,
 						"user": admin.username,
 						"email": admin.email,
-						"password": admin.password
+						"type": "admin"
 					}
 				}
 			})

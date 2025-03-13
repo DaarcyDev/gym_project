@@ -22,12 +22,12 @@ export class AuthService {
 	/**
 	 * Setter & getter for access token
 	 */
-	set accessToken(token: string) {
-		localStorage.setItem('accessToken', token);
+	set access_token(token: string) {
+		localStorage.setItem('access_token', token);
 	}
 
-	get accessToken(): string {
-		return localStorage.getItem('accessToken') ?? '';
+	get access_token(): string {
+		return localStorage.getItem('access_token') ?? '';
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ export class AuthService {
 			switchMap((response: any) => {
 				console.log('response.result.data', response.result.data);
 				if (response?.result?.status) {
-					this.accessToken = JSON.stringify(response.result.data);
+					this.access_token = JSON.stringify(response.result.data);
 					this._authenticated = true;
 					this._userService.user = response.result.data;
 				}
@@ -89,7 +89,7 @@ export class AuthService {
 			switchMap((response: any) => {
 				console.log('response.result.data', response.result.data);
 				// if (response?.result?.status) {
-				// 	this.accessToken = JSON.stringify(response.result.data);
+				// 	this.access_token = JSON.stringify(response.result.data);
 				// 	this._authenticated = true;
 				// 	this._userService.user = response.result.data;
 				// }
@@ -110,7 +110,7 @@ export class AuthService {
 				console.log('paramas', params);
 				console.log('paramas.name', params.name);
 				// if (response?.result?.status) {
-				// 	this.accessToken = JSON.stringify(response.result.data);
+				// 	this.access_token = JSON.stringify(response.result.data);
 				// 	this._authenticated = true;
 				// 	this._userService.user = response.result.data;
 				// }
@@ -129,7 +129,7 @@ export class AuthService {
 	signInUsingToken(): Observable<any> {
 		// Sign in using the token
 		return this._httpClient.post('api/auth/sign-in-with-token', {
-			accessToken: this.accessToken
+			access_token: this.access_token
 		}).pipe(
 			catchError(() =>
 
@@ -145,8 +145,8 @@ export class AuthService {
 				// in using the token, you should generate a new one on the server
 				// side and attach it to the response object. Then the following
 				// piece of code can replace the token with the refreshed one.
-				if (response.accessToken) {
-					this.accessToken = response.accessToken;
+				if (response.access_token) {
+					this.access_token = response.access_token;
 				}
 
 				// Set the authenticated flag to true
@@ -166,7 +166,7 @@ export class AuthService {
 	 */
 	signOut(): Observable<any> {
 		// Remove the access token from the local storage
-		localStorage.removeItem('accessToken');
+		localStorage.removeItem('access_token');
 
 		// Set the authenticated flag to false
 		this._authenticated = false;
@@ -196,16 +196,16 @@ export class AuthService {
 		}
 
 		// Check the access token availability
-		if (!this.accessToken) {
+		if (!this.access_token) {
 			return of(false);
 		}
 
 		// Check the access token expire date
-		/*  if ( AuthUtils.isTokenExpired(this.accessToken) )
+		/*  if ( AuthUtils.isTokenExpired(this.access_token) )
 		{
 			return of(false);
 		 } */
-		// this._userService.user = JSON.parse(this.accessToken);
+		// this._userService.user = JSON.parse(this.access_token);
 
 		// If the access token exists and it didn't expire, sign in using it
 		/* return this.signInUsingToken(); */

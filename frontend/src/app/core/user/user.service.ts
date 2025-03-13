@@ -39,8 +39,8 @@ export class UserService {
 			   this._user.next(user);
 		    })
 		); */
-		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
+		this._user.next(JSON.parse(localStorage.getItem('access_token')) ?? {})
+		return JSON.parse(localStorage.getItem('access_token')) ?? {};
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class UserService {
 			   this._user.next(response);
 		    })
 		); */
-		this._user.next(JSON.parse(localStorage.getItem('accessToken')) ?? {})
-		return JSON.parse(localStorage.getItem('accessToken')) ?? {};
+		this._user.next(JSON.parse(localStorage.getItem('access_token')) ?? {})
+		return JSON.parse(localStorage.getItem('access_token')) ?? {};
 	}
 }
