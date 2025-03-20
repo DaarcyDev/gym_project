@@ -78,6 +78,7 @@ export const appRoutes: Route[] = [
 			{ path: 'profile', loadChildren: () => import('app/modules/pages/profile/profile.routes') },
 			{ path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes') },
 			{ path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') },
+			{ path: 'sign-up-trainer', loadChildren: () => import('app/modules/auth/sign-up-trainer/sign-up-trainer.routes') },
 			{ path: 'contacts', loadChildren: () => import('app/modules/pages/contacts/contacts.routes') },
 		]
 	}

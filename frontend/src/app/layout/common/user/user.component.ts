@@ -116,6 +116,10 @@ export class UserComponent implements OnInit, OnDestroy
     redirectToSignUp(): void {
         this._router.navigate(['/sign-up']);
     }
+
+    redirectToSignUpTrainer(): void {
+        this._router.navigate(['/sign-up-trainer']);
+    }
     /**
      * Sign out
      */

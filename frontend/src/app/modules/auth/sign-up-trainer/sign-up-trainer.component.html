@@ -9,7 +9,7 @@
 
 
 			<!-- Title -->
-			<div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Registrar administradores</div>
+			<div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Registrar entrenadores</div>
 			<!-- <div class="flex items-baseline mt-0.5 font-medium">
                 <div>Already have an account?</div>
                 <a
@@ -27,15 +27,6 @@
 			<!-- Sign Up form -->
 			<form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm">
 
-				<!--Username field -->
-				<mat-form-field class="w-full">
-					<mat-label>Nombre de usuario</mat-label>
-					<input id="username" matInput [formControlName]="'username'">
-					<mat-error *ngIf="signUpForm.get('username').hasError('required')">
-						El nombre de usuario es requerido
-					</mat-error>
-				</mat-form-field>
-
 				<!-- Name field -->
 				<mat-form-field class="w-full">
 					<mat-label>Nombre</mat-label>
@@ -51,18 +42,6 @@
 					<input id="lastname" matInput [formControlName]="'lastname'">
 					<mat-error *ngIf="signUpForm.get('lastname').hasError('required')">
 						El apellido es requerido
-					</mat-error>
-				</mat-form-field>
-
-				<!-- Email field -->
-				<mat-form-field class="w-full">
-					<mat-label>Correo electronico</mat-label>
-					<input id="email" matInput [formControlName]="'email'">
-					<mat-error *ngIf="signUpForm.get('email').hasError('required')">
-						El correo electronico es requerido
-					</mat-error>
-					<mat-error *ngIf="signUpForm.get('email').hasError('email')">
-						Porfavor ingrese un correo valido
 					</mat-error>
 				</mat-form-field>
 

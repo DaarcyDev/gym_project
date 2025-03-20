@@ -45,10 +45,8 @@ export class AuthSignUpTrainerComponent {
   ngOnInit(): void {
     // Create the form
     this.signUpForm = this._formBuilder.group({
-      username: ['', Validators.required],
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       gender: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       password: ['', Validators.required],
