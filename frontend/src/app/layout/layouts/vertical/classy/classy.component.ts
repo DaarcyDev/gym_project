@@ -46,20 +46,14 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _fuseNavigationService: FuseNavigationService,
     )
     {
-        const storedToken = localStorage.getItem('accessToken');
-
-        if (storedToken) {
-            const parsedToken = JSON.parse(storedToken);
-            const access_token = parsedToken['access_token'];
-            const user = parsedToken['user'];
-            const email = parsedToken['email'];
-            // Si están guardados, actualiza el objeto 'user'
-            this.user = JSON.parse(storedToken);
-            // Si quieres también, puedes asignar el token a una propiedad
-            this.user.access_token = access_token;
-            this.user.user = user;
-            this.user.email = email;
-            // Y luego, puedes hacer lo que quieras con el token
+        if (localStorage.getItem('access_token')) {
+            this.user = {
+                access_token: localStorage.getItem('access_token'),
+                user: localStorage.getItem('user'),
+                email: localStorage.getItem('email'),
+                name: localStorage.getItem('name'),
+                lastname: localStorage.getItem('lastname'),
+            };
             console.log("user", this.user);
         }
     }

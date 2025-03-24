@@ -27,6 +27,7 @@ class Administrator(models.Model):
 		
 class Trainer(models.Model):
 	id = models.AutoField(primary_key=True)
+	username = models.CharField(max_length=150, unique=True)
 	name = models.CharField(max_length=150)
 	lastname = models.CharField(max_length=128)
 	gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=False)

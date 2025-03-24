@@ -101,6 +101,23 @@ export class AuthService {
 			})
 		);
 	}
+	signUpTrainers(admin: { username: string; name: string; lastname: string; email: string; gender: string; phone_number: string; password: string }): Observable<any> {
+		return this._httpClient.post(environment.apiURL + '/api/users/trainer/register/', { admin }).pipe(
+			switchMap((response: any) => {
+				console.log('response.result.data', response.result.data);
+				// if (response?.result?.status) {
+				// 	this.access_token = JSON.stringify(response.result.data);
+				// 	this._authenticated = true;
+				// 	this._userService.user = response.result.data;
+				// }
+				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
+			})
+		);
+	}
 
 	createUser(params: { name: string, last_name: string, gender: string, phone: string }): Observable<any> {
 		console.log("auth.service createUser");

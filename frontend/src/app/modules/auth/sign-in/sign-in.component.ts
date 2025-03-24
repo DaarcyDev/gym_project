@@ -99,6 +99,8 @@ export class AuthSignInComponent implements OnInit {
 						localStorage.setItem('user', JSON.stringify(this.backResponse.data.user));
 						localStorage.setItem('email', this.backResponse.data.email);
 						localStorage.setItem('type', this.backResponse.data.type);
+						localStorage.setItem('name', this.backResponse.data.name);
+						localStorage.setItem('lastname', this.backResponse.data.lastname);
 						const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
 					// 	//const redirectURL = '/pages/home';
 					// 	//Navigate to the redirect url

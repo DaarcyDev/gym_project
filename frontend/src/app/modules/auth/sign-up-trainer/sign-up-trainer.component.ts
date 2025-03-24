@@ -51,12 +51,13 @@ export class AuthSignUpTrainerComponent {
       phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       password: ['', Validators.required],
       password_confirm: ['', Validators.required],
+      access_token_admin: localStorage.getItem('access_token'),
     });
 
   }
 
   signUp(): void {
-    console.log("signUp sign-up.component.ts");
+    console.log("signUpTrainers sign-up-trainers.component.ts");
     // Do nothing if the form is invalid
     console.log('signUpForm', this.signUpForm);
     if (this.signUpForm.invalid) {
@@ -72,7 +73,7 @@ export class AuthSignUpTrainerComponent {
 
     console.log("se va a llamar a signUpAdmins");
     // Sign up
-    this._authService.signUpAdmins(this.signUpForm.value)
+    this._authService.signUpTrainers(this.signUpForm.value)
       .subscribe(
         (response) => {
           console.log("signUpAdmins response", response);
@@ -89,26 +90,7 @@ export class AuthSignUpTrainerComponent {
             const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || 'home';
             this._router.navigateByUrl(redirectURL);
           }
-
         },
-        // (response) =>
-        // {
-        //     console.log("signUpAdmins response2", response);
-        //     // Re-enable the form
-        //     this.signUpForm.enable();
-
-        //     // Reset the form
-        //     this.signUpNgForm.resetForm();
-
-        //     // Set the alert
-        //     this.alert = {
-        //         type   : 'error',
-        //         message: 'Something went wrong, please try again.',
-        //     };
-
-        //     // Show the alert
-        //     this.showAlert = true;
-        // },
       );
   }
 
