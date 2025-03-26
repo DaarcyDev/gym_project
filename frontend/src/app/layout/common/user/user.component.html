@@ -39,12 +39,13 @@
         <span>Configuración</span>
     </button>
     <button mat-menu-item 
-            *ngIf="user?.access_token === adminToken"
+            *ngIf="user?.access_token === adminToken || user?.tipo_usuario === 'admin'"
             (click)="redirectToSignUp()">
         <mat-icon [svgIcon]="'heroicons_outline:ellipsis-horizontal-circle'"></mat-icon>
         <span>Crear administrador</span>
     </button>
     <button mat-menu-item 
+            *ngIf="user?.access_token === adminToken || user?.tipo_usuario === 'admin'"
             (click)="redirectToSignUpTrainer()">
         <mat-icon [svgIcon]="'heroicons_outline:ellipsis-horizontal-circle'"></mat-icon>
         <span>Crear entrenador</span>

@@ -46,6 +46,7 @@ export class UserComponent implements OnInit, OnDestroy
                 email: localStorage.getItem('email'),
                 name: localStorage.getItem('name'),
                 lastname: localStorage.getItem('lastname'),
+                tipo_usuario: localStorage.getItem('type'),
             };
             console.log("user", this.user);
         }
