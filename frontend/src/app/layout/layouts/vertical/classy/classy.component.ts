@@ -19,7 +19,7 @@ import { SearchComponent } from 'app/layout/common/search/search.component';
 import { ShortcutsComponent } from 'app/layout/common/shortcuts/shortcuts.component';
 import { UserComponent } from 'app/layout/common/user/user.component';
 import { Subject, takeUntil } from 'rxjs';
-
+import { environment } from 'environments/environment';
 @Component({
     selector     : 'classy-layout',
     templateUrl  : './classy.component.html',
@@ -32,6 +32,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     isScreenSmall: boolean;
     navigation: Navigation;
     user: User;
+    adminToken = environment.adminAccessToken;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -46,17 +47,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _fuseNavigationService: FuseNavigationService,
     )
     {
-        if (localStorage.getItem('access_token')) {
-            this.user = {
-                access_token: localStorage.getItem('access_token'),
-                user: localStorage.getItem('user'),
-                email: localStorage.getItem('email'),
-                name: localStorage.getItem('name'),
-                lastname: localStorage.getItem('lastname'),
-                tipo_usuario: localStorage.getItem('type'),
-            };
-            console.log("user", this.user);
-        }
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -80,6 +71,17 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        if (localStorage.getItem('access_token')) {
+            this.user = {
+                access_token: localStorage.getItem('access_token'),
+                user: localStorage.getItem('user'),
+                email: localStorage.getItem('email'),
+                name: localStorage.getItem('name'),
+                lastname: localStorage.getItem('lastname'),
+                tipo_usuario: localStorage.getItem('type'),
+            };
+            console.log("usertest", this.user);
+        }
         // Subscribe to navigation data
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))

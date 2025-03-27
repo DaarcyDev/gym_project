@@ -39,7 +39,7 @@
         <span>Configuración</span>
     </button>
     <button mat-menu-item 
-            *ngIf="user?.access_token === adminToken || user?.tipo_usuario === 'admin'"
+            *ngIf="user?.access_token === adminToken"
             (click)="redirectToSignUp()">
         <mat-icon [svgIcon]="'heroicons_outline:ellipsis-horizontal-circle'"></mat-icon>
         <span>Crear administrador</span>

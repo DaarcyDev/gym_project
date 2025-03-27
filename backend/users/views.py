@@ -149,7 +149,7 @@ def users_signin(request):
 					"access_token": token,
 					"user": user.username,
 					"email": user.email,
-					'name': user.name,
+					'name': "Super admin",
 				}
 			}
 		})

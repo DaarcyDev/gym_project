@@ -12,6 +12,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 import { MatRadioModule } from '@angular/material/radio';
+import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment';
 @Component({
   selector: 'auth-sign-up-trainer',
   templateUrl: './sign-up-trainer.component.html',
@@ -30,7 +32,8 @@ export class AuthSignUpTrainerComponent {
   };
   signUpForm: UntypedFormGroup;
   showAlert: boolean = false;
-
+  user: User;
+  adminToken = environment.adminAccessToken;
   /**
    * Constructor
    */
@@ -43,6 +46,17 @@ export class AuthSignUpTrainerComponent {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('access_token')) {
+      this.user = {
+        access_token: localStorage.getItem('access_token'),
+        user: localStorage.getItem('user'),
+        email: localStorage.getItem('email'),
+        name: localStorage.getItem('name'),
+        lastname: localStorage.getItem('lastname'),
+        tipo_usuario: localStorage.getItem('type'),
+      };
+      console.log("usertest", this.user);
+    }
     // Create the form
     this.signUpForm = this._formBuilder.group({
       name: ['', Validators.required],
