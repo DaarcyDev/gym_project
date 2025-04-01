@@ -7,10 +7,16 @@ from django.contrib.auth.hashers import check_password
 import uuid
 # Create your views here.
 
+@api_view(["GET"])
+def get_admins(request):
+	admins = Administrator.objects.all().values("id", "name", "lastname", "access_token")
+	print("admins", admins)
+	return Response({"admins": list(admins)})
+
 def create_uuid(username, name, phone_number):
-    unique_string = f"{username}-{name}-{phone_number}"
-    return str(uuid.uuid5(uuid.NAMESPACE_DNS, unique_string))
-    
+	unique_string = f"{username}-{name}-{phone_number}"
+	return str(uuid.uuid5(uuid.NAMESPACE_DNS, unique_string))
+	
 
 @api_view(['POST'])
 def users_register(request):
@@ -150,6 +156,7 @@ def users_signin(request):
 					"user": user.username,
 					"email": user.email,
 					'name': "Super admin",
+					"type": "superadmin",
 				}
 			}
 		})

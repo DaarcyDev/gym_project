@@ -95,13 +95,14 @@
 						La confirmación de la contraseña es requerida
 					</mat-error>
 				</mat-form-field>
-
+				
 				<mat-form-field class="w-full" *ngIf="user?.access_token === adminToken">
-					<mat-label>Selecciona el administrador </mat-label>
-					<input id="phone_number" matInput type="text" pattern="^[0-9]*$" [formControlName]="'phone_number'">
-					<mat-error *ngIf="signUpForm.get('phone_number').hasError('required')">
-						El número de teléfono es requerido
-					</mat-error>
+					<mat-label>Selecciona el administrador</mat-label>
+					<mat-select formControlName="access_token_admin">
+						<mat-option *ngFor="let admin of admins" [value]="admin.access_token">
+							{{ admin.name }} {{ admin.lastname }}
+						</mat-option>
+					</mat-select>
 				</mat-form-field>
 
 				<!-- Submit button -->

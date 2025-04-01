@@ -14,13 +14,19 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { MatRadioModule } from '@angular/material/radio';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
+import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'auth-sign-up-trainer',
   templateUrl: './sign-up-trainer.component.html',
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations,
   standalone: true,
-  imports: [RouterLink, NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatProgressSpinnerModule, MatRadioModule],
+  imports: [
+    RouterLink, NgIf, CommonModule, MatSelectModule, FuseAlertComponent, FormsModule,
+    ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,
+    MatCheckboxModule, MatProgressSpinnerModule, MatRadioModule
+  ],
 
 })
 export class AuthSignUpTrainerComponent {
@@ -34,6 +40,7 @@ export class AuthSignUpTrainerComponent {
   showAlert: boolean = false;
   user: User;
   adminToken = environment.adminAccessToken;
+  admins: any[] = [];
   /**
    * Constructor
    */
@@ -58,16 +65,40 @@ export class AuthSignUpTrainerComponent {
       console.log("usertest", this.user);
     }
     // Create the form
-    this.signUpForm = this._formBuilder.group({
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      gender: ['', Validators.required],
-      phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      password: ['', Validators.required],
-      password_confirm: ['', Validators.required],
-      access_token_admin: localStorage.getItem('access_token'),
-    });
-
+    if (this.user?.tipo_usuario != 'superadmin') {
+      this.signUpForm = this._formBuilder.group({
+        name: ['', Validators.required],
+        lastname: ['', Validators.required],
+        gender: ['', Validators.required],
+        phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+        password: ['', Validators.required],
+        password_confirm: ['', Validators.required],
+        access_token_admin: ['', Validators.required],
+      });
+    }
+    else {
+      this.signUpForm = this._formBuilder.group({
+        name: ['', Validators.required],
+        lastname: ['', Validators.required],
+        gender: ['', Validators.required],
+        phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+        password: ['', Validators.required],
+        password_confirm: ['', Validators.required],
+        access_token_admin: localStorage.getItem('access_token'),
+      });
+    }
+    //! TODO: arreglar el tema de los Username con los entrenadores
+    
+    this._authService.admin_get_all().subscribe(
+      (response) => {
+        console.log("admin_get_all response", response);
+        this.admins = response.admins;
+      }, error=> {
+        console.log("admin_get_all error", error);
+        this.admins = [];
+      }
+      
+    );
   }
 
   signUp(): void {
@@ -87,6 +118,7 @@ export class AuthSignUpTrainerComponent {
 
     console.log("se va a llamar a signUpAdmins");
     // Sign up
+    console.log("signUpForm.value", this.signUpForm.value);
     this._authService.signUpTrainers(this.signUpForm.value)
       .subscribe(
         (response) => {

@@ -57,6 +57,34 @@ export class AuthService {
 	 *
 	 * @param credentials
 	 */
+	admin_get_all(): Observable<any> {
+		if (this._authenticated) {
+			return throwError(() => new Error('User is already logged in.'));
+		}
+		console.log("auth.service signIn");
+		return this._httpClient.get(environment.apiURL + '/api/users/admin/get-all/', {  }).pipe(
+			switchMap((response: any) => {
+				// console.log('response.result.data', response.result.data);
+				console.log('response', response);
+				// if (response?.result?.status) {
+				// 	this.access_token = JSON.stringify(response.result.data);
+				// 	this._authenticated = true;
+				// 	this._userService.user = response.result.data;
+				// }
+				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
+			})
+		);
+	}
+
+	/**
+	 * Sign in
+	 *
+	 * @param credentials
+	 */
 	signIn(params: { user: string, password: string }): Observable<any> {
 		if (this._authenticated) {
 			return throwError(() => new Error('User is already logged in.'));
