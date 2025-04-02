@@ -45,6 +45,18 @@
 					</mat-error>
 				</mat-form-field>
 
+				<!-- Email field -->
+				<mat-form-field class="w-full">
+					<mat-label>Correo electronico</mat-label>
+					<input id="email" matInput [formControlName]="'email'">
+					<mat-error *ngIf="signUpForm.get('email').hasError('required')">
+						El correo electronico es requerido
+					</mat-error>
+					<mat-error *ngIf="signUpForm.get('email').hasError('email')">
+						Porfavor ingrese un correo valido
+					</mat-error>
+				</mat-form-field>
+
 				<!-- Geneder field -->
 				<label class="block mb-2 font-medium">Sexo</label>
 				<mat-radio-group formControlName="gender" class="flex space-x-4">

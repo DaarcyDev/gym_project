@@ -85,6 +85,8 @@ def trainer_register(request):
 		password = request.data["admin"]["password"]
 		password_confirm = request.data["admin"]["password_confirm"]
 		access_token_admin = request.data["admin"]["access_token_admin"]
+		email = request.data["admin"]["email"]
+		username = request.data["admin"]["email"]
 		if password != password_confirm:
 			return Response({
 				"result": {
@@ -116,6 +118,8 @@ def trainer_register(request):
 					phone_number=phone_number,
 					password=hashed_password,
 					access_token= create_uuid(name, lastname, phone_number),
+					email=email,
+					username=username,
 					created_by=admin
 				)
 				admin.save()
@@ -181,7 +185,7 @@ def users_signin(request):
 			})
 		else:
 			try:
-				trainer = Trainer.objects.get(name=username)
+				trainer = Trainer.objects.get(username=username)
 			except Trainer.DoesNotExist:
 				trainer = None
 			if trainer is not None and check_password(password, trainer.password):

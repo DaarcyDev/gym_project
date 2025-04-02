@@ -65,10 +65,12 @@ export class AuthSignUpTrainerComponent {
       console.log("usertest", this.user);
     }
     // Create the form
-    if (this.user?.tipo_usuario != 'superadmin') {
+    if (this.user?.tipo_usuario == 'superadmin') {
+      console.log("user tipo_usuario", this.user?.tipo_usuario);
       this.signUpForm = this._formBuilder.group({
         name: ['', Validators.required],
         lastname: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
         gender: ['', Validators.required],
         phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
         password: ['', Validators.required],
@@ -77,9 +79,11 @@ export class AuthSignUpTrainerComponent {
       });
     }
     else {
+      console.log("entro al else")
       this.signUpForm = this._formBuilder.group({
         name: ['', Validators.required],
         lastname: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
         gender: ['', Validators.required],
         phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
         password: ['', Validators.required],
