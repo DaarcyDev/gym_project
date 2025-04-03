@@ -53,7 +53,7 @@ export class AuthService {
 	}
 
 	/**
-	 * Sign in
+	 * Get Admins
 	 *
 	 * @param credentials
 	 */
@@ -64,13 +64,8 @@ export class AuthService {
 		console.log("auth.service signIn");
 		return this._httpClient.get(environment.apiURL + '/api/users/admin/get-all/', {  }).pipe(
 			switchMap((response: any) => {
-				// console.log('response.result.data', response.result.data);
+
 				console.log('response', response);
-				// if (response?.result?.status) {
-				// 	this.access_token = JSON.stringify(response.result.data);
-				// 	this._authenticated = true;
-				// 	this._userService.user = response.result.data;
-				// }
 				return of(response);
 			}),
 			catchError(err => {
@@ -154,11 +149,6 @@ export class AuthService {
 				console.log('response.result', response.result);
 				console.log('paramas', params);
 				console.log('paramas.name', params.name);
-				// if (response?.result?.status) {
-				// 	this.access_token = JSON.stringify(response.result.data);
-				// 	this._authenticated = true;
-				// 	this._userService.user = response.result.data;
-				// }
 				return of(response);
 			}),
 			catchError(err => {

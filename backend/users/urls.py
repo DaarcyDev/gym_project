@@ -11,6 +11,8 @@ urlpatterns = [
     path('memberships/', views.users_memberships),
     path('admin/register/', views.admin_register),
     path('admin/get-all/', views.get_admins),
+    path('trainer/get-all/', views.get_trainers),
     path('trainer/register/', views.trainer_register),
+    path('users/register/', views.users_register),
 ]
 

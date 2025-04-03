@@ -13,15 +13,16 @@ def get_admins(request):
 	print("admins", admins)
 	return Response({"admins": list(admins)})
 
+@api_view(["GET"])
+def get_trainers(request):
+	trainers = Trainer.objects.all().values("id", "name", "lastname", "access_token")
+	print("trainers", trainers)
+	return Response({"trainers": list(trainers)})
+
 def create_uuid(username, name, phone_number):
 	unique_string = f"{username}-{name}-{phone_number}"
 	return str(uuid.uuid5(uuid.NAMESPACE_DNS, unique_string))
 	
-
-@api_view(['POST'])
-def users_register(request):
-	print("request",request.data)
-	return Response({"result": "Hello, world! from Django register"})
 
 @api_view(['POST'])
 def admin_register(request):
@@ -72,6 +73,17 @@ def admin_register(request):
 				}
 			}
 		})
+
+@api_view(['POST'])
+def users_register(request):
+	print("request",request.data)
+	if request.method == 'POST':
+		name = request.data["user"]["name"]
+		lastname = request.data["user"]["lastname"]
+		gender = request.data["user"]["gender"]
+		phone_number = request.data["user"]["phone_number"]
+	return Response({"result": "Hello, world! from Django register"})
+
 
 @api_view(['POST'])
 def trainer_register(request):

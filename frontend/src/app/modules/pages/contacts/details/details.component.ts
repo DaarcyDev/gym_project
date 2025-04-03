@@ -23,6 +23,8 @@ import { ContactsListComponent } from 'app/modules/pages/contacts/list/list.comp
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { MatRadioModule } from '@angular/material/radio';
 import { AuthService } from 'app/core/auth/auth.service';
+import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment';
 @Component({
     selector       : 'contacts-details',
     templateUrl    : './details.component.html',
@@ -45,6 +47,10 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
     contactForm: UntypedFormGroup;
     contacts: Contact[];
     countries: Country[];
+    admins: any[] = [];
+    user: User;
+    adminToken = environment.adminAccessToken;
+
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -76,7 +82,26 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-
+        if (localStorage.getItem('access_token')) {
+            this.user = {
+                access_token: localStorage.getItem('access_token'),
+                user: localStorage.getItem('user'),
+                email: localStorage.getItem('email'),
+                name: localStorage.getItem('name'),
+                lastname: localStorage.getItem('lastname'),
+                tipo_usuario: localStorage.getItem('type'),
+            };
+            console.log("usertest", this.user);
+        }
+        this._authService.admin_get_all().subscribe(
+            (response) => {
+                console.log("admin_get_all response", response);
+                this.admins = response.admins;
+            }, error => {
+                console.log("admin_get_all error", error);
+                this.admins = [];
+            }
+        );
         // Open the drawer
         this._contactsListComponent.matDrawer.open();
 

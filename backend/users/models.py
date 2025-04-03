@@ -65,13 +65,13 @@ class Member(models.Model):
 		related_name='members'
 	)
 	# Asignación del entrenador; puede ser null si aún no se asigna
-	trainer = models.ForeignKey(
-		Trainer, 
-		on_delete=models.SET_NULL, 
-		null=True, 
-		blank=True, 
-		related_name='members'
-	)
+	# trainer = models.ForeignKey(
+	# 	Trainer, 
+	# 	on_delete=models.SET_NULL, 
+	# 	null=True, 
+	# 	blank=True, 
+	# 	related_name='members'
+	# )
 	created_at = models.DateTimeField(auto_now_add=True)
 	
 	def __str__(self):

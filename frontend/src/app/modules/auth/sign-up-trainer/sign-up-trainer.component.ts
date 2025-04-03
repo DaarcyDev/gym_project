@@ -91,7 +91,6 @@ export class AuthSignUpTrainerComponent {
         access_token_admin: localStorage.getItem('access_token'),
       });
     }
-    //! TODO: arreglar el tema de los Username con los entrenadores
     
     this._authService.admin_get_all().subscribe(
       (response) => {
