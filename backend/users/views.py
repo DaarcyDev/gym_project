@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
-from .models import Administrator, Trainer
+from .models import Administrator, Trainer, Member
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 import uuid
@@ -78,11 +78,38 @@ def admin_register(request):
 def users_register(request):
 	print("request",request.data)
 	if request.method == 'POST':
-		name = request.data["user"]["name"]
-		lastname = request.data["user"]["lastname"]
-		gender = request.data["user"]["gender"]
-		phone_number = request.data["user"]["phone_number"]
-	return Response({"result": "Hello, world! from Django register"})
+		name = request.data["params"]["name"]
+		lastname = request.data["params"]["lastname"]
+		gender = request.data["params"]["gender"]
+		phone_number = request.data["params"]["phone_number"]
+		access_token_admin = request.data["params"]["access_token_admin"]
+		admin = Administrator.objects.get(access_token=access_token_admin)
+		if admin is None:
+			return Response({
+				"result": {
+					"status": False,
+					"data": {
+						"message": "No se encontro el administrador"
+					}
+				}
+			})
+		else:
+			admin = Member.objects.create(
+				name=name,
+				lastname=lastname,
+				gender=gender,
+				phone_number=phone_number,
+				created_by=admin
+			)
+			admin.save()
+	return Response({
+			"result": {
+				"status": True,
+				"data": {
+					"message": "Usuario creado correctamente"
+				}
+			}
+		})
 
 
 @api_view(['POST'])

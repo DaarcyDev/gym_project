@@ -76,7 +76,8 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
-
+    // ! TODO: ocultar la barra de creacion de contactos cuando el contacto se cree
+    
     /**
      * On init
      */
@@ -112,7 +113,8 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             name        : ['', [Validators.required]],
             lastname    : ['', [Validators.required]],
             gender      : ['', [Validators.required]],
-            phoneNumbers: this._formBuilder.array([]),
+            phone_number: ['', [Validators.required]],
+            access_token_admin: localStorage.getItem('access_token'),
         });
 
         // Get the contacts
