@@ -14,6 +14,13 @@ def get_admins(request):
 	return Response({"admins": list(admins)})
 
 @api_view(["GET"])
+def get_users(request):
+	users = Member.objects.all().values("name", "lastname", "phone_number")
+	print("users")
+	return Response({"users": list(users)})
+
+
+@api_view(["GET"])
 def get_trainers(request):
 	trainers = Trainer.objects.all().values("id", "name", "lastname", "access_token")
 	print("trainers", trainers)

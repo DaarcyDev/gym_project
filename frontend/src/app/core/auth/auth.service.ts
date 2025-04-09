@@ -76,6 +76,28 @@ export class AuthService {
 	}
 
 	/**
+	 * Get users
+	 *
+	 * @param credentials
+	 */
+	users_get_all(): Observable<any> {
+		if (this._authenticated) {
+			return throwError(() => new Error('User is already logged in.'));
+		}
+		console.log("users_get_all");
+		return this._httpClient.get(environment.apiURL + '/api/users/users/get-all/', {  }).pipe(
+			switchMap((response: any) => {
+				console.log('response', response);
+
+				return of(response);
+			}),
+			catchError(err => {
+				console.error("Error in signIn:", err);
+				return throwError(() => err);
+			})
+		);
+	}
+	/**
 	 * Sign in
 	 *
 	 * @param credentials

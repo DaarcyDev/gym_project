@@ -11,6 +11,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ContactsService } from 'app/modules/pages/contacts/contacts.service';
 import { Contact, Country } from 'app/modules/pages/contacts/contacts.types';
 import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { AuthService } from 'app/core/auth/auth.service';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector       : 'contacts-list',
@@ -24,7 +26,7 @@ export class ContactsListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
-    contacts$: Observable<Contact[]>;
+    contacts$: Observable<any[]>;
 
     contactsCount: number = 0;
     contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
@@ -44,6 +46,7 @@ export class ContactsListComponent implements OnInit, OnDestroy
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _authService: AuthService,
     )
     {
     }
@@ -52,23 +55,17 @@ export class ContactsListComponent implements OnInit, OnDestroy
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
 
+    //! TODO limpiar modulos que no se usan
+
     /**
      * On init
      */
     ngOnInit(): void
     {
         // Get the contacts
-        // this.contacts$ = this._contactsService.contacts$;
-        // this._contactsService.contacts$
-        //     .pipe(takeUntil(this._unsubscribeAll))
-        //     .subscribe((contacts: Contact[]) =>
-        //     {
-        //         // Update the counts
-        //         this.contactsCount = contacts.length;
-
-        //         // Mark for check
-        //         this._changeDetectorRef.markForCheck();
-        //     });
+        this.contacts$ = this._authService.users_get_all().pipe(
+            map((response) => response.users) // 👈 extrae el array
+        );
 
         // Get the contact
         this._contactsService.contact$
