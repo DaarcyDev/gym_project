@@ -1,4 +1,4 @@
-import { contacts } from './../../mock-api/apps/chat/data';
+// import { contacts } from './../../mock-api/apps/chat/data';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
